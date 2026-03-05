@@ -2,8 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 
-// +-+-+-+-+-+-+-+- 在庫メニュー +-+-+-+-+-+-+-+-
-use App\Http\Controllers\Stock\StockMenu\StockMenuController;
 // +-+-+-+-+-+-+-+- 在庫 +-+-+-+-+-+-+-+-
 use App\Http\Controllers\Stock\Stock\StockController;
 use App\Http\Controllers\Stock\Stock\StockDownloadController;
@@ -20,10 +18,6 @@ use App\Http\Controllers\Stock\ReceivingInspection\ReceivingInspectionEnterContr
 use App\Http\Controllers\Stock\ItemLocationUpdate\ItemLocationUpdateController;
 
 Route::middleware('common')->group(function (){
-    // +-+-+-+-+-+-+-+- 在庫メニュー +-+-+-+-+-+-+-+-
-    Route::controller(StockMenuController::class)->prefix('stock_menu')->name('stock_menu.')->group(function(){
-        Route::get('', 'index')->name('index');
-    });
     // +-+-+-+-+-+-+-+- 在庫 +-+-+-+-+-+-+-+-
     Route::controller(StockController::class)->prefix('stock')->name('stock.')->group(function(){
         Route::get('index_by_item', 'index_by_item')->name('index_by_item');

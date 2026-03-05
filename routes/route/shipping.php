@@ -2,8 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 
-// +-+-+-+-+-+-+-+- 出荷メニュー +-+-+-+-+-+-+-+-
-use App\Http\Controllers\Shipping\ShippingMenu\ShippingMenuController;
 // +-+-+-+-+-+-+-+- 出荷管理 +-+-+-+-+-+-+-+-
 use App\Http\Controllers\Shipping\ShippingMgt\ShippingMgtController;
 // +-+-+-+-+-+-+-+- 配送伝票番号取込 +-+-+-+-+-+-+-+-
@@ -35,10 +33,6 @@ use App\Http\Controllers\Shipping\ShippingHistory\ShippingHistoryDownloadControl
 use App\Http\Controllers\Shipping\ShippingHistory\ShippingActualDownloadController;
 
 Route::middleware('common')->group(function (){
-    // +-+-+-+-+-+-+-+- 出荷メニュー +-+-+-+-+-+-+-+-
-    Route::controller(ShippingMenuController::class)->prefix('shipping_menu')->name('shipping_menu.')->group(function(){
-        Route::get('', 'index')->name('index');
-    });
     // +-+-+-+-+-+-+-+- 出荷管理 +-+-+-+-+-+-+-+-
     Route::controller(ShippingMgtController::class)->prefix('shipping_mgt')->name('shipping_mgt.')->group(function(){
         Route::get('', 'index')->name('index');

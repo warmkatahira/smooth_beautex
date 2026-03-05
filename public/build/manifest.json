@@ -4,7 +4,7 @@
     "name": "audio"
   },
   "resources/css/app.css": {
-    "file": "assets/app-C_4BNKwp.css",
+    "file": "assets/app-CpMPsN71.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -63,15 +63,6 @@
     "file": "assets/item-BMEI92Gr.js",
     "name": "item",
     "src": "resources/js/item/item/item.js",
-    "isEntry": true,
-    "imports": [
-      "resources/js/loading.js"
-    ]
-  },
-  "resources/js/item/item_qr_analysis/item_qr_analysis.js": {
-    "file": "assets/item_qr_analysis-DN20RFGA.js",
-    "name": "item_qr_analysis",
-    "src": "resources/js/item/item_qr_analysis/item_qr_analysis.js",
     "isEntry": true,
     "imports": [
       "resources/js/loading.js"
@@ -264,11 +255,14 @@
       "resources/js/loading.js"
     ]
   },
-  "resources/js/system_admin/system_document/system_document.js": {
-    "file": "assets/system_document-Dp8uX-06.js",
-    "name": "system_document",
-    "src": "resources/js/system_admin/system_document/system_document.js",
-    "isEntry": true
+  "resources/js/system_admin/holiday/holiday.js": {
+    "file": "assets/holiday-0eP8L16g.js",
+    "name": "holiday",
+    "src": "resources/js/system_admin/holiday/holiday.js",
+    "isEntry": true,
+    "imports": [
+      "resources/js/loading.js"
+    ]
   },
   "resources/js/system_admin/user/user.js": {
     "file": "assets/user-DC2RL5qp.js",

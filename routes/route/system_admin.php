@@ -2,8 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 
-// +-+-+-+-+-+-+-+- システム管理 +-+-+-+-+-+-+-+-
-use App\Http\Controllers\SystemAdmin\SystemAdminMenu\SystemAdminMenuController;
 // +-+-+-+-+-+-+-+- 倉庫 +-+-+-+-+-+-+-+-
 use App\Http\Controllers\SystemAdmin\Base\BaseController;
 use App\Http\Controllers\SystemAdmin\Base\BaseCreateController;
@@ -19,16 +17,7 @@ use App\Http\Controllers\SystemAdmin\Holiday\HolidayController;
 use App\Http\Controllers\SystemAdmin\Holiday\NationalHolidayController;
 
 Route::middleware('common')->group(function (){
-    
     Route::middleware(['warm_check'])->group(function () {
-        
-    });
-    
-    Route::middleware(['warm_check'])->group(function () {
-        // +-+-+-+-+-+-+-+- システム管理メニュー +-+-+-+-+-+-+-+-
-        Route::controller(SystemAdminMenuController::class)->prefix('system_admin_menu')->name('system_admin_menu.')->group(function(){
-            Route::get('', 'index')->name('index');
-        });
         // +-+-+-+-+-+-+-+- 祝日 +-+-+-+-+-+-+-+-
         Route::controller(HolidayController::class)->prefix('holiday')->name('holiday.')->group(function(){
             Route::get('', 'index')->name('index');

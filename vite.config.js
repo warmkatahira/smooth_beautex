@@ -44,7 +44,6 @@ export default defineConfig({
                 // 商品
                 'resources/js/item/item/item.js',
                 'resources/js/item/item_upload/item_upload.js',
-                'resources/js/item/item_qr_analysis/item_qr_analysis.js',
                 // 在庫
                 'resources/js/stock/stock/stock.js',
                 'resources/js/stock/input_stock_operation/input_stock_operation.js',
@@ -60,7 +59,7 @@ export default defineConfig({
                 // システム管理
                 'resources/js/system_admin/base/base.js',
                 'resources/js/system_admin/user/user.js',
-                'resources/js/system_admin/system_document/system_document.js',
+                'resources/js/system_admin/holiday/holiday.js',
                 // プロフィール
                 'resources/js/profile/profile.js',
                 'resources/sass/profile/profile.scss',

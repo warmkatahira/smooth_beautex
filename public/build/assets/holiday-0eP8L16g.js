@@ -1,0 +1,2 @@
+import{s as i}from"./loading-ChqFcCVw.js";$("#national_holiday_get_api").on("click",function(){try{const t=prompt(`国民の祝日を取得する西暦年を入力して下さい。
+※例：2025`);if(t===null)return;if(isNaN(t)||t<2020||t>2100)throw new Error("正しい西暦年を入力してください。（例：2025）");i(),$("#get_year").val(t),$("#national_holiday_get_api_form").submit()}catch(t){alert(t.message)}});$(".year_btn").on("click",function(){$(this).next("div").slideToggle();const t=$(this).find(".accordion-icon");t.length&&t.text(t.text()==="+"?"-":"+")});

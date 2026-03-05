@@ -2,8 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 
-// +-+-+-+-+-+-+-+- 設定メニュー +-+-+-+-+-+-+-+-
-use App\Http\Controllers\Setting\SettingMenu\SettingMenuController;
 // +-+-+-+-+-+-+-+- 出荷倉庫 +-+-+-+-+-+-+-+-
 use App\Http\Controllers\Setting\ShippingBase\ShippingBaseController;
 use App\Http\Controllers\Setting\ShippingBase\ShippingBaseUpdateController;
@@ -25,10 +23,6 @@ use App\Http\Controllers\Setting\AutoProcess\AutoProcessConditionUpdateControlle
 
 Route::middleware('common')->group(function (){
     Route::middleware(['warm_check'])->group(function () {
-        // +-+-+-+-+-+-+-+- 設定メニュー +-+-+-+-+-+-+-+-
-        Route::controller(SettingMenuController::class)->prefix('setting_menu')->name('setting_menu.')->group(function(){
-            Route::get('', 'index')->name('index');
-        });
         // +-+-+-+-+-+-+-+- 出荷倉庫 +-+-+-+-+-+-+-+-
         Route::controller(ShippingBaseController::class)->prefix('shipping_base')->name('shipping_base.')->group(function(){
             Route::get('', 'index')->name('index');

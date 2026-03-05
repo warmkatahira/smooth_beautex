@@ -10,33 +10,27 @@ enum OperationLogEnum
         'dashboard',
         'dashboard/ajax_get_chart_data',
         // 受注
-        'order_menu',
         'order_import',
         // 出荷
-        'shipping_menu',
         'order_document',
         'nifuda_download',
         'shipping_work_end',
         'shipping_work_end',
         'shipping_inspection',
         // 商品
-        'item_menu',
         'item',
         'item_upload',
         // 在庫
-        'stock_menu',
         'input_stock_operation',
         'input_stock_operation_enter',
         'stock_history',
         'receiving_inspection',
         // 設定
-        'setting_menu',
         'auto_process',
         'auto_process_create',
         'auto_process_update',
         'auto_process_condition_update/ajax_validation',
         // システム管理
-        'system_admin_menu',
         'base',
         'base_create',
         'base_update',
@@ -45,7 +39,6 @@ enum OperationLogEnum
         'operation_log',
         'operation_log_download/download',
         'billing_data',
-        'system_document',
     ];
 
     // パスの日本語変換用

@@ -2,8 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 
-// +-+-+-+-+-+-+-+- 受注メニュー +-+-+-+-+-+-+-+-
-use App\Http\Controllers\Order\OrderMenu\OrderMenuController;
 // +-+-+-+-+-+-+-+- 受注取込 +-+-+-+-+-+-+-+-
 use App\Http\Controllers\Order\OrderImport\OrderImportController;
 // +-+-+-+-+-+-+-+- 受注管理 +-+-+-+-+-+-+-+-
@@ -21,10 +19,6 @@ use App\Http\Controllers\Order\KakuninmachiList\KakuninmachiListController;
 use App\Http\Controllers\Order\HikiatemachiList\HikiatemachiListController;
 
 Route::middleware('common')->group(function (){
-    // +-+-+-+-+-+-+-+- 受注メニュー +-+-+-+-+-+-+-+-
-    Route::controller(OrderMenuController::class)->prefix('order_menu')->name('order_menu.')->group(function(){
-        Route::get('', 'index')->name('index');
-    });
     Route::middleware(['warm_check'])->group(function () {
         // +-+-+-+-+-+-+-+- 受注取込 +-+-+-+-+-+-+-+-
         Route::controller(OrderImportController::class)->prefix('order_import')->name('order_import.')->group(function(){
