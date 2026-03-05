@@ -1,0 +1,51 @@
+@use 'color' as color;
+
+/*  ナビゲーションバー本体  */
+#navigation-bar {
+  height: 100%;
+  width: 70px;
+  background-color:color.$main;
+  position: fixed;
+  left: 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+}
+
+/*  ナビゲーションボタン  */
+.navigation-btn{
+  color: white;
+  z-index: 30;
+  font-size: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  margin: 5px 0;
+  position: relative;
+}
+.navigation-btn a{
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+/*  ロゴ用  */
+#logo {
+  cursor: default;
+  width: 50px;
+}
+
+/*  アイコン用  */
+.navigation-btn a i {
+  background-color: color.$sub;              /* 空白部分に塗る色 */
+  padding: 10px;                              /* 背景のサイズを調整 */
+  border-radius: 5px;                         /* 角を丸くする（任意） */
+  color: #333;                              /* アイコンの色を指定 */
+}
+
+/*  最後のプロフィールのみ下に寄せる  */
+#navigation-bar .navigation-btn:last-child {
+  margin-top: auto;
+}

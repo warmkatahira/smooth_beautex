@@ -1,0 +1,1 @@
+import{s as t}from"./loading-ChqFcCVw.js";$("#order_category_update_enter").on("click",function(){try{window.confirm("受注区分を更新しますか？")==!0&&(t(),$("#order_category_update_form").submit())}catch(e){alert(e.message)}});$("#image_file").on("change",function(){const e=this.files[0];e&&$("#image_file_name").text(e.name)});

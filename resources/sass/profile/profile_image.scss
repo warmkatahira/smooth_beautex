@@ -1,0 +1,19 @@
+/*  プロフィール画像用  */
+.profile_image_navigation{
+    display: inline-block;
+    padding: 0 10px;
+    width: auto;
+    height: 45px;
+    margin-bottom: 3px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+/*  プロフィール画像用  */
+.profile_image_normal{
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    vertical-align: middle;
+}

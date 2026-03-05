@@ -1,0 +1,10 @@
+@use 'font' as font;
+
+/*  ホバーアニメーション  */
+.btn {
+    transition: opacity 0.3s ease;
+    cursor: pointer;
+}
+.btn:hover {
+    opacity: .7;
+}

@@ -1,0 +1,1 @@
+<a href="{{ $url }}" class="btn bg-theme-sub border border-black text-sm inline-block px-5 py-2 mt-3"><i class="las la-arrow-circle-left la-lg mr-1"></i>戻る</a>

@@ -1,0 +1,1 @@
+$(document).on("click",function(a){if(a.target.classList.contains("image_fade_in_modal_close")===!0&&$("#image_fade_in_modal").addClass("hidden"),a.target.classList.contains("image_fade_in_modal_open")){const i=a.target.getAttribute("src"),e=$("<img>").attr("src",i).addClass("mx-auto");$("#image_fade_in_div").empty().append(e),$("#image_fade_in_modal").removeClass("hidden")}});

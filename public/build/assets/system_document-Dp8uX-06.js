@@ -1,0 +1,1 @@
+$("#system_document_create_enter").on("click",function(){try{window.confirm("システム資料を追加しますか？")==!0&&$("#system_document_create_form").submit()}catch(e){alert(e.message)}});$(".system_document_delete").on("click",function(){window.confirm("システム資料を削除しますか？")==!0&&$("#system_document_delete_form_"+$(this).val()).submit()});

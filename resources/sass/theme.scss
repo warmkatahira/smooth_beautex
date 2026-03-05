@@ -1,0 +1,9 @@
+@use 'color' as color;
+@use 'font' as font;
+
+// 画面全体に適用するスタイル
+body{
+    background-color: color.$body;
+    @include font.KosugiMaru;
+    font-size: 14px;
+}

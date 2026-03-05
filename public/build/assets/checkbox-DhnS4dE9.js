@@ -1,0 +1,1 @@
+function n(){const c=document.getElementsByName("chk[]");let t=0,l=0;for(let e=0;e<c.length;e++)l++,c[e].checked&&t++;return[c,t,l]}$("#all_check").on("click",function(){const[c,t,l]=n();if(t==l)for(let e=0;e<c.length;e++)c[e].checked=!1;else for(let e=0;e<c.length;e++)c[e].checked=!0});export{n as g};

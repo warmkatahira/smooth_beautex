@@ -1,0 +1,27 @@
+@page {
+    size: A4 portrait;
+    padding: 5mm; // ヘッダー・フッターが出力されないように
+}
+
+body {
+    background: #fff;
+    width: 210mm;
+    .page-container {
+        width: 210mm;
+        height: 295.5mm; // 297mmだと2ページ目にはみ出してしまうので微調整
+        page-break-after: always;
+    }
+}
+
+// プレビュー用
+@media screen {
+    body {
+        margin: 0 auto;
+        background: #ccc;
+        .page-container {
+            background: #fff;
+            box-shadow: 0 .5mm 2mm rgba(0,0,0,.3);
+            margin: 0mm 0mm;
+        }
+    }
+}

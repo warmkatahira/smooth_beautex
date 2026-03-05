@@ -1,0 +1,44 @@
+@use 'color' as color;
+
+// 親要素
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+// ドロップダウンボタン
+.dropdown_btn {
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    background-color: color.$main;
+    color: black;
+    padding: 10px 20px;
+    margin-top: 3px;
+}
+
+// 内容
+.dropdown-content {
+    display: none;
+    position: absolute;
+    z-index: 999;
+    width: 200px;
+}
+
+// 内容の各ボタン
+.dropdown-content .dropdown-content-element {
+    text-decoration: none;
+    display: block;
+    font-size: 12px;
+    background-color: #000000;
+    color: white;
+    padding: 10px;
+    width: 250px;
+    text-align: left;
+}
+
+// 各ボタンのホバー時
+.dropdown-content .dropdown-content-element:hover {
+    background-color: rgb(146, 146, 146);
+    cursor: pointer;
+}
