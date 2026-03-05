@@ -149,6 +149,7 @@ tippy('.tippy_shipping_base_update', {
     duration: 500,
     allowHTML: true,
     placement: 'right',
+    theme: 'tippy_main_theme',
 });
 
 // 配送方法更新モーダルのツールチップ
@@ -157,6 +158,7 @@ tippy('.tippy_shipping_method_update', {
     duration: 500,
     allowHTML: true,
     placement: 'right',
+    theme: 'tippy_main_theme',
 });
 
 // 配送伝票番号更新モーダルのツールチップ
@@ -165,6 +167,7 @@ tippy('.tippy_tracking_no_update', {
     duration: 500,
     allowHTML: true,
     placement: 'right',
+    theme: 'tippy_main_theme',
 });
 
 // 受注メモ更新モーダルのツールチップ
@@ -173,6 +176,7 @@ tippy('.tippy_order_memo_update', {
     duration: 500,
     allowHTML: true,
     placement: 'right',
+    theme: 'tippy_main_theme',
 });
 
 // 出荷作業メモ更新モーダルのツールチップ
@@ -181,6 +185,7 @@ tippy('.tippy_shipping_work_memo_update', {
     duration: 500,
     allowHTML: true,
     placement: 'right',
+    theme: 'tippy_main_theme',
 });
 
 // 配送希望日更新モーダルのツールチップ
@@ -189,6 +194,7 @@ tippy('.tippy_desired_delivery_date_update', {
     duration: 500,
     allowHTML: true,
     placement: 'right',
+    theme: 'tippy_main_theme',
 });
 
 // 配送伝票番号のツールチップ
@@ -197,6 +203,7 @@ tippy('.tippy_tracking_no_url', {
     duration: 500,
     allowHTML: true,
     placement: 'right',
+    theme: 'tippy_main_theme',
 });
 
 // 受注メモのツールチップ
@@ -205,6 +212,7 @@ tippy('.tippy_order_memo', {
     duration: 500,
     allowHTML: true,
     placement: 'right',
+    theme: 'tippy_main_theme',
 });
 
 // 出荷作業メモのツールチップ
@@ -213,6 +221,7 @@ tippy('.tippy_shipping_work_memo', {
     duration: 500,
     allowHTML: true,
     placement: 'right',
+    theme: 'tippy_main_theme',
 });
 
 // 領収書宛名のツールチップ
@@ -221,4 +230,5 @@ tippy('.tippy_receipt_name', {
     duration: 500,
     allowHTML: true,
     placement: 'right',
+    theme: 'tippy_main_theme',
 });

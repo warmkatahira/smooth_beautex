@@ -39,6 +39,7 @@ tippy('.tippy_shipping_work_end_target_count', {
     duration: 500,
     allowHTML: true,
     placement: 'right',
+    theme: 'tippy_main_theme',
 });
 
 // 出荷完了対象外件数のツールチップ
@@ -47,4 +48,5 @@ tippy('.tippy_not_shipping_work_end_target_count', {
     duration: 500,
     allowHTML: true,
     placement: 'right',
+    theme: 'tippy_main_theme',
 });

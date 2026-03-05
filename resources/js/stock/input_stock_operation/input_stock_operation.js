@@ -72,4 +72,5 @@ tippy('.tippy_quantity', {
     duration: 500,
     allowHTML: true,
     placement: 'right',
+    theme: 'tippy_main_theme',
 });

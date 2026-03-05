@@ -11,6 +11,7 @@ tippy('.tippy_display_by_item', {
     duration: 500,
     allowHTML: true,
     placement: 'right',
+    theme: 'tippy_main_theme',
 });
 
 // 在庫単位表示のツールチップ
@@ -19,6 +20,7 @@ tippy('.tippy_display_by_stock', {
     duration: 500,
     allowHTML: true,
     placement: 'right',
+    theme: 'tippy_main_theme',
 });
 
 // アップロードでファイルが選択されたら

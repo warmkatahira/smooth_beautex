@@ -24,6 +24,7 @@ tippy('.tippy_setting_1', {
     placement: 'right',
     maxWidth: 'none',
     width: 500,
+    theme: 'tippy_main_theme',
 });
 
 // 設定2のツールチップ
@@ -35,6 +36,7 @@ tippy('.tippy_setting_2', {
     placement: 'right',
     maxWidth: 'none',
     width: 500,
+    theme: 'tippy_main_theme',
 });
 
 // 設定3のツールチップ
@@ -46,4 +48,5 @@ tippy('.tippy_setting_3', {
     placement: 'right',
     maxWidth: 'none',
     width: 500,
+    theme: 'tippy_main_theme',
 });

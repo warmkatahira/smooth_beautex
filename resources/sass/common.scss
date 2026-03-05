@@ -1,4 +1,5 @@
 @use 'font' as font;
+@use 'color' as color;
 
 /*  ホバーアニメーション  */
 .btn {
@@ -7,4 +8,29 @@
 }
 .btn:hover {
     opacity: .7;
+}
+
+/*  ツールチップのデザイン  */
+.tippy-box[data-theme~='tippy_main_theme'] {
+  background-color: color.$tippy;
+  color: #fff;
+}
+.tippy-box[data-theme~='tippy_main_theme'][data-placement^='right'] > .tippy-arrow::before {
+  border-right-color: color.$tippy;
+}
+/* 右方向の矢印 */
+.tippy-box[data-theme~='tippy_main_theme'][data-placement^='right'] > .tippy-arrow::before {
+  border-right-color: color.$tippy;
+}
+/* 上方向 */
+.tippy-box[data-theme~='tippy_main_theme'][data-placement^='top'] > .tippy-arrow::before {
+  border-top-color: color.$tippy;
+}
+/* 下方向 */
+.tippy-box[data-theme~='tippy_main_theme'][data-placement^='bottom'] > .tippy-arrow::before {
+  border-bottom-color: color.$tippy;
+}
+/* 左方向 */
+.tippy-box[data-theme~='tippy_main_theme'][data-placement^='left'] > .tippy-arrow::before {
+  border-left-color: color.$tippy;
 }
