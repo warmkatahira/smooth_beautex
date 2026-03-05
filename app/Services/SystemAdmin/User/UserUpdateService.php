@@ -44,7 +44,7 @@ class UserUpdateService
         // Toを設定
         $mail->to($user->pluck('email')->toArray());
         // 件名を設定
-        $mail->subject('【smooth_'.SystemEnum::CUSTOMER_NAME.'】アカウント承認完了通知');
+        $mail->subject('【smooth_'.SystemEnum::CUSTOMER_NAME_JP.'】アカウント承認完了通知');
         // メールを送信
         Mail::send($mail);
         // +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-

@@ -10,7 +10,6 @@ export default defineConfig({
                 'resources/css/app.css',
                 'resources/sass/theme.scss',
                 'resources/js/loading.js',
-                'resources/js/navigation.js',
                 'resources/js/search.js',
                 'resources/js/file_select.js',
                 'resources/js/search_date.js',

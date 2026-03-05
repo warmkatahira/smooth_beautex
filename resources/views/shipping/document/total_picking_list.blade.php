@@ -3,7 +3,7 @@
         <div class="flex flex-row">
             <div class="flex flex-col">
                 <span class="text-xl">トータルピッキングリスト</span>
-                <span>{{ SystemEnum::CUSTOMER_NAME }}出荷システム</span>
+                <span>{{ SystemEnum::CUSTOMER_NAME_JP }}出荷システム</span>
             </div>
             <div class="flex text-center text-2xl ml-auto mr-1">
                 <p class="bg-theme-sub border border-black py-2 px-5">合計数</p>

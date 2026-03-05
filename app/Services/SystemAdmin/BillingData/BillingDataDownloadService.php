@@ -32,7 +32,7 @@ class BillingDataDownloadService
     public function makeDirectory($nowDate)
     {
         // 保存先のディレクトリ名を決める
-        $directory_name = "【" . SystemEnum::CUSTOMER_NAME . "】請求データ_" . $nowDate->format('Y年m月d日H時i分s秒');
+        $directory_name = "【" . SystemEnum::CUSTOMER_NAME_JP . "】請求データ_" . $nowDate->format('Y年m月d日H時i分s秒');
         // ディレクトリのパスを取得
         $directory_path = 'export/' . $directory_name;
         // 既に存在しているディレクトリではない場合
@@ -77,7 +77,7 @@ class BillingDataDownloadService
     public function createShippingReportFile($nowDate, $billing_date, $directory_path, $orders)
     {
         // ファイル名を取得
-        $file_name = "【" . SystemEnum::CUSTOMER_NAME . "様】出荷明細_" . $billing_date . ".csv";
+        $file_name = "【" . SystemEnum::CUSTOMER_NAME_JP . "様】出荷明細_" . $billing_date . ".csv";
         // ファイルパスを取得
         $file_path = $directory_path . '/' . $file_name;
         // 一時ファイルを生成（PHPファイルシステム上）
@@ -139,7 +139,7 @@ class BillingDataDownloadService
     public function createReceivingReportFile($nowDate, $billing_date, $directory_path, $nyukas)
     {
         // ファイル名を取得
-        $file_name = "【" . SystemEnum::CUSTOMER_NAME . "様】入荷明細_" . $billing_date . ".csv";
+        $file_name = "【" . SystemEnum::CUSTOMER_NAME_JP . "様】入荷明細_" . $billing_date . ".csv";
         // ファイルパスを取得
         $file_path = $directory_path . '/' . $file_name;
         // 一時ファイルを生成（PHPファイルシステム上）

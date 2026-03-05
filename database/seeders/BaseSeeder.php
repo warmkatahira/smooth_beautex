@@ -15,10 +15,10 @@ class BaseSeeder extends Seeder
     public function run(): void
     {
         Base::create([
-            'base_id' => 'Hiroshima',
+            'base_id' => '1st',
             'base_name' => '広島営業所',
             'base_color_code' => '#e5fff4',
-            'mieru_customer_code' => 'beautex_hiroshima',
+            'mieru_customer_code' => 'beautex_1st',
             'sort_order' => 1,
         ]);
     }

@@ -9,6 +9,7 @@ use App\Http\Middleware\CheckUserStatusMiddleware;
 use App\Http\Middleware\AdminCheckMiddleware;
 use App\Http\Middleware\OperationLogRecordMiddleware;
 use App\Http\Middleware\WarmCheckMiddleware;
+use App\Http\Middleware\NavigationRouteCheckMiddleware;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -25,6 +26,8 @@ return Application::configure(basePath: dirname(__DIR__))
             OperationLogRecordMiddleware::class,
             // ユーザーステータス確認
             CheckUserStatusMiddleware::class,
+            // ナビゲーションボタンのクラス確認用
+            NavigationRouteCheckMiddleware::class,
         ]);
         // ルートミドルウェア
         $middleware->alias([

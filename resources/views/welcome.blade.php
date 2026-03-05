@@ -43,6 +43,7 @@
         <script src="https://unpkg.com/tippy.js@6"></script>
     </head>
     <body>
+        <p class="text-xl text-center bg-theme-main py-3 cursor-default">{{ SystemEnum::getSystemTitle() }}</p>
         <!-- アラート表示 -->
         <x-alert/>
         <div class="flex mt-3">

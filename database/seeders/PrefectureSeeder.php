@@ -15,7 +15,7 @@ class PrefectureSeeder extends Seeder
     public function run(): void
     {
         // 出荷倉庫が「広島営業所」の都道府県を配列に格納
-        $prefectures_Hiroshima = [
+        $prefectures_1st = [
             '北海道', '青森県', '岩手県', '宮城県', '秋田県', '山形県', '福島県',
             '茨城県', '栃木県', '群馬県', '埼玉県', '千葉県', '東京都', '神奈川県',
             '新潟県', '富山県', '石川県', '福井県', '山梨県', '長野県',
@@ -26,11 +26,11 @@ class PrefectureSeeder extends Seeder
             '福岡県', '佐賀県', '長崎県', '熊本県', '大分県', '宮崎県', '鹿児島県', '沖縄県',
         ];
         // 都道府県の分だけループ処理
-        foreach($prefectures_Hiroshima as $prefecture){
+        foreach($prefectures_1st as $prefecture){
             // 追加
             Prefecture::create([
                 'prefecture_name' => $prefecture,
-                'shipping_base_id' => 'Hiroshima',
+                'shipping_base_id' => '1st',
             ]);
         }
     }

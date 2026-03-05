@@ -16,7 +16,7 @@ class ChatworkService
         // 現在の日時を格納
         $nowDate = '通知日時　：'.CarbonImmutable::now()->format('Y/m/d H:i:s')."\n";
         // 荷主名を格納
-        $customer_name = '荷主名　　：'.SystemEnum::CUSTOMER_NAME."\n";
+        $customer_name = '荷主名　　：'.SystemEnum::CUSTOMER_NAME_JP."\n";
         // メッセージを形成
         $message = "[info][title]smooth@BEAUTEXからのメッセージ[/title]".$nowDate.$customer_name."購入数の更新処理が行われました。[/info]";
         // メッセージを投稿

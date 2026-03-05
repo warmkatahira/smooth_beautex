@@ -38,7 +38,6 @@
         @vite([
             'resources/js/app.js',
             'resources/js/loading.js',
-            'resources/js/navigation.js',
             'resources/js/dropdown.js',
             'resources/js/search.js',
             'resources/js/search_date.js',
@@ -72,9 +71,15 @@
     <body>
         <!-- ナビゲーションメニュー -->
         @include('layouts.navigation')
-        <div class="pl-20 pr-3 pt-3 mb-3">
-            <!-- ページヘッダー -->
-            <x-page-header />
+        <div class="pl-[265px] pr-3 pt-3 mb-3">
+            <div class="flex flex-row items-center mb-3">
+                <!-- ページヘッダー -->
+                <x-page-header />
+                <!-- プロフィール -->
+                <a class="btn tippy_profile ml-auto" href="{{ route('profile.index') }}" data-full-name="{{ Auth::user()->full_name }}">
+                    <img id="profile" class="profile_image_navigation" src="{{ asset('storage/profile_images/' . Auth::user()->profile_image_file_name) }}">
+                </a>
+            </div>
             <!-- バリデーションエラー -->
             <x-validation-error-msg />
             <!-- アラート表示 -->
@@ -82,7 +87,7 @@
             <!-- ローディング -->
             <x-loading />
             <!-- ページコンテンツ -->
-            <main class="max-w-[2000px]">
+            <main>
                 {{ $slot }}
             </main>
         </div>

@@ -14,13 +14,9 @@ use App\Http\Controllers\SystemAdmin\User\UserUpdateController;
 // +-+-+-+-+-+-+-+- 操作ログ +-+-+-+-+-+-+-+-
 use App\Http\Controllers\SystemAdmin\OperationLog\OperationLogController;
 use App\Http\Controllers\SystemAdmin\OperationLog\OperationLogDownloadController;
-// +-+-+-+-+-+-+-+- システム資料 +-+-+-+-+-+-+-+-
-use App\Http\Controllers\SystemAdmin\SystemDocument\SystemDocumentController;
-use App\Http\Controllers\SystemAdmin\SystemDocument\SystemDocumentCreateController;
-use App\Http\Controllers\SystemAdmin\SystemDocument\SystemDocumentDeleteController;
-// +-+-+-+-+-+-+-+- 請求データ +-+-+-+-+-+-+-+-
-use App\Http\Controllers\SystemAdmin\BillingData\BillingDataController;
-use App\Http\Controllers\SystemAdmin\BillingData\BillingDataDownloadController;
+// +-+-+-+-+-+-+-+- 祝日 +-+-+-+-+-+-+-+-
+use App\Http\Controllers\SystemAdmin\Holiday\HolidayController;
+use App\Http\Controllers\SystemAdmin\Holiday\NationalHolidayController;
 
 Route::middleware('common')->group(function (){
     
@@ -33,25 +29,14 @@ Route::middleware('common')->group(function (){
         Route::controller(SystemAdminMenuController::class)->prefix('system_admin_menu')->name('system_admin_menu.')->group(function(){
             Route::get('', 'index')->name('index');
         });
-        // +-+-+-+-+-+-+-+- システム資料 +-+-+-+-+-+-+-+-
-        Route::controller(SystemDocumentController::class)->prefix('system_document')->name('system_document.')->group(function(){
+        // +-+-+-+-+-+-+-+- 祝日 +-+-+-+-+-+-+-+-
+        Route::controller(HolidayController::class)->prefix('holiday')->name('holiday.')->group(function(){
             Route::get('', 'index')->name('index');
         });
-        // +-+-+-+-+-+-+-+- 請求データ +-+-+-+-+-+-+-+-
-        Route::controller(BillingDataController::class)->prefix('billing_data')->name('billing_data.')->group(function(){
-            Route::get('', 'index')->name('index');
-        });
-        Route::controller(BillingDataDownloadController::class)->prefix('billing_data_download')->name('billing_data_download.')->group(function(){
-            Route::get('download', 'download')->name('download');
+        Route::controller(NationalHolidayController::class)->prefix('national_holiday')->name('national_holiday.')->group(function(){
+            Route::post('get_api', 'get_api')->name('get_api');
         });
         Route::middleware(['admin_check'])->group(function () {
-            Route::controller(SystemDocumentCreateController::class)->prefix('system_document_create')->name('system_document_create.')->group(function(){
-                Route::get('', 'index')->name('index');
-                Route::post('create', 'create')->name('create');
-            });
-            Route::controller(SystemDocumentDeleteController::class)->prefix('system_document_delete')->name('system_document_delete.')->group(function(){
-                Route::post('delete', 'delete')->name('delete');
-            });
             // +-+-+-+-+-+-+-+- 倉庫 +-+-+-+-+-+-+-+-
             Route::controller(BaseController::class)->prefix('base')->name('base.')->group(function(){
                 Route::get('', 'index')->name('index');

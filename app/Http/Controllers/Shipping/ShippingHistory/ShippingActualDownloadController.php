@@ -25,7 +25,7 @@ class ShippingActualDownloadController extends Controller
         $response = $ShippingActualDownloadService->getDownloadData($result);
         // ダウンロード処理
         $response->headers->set('Content-Type', 'text/csv');
-        $response->headers->set('Content-Disposition', 'attachment; filename=【'.SystemEnum::CUSTOMER_NAME.'】出荷実績データ_' . CarbonImmutable::now()->isoFormat('Y年MM月DD日HH時mm分ss秒') . '.csv');
+        $response->headers->set('Content-Disposition', 'attachment; filename=【'.SystemEnum::CUSTOMER_NAME_JP.'】出荷実績データ_' . CarbonImmutable::now()->isoFormat('Y年MM月DD日HH時mm分ss秒') . '.csv');
         return $response;
     }
 }

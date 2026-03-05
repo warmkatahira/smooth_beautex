@@ -25,7 +25,7 @@ class OperationLogDownloadController extends Controller
         $response = $OperationLogDownloadService->getDownloadData($log_contents);
         // ダウンロード処理
         $response->headers->set('Content-Type', 'text/csv');
-        $response->headers->set('Content-Disposition', 'attachment; filename=【'.SystemEnum::CUSTOMER_NAME.'】操作ログデータ_' . CarbonImmutable::now()->isoFormat('Y年MM月DD日HH時mm分ss秒') . '.csv');
+        $response->headers->set('Content-Disposition', 'attachment; filename=【'.SystemEnum::CUSTOMER_NAME_JP.'】操作ログデータ_' . CarbonImmutable::now()->isoFormat('Y年MM月DD日HH時mm分ss秒') . '.csv');
         return $response;
     }
 }

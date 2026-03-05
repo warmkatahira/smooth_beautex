@@ -2,50 +2,89 @@
 
 /*  ナビゲーションバー本体  */
 #navigation-bar {
-  height: 100%;
-  width: 70px;
-  background-color:color.$main;
-  position: fixed;
-  left: 0;
-  z-index: 30;
-  display: flex;
-  flex-direction: column;
+    height: 100%;
+    width: 250px;
+    background-color:color.$sub;
+    position: fixed;
+    left: 0;
+    z-index: 30;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid black;
+    overflow-y: auto;
+    flex-grow: 1;
+    padding-bottom: 20px;
+}
+
+.navigation-scroll {
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+
+/* Webkit系ブラウザ */
+#navigation-bar::-webkit-scrollbar {
+    width: 0;
+}
+
+#navigation-bar:hover::-webkit-scrollbar {
+    width: 4px;
+}
+
+#navigation-bar::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,0.3);
+    border-radius: 4px;
 }
 
 /*  ナビゲーションボタン  */
-.navigation-btn{
-  color: white;
-  z-index: 30;
-  font-size: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 50px;
-  margin: 5px 0;
-  position: relative;
+.navigation-btn-div{
+    color: black;
+    z-index: 30;
+    font-size: 20px;
+    display: flex;
+    position: relative;
 }
-.navigation-btn a{
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
+.navigation-btn-div > a,
+.navigation-btn-div > p {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    justify-content: flex-start;
+    padding: 5px 0;
+    cursor: pointer;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-/*  ロゴ用  */
+.navigation-btn-div > a:hover,
+.navigation-btn-div > p:hover {
+    color: black;
+    background-color: color.$main;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.35);
+}
+
+#navigation_top_div {
+    padding: 5px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-bottom: 2px solid black;
+}
 #logo {
-  cursor: default;
-  width: 50px;
+    cursor: default;
+    width: 100px;
 }
 
 /*  アイコン用  */
-.navigation-btn a i {
-  background-color: color.$sub;              /* 空白部分に塗る色 */
-  padding: 10px;                              /* 背景のサイズを調整 */
-  border-radius: 5px;                         /* 角を丸くする（任意） */
-  color: #333;                              /* アイコンの色を指定 */
+.navigation-btn-icon {
+    padding-left: 5px;
 }
 
-/*  最後のプロフィールのみ下に寄せる  */
-#navigation-bar .navigation-btn:last-child {
-  margin-top: auto;
+// 矢印の回転
+.arrow {
+  transition: transform 0.3s ease;
+}
+
+// 矢印を180度回転
+.arrow.open {
+  transform: rotate(180deg);
 }
