@@ -5,8 +5,8 @@ namespace App\Enums;
 enum SystemEnum
 {
     // 顧客名
-    const CUSTOMER_NAME     = '百道';
-    const CUSTOMER_NAME_EN  = 'momochi';
+    const CUSTOMER_NAME     = 'BEAUTEX';
+    const CUSTOMER_NAME_EN  = 'beautex';
     // ページネーションの値を定義
     const PAGINATE_DEFAULT = 1000;
     const PAGINATE_OPERATION_LOG = 200;

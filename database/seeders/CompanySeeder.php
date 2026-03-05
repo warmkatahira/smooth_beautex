@@ -20,8 +20,8 @@ class CompanySeeder extends Seeder
             'sort_order' => 1,
         ]);
         Company::create([
-            'company_id' => 'momochi',
-            'company_name' => '株式会社百道',
+            'company_id' => 'beautex',
+            'company_name' => '株式会社BEAUTEX',
             'sort_order' => 2,
         ]);
     }

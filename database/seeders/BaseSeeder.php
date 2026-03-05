@@ -18,7 +18,7 @@ class BaseSeeder extends Seeder
             'base_id' => 'Hiroshima',
             'base_name' => '広島営業所',
             'base_color_code' => '#e5fff4',
-            'mieru_customer_code' => 'momochi_hiroshima',
+            'mieru_customer_code' => 'beautex_hiroshima',
             'sort_order' => 1,
         ]);
     }

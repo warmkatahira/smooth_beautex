@@ -15,7 +15,7 @@ class ShipperSeeder extends Seeder
     public function run(): void
     {
         Shipper::create([
-            'shipper_company_name' => '株式会社 百道',
+            'shipper_company_name' => '株式会社 BEAUTEX',
             'shipper_name' => 'レンズショップmomo/モモ',
             'shipper_zip_code' => '810-0001',
             'shipper_address' => '福岡県福岡市中央区天神2丁目3-10 天神パインクレスト716',
