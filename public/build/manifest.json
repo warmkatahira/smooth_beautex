@@ -4,7 +4,7 @@
     "name": "audio"
   },
   "resources/css/app.css": {
-    "file": "assets/app-CBHt0stA.css",
+    "file": "assets/app-C_4BNKwp.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -35,10 +35,10 @@
     "src": "resources/js/checkbox.js",
     "isEntry": true
   },
-  "resources/js/dashboard/chart.js": {
-    "file": "assets/chart-B3XDSYPd.js",
-    "name": "chart",
-    "src": "resources/js/dashboard/chart.js",
+  "resources/js/dashboard/dashboard.js": {
+    "file": "assets/dashboard-DcqmxOml.js",
+    "name": "dashboard",
+    "src": "resources/js/dashboard/dashboard.js",
     "isEntry": true
   },
   "resources/js/dropdown.js": {
@@ -284,6 +284,11 @@
     "src": "resources/sass/common.scss",
     "isEntry": true
   },
+  "resources/sass/dashboard/dashboard.scss": {
+    "file": "assets/dashboard-B9i60jde.css",
+    "src": "resources/sass/dashboard/dashboard.scss",
+    "isEntry": true
+  },
   "resources/sass/dropdown.scss": {
     "file": "assets/dropdown-vrpWzODa.css",
     "src": "resources/sass/dropdown.scss",
@@ -315,7 +320,7 @@
     "isEntry": true
   },
   "resources/sass/profile/profile_image.scss": {
-    "file": "assets/profile_image-MW0It_SR.css",
+    "file": "assets/profile_image-DRJ8DOA0.css",
     "src": "resources/sass/profile/profile_image.scss",
     "isEntry": true
   },

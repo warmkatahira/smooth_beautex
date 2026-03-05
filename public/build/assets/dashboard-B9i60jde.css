@@ -1,0 +1,1 @@
+@keyframes marquee{0%{transform:translate(100%)}to{transform:translate(-100%)}}.animate-marquee{display:inline-block;white-space:nowrap;animation:marquee 4s linear infinite}

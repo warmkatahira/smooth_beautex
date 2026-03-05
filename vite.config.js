@@ -26,7 +26,8 @@ export default defineConfig({
                 // 認証
                 'resources/js/auth/register.js',
                 // ダッシュボード
-                'resources/js/dashboard/chart.js',
+                'resources/js/dashboard/dashboard.js',
+                'resources/sass/dashboard/dashboard.scss',
                 // 受注
                 'resources/js/order/order_import/order_import.js',
                 'resources/js/order/order_mgt/order_mgt.js',
