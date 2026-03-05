@@ -1,7 +1,7 @@
 <x-app-layout>
     <div class="flex flex-row gap-10 mt-3">
-        <x-dashboard.info-div label="出荷作業前件数" orderCountId="sagyo_mae_order_count" shipQuantityId="sagyo_mae_ship_quantity" />
-        <x-dashboard.info-div label="出荷作業中件数" orderCountId="sagyo_chu_order_count" shipQuantityId="sagyo_chu_ship_quantity" />
+        <x-dashboard.info-div label="出荷作業前" orderCountId="sagyo_mae_order_count" shipQuantityId="sagyo_mae_ship_quantity" />
+        <x-dashboard.info-div label="出荷作業中" orderCountId="sagyo_chu_order_count" shipQuantityId="sagyo_chu_ship_quantity" />
         <x-dashboard.info-div labelId="total_shipped_label" orderCountId="total_shipped_count" shipQuantityId="total_shipped_quantity" />
     </div>
     <div class="flex flex-row items-center gap-5 mt-5">
