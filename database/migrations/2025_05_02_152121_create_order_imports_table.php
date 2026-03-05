@@ -19,7 +19,6 @@ return new class extends Migration
             $table->unsignedInteger('order_status_id');
             $table->unsignedInteger('shipping_method_id');
             $table->string('shipping_base_id', 10)->nullable();
-            $table->string('shipper_id', 20)->nullable();
             $table->date('desired_delivery_date')->nullable();
             $table->string('desired_delivery_time', 20)->nullable();
             // ここから受注データの内容
@@ -28,13 +27,16 @@ return new class extends Migration
             $table->time('order_time');
             $table->string('ship_name', 255);
             $table->string('ship_zip_code', 8);
-            $table->string('ship_prefecture_name', 5);
-            $table->string('ship_address', 255);
+            $table->string('ship_country_code', 5)->nullable();
+            $table->string('ship_province_code', 10)->nullable();
+            $table->string('ship_province_name', 5)->nullable();
+            $table->string('ship_city', 255);
+            $table->string('ship_address_1', 255);
+            $table->string('ship_address_2', 255);
             $table->string('ship_tel', 15);
             $table->string('order_item_code', 255);
             $table->string('order_item_name', 255);
             $table->unsignedInteger('order_quantity');
-            $table->string('seller_item_code', 50);
             // ここまで受注データの内容
             $table->unsignedInteger('unallocated_quantity');
             $table->unsignedInteger('order_category_id');

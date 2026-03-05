@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
             //ItemSeeder::class,
             //StockSeeder::class,
             StockHistoryCategorySeeder::class,
+            MallSeeder::class,
             OrderCategorySeeder::class,
             //AutoProcessSeeder::class,
         ]);

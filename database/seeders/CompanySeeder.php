@@ -15,14 +15,14 @@ class CompanySeeder extends Seeder
     public function run(): void
     {
         Company::create([
-            'company_id' => 'warm',
-            'company_name' => '株式会社ワーム',
-            'sort_order' => 1,
+            'company_id'    => 'warm',
+            'company_name'  => '株式会社ワーム',
+            'sort_order'    => 1,
         ]);
         Company::create([
-            'company_id' => 'beautex',
-            'company_name' => '株式会社BEAUTEX',
-            'sort_order' => 2,
+            'company_id'    => 'beautex',
+            'company_name'  => '株式会社BEAUTEX',
+            'sort_order'    => 2,
         ]);
     }
 }

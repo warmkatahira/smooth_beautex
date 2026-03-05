@@ -36,7 +36,7 @@ class OrderImportService
         // 選択したデータのファイル名を取得
         $original_file_name = $select_file->getClientOriginalName();
         // ストレージに保存する際のファイル名を設定
-        $save_file_name = 'order_import_data_'.$nowDate->format('Y-m-d H-i-s').'.xlsx';
+        $save_file_name = 'order_import_data_'.$nowDate->format('Y-m-d H-i-s').'.csv';
         // ファイルを保存して保存先のパスを取得
         $save_file_path = Storage::disk('public')->putFileAs('import/order_import', $select_file, $save_file_name);
         // 保存先のパスがNullの場合
@@ -61,9 +61,16 @@ class OrderImportService
         }
         // インポートしたデータのヘッダーを取得
         $import_data_header = array_keys((array) $all_line[0]);
-        // Qoo10のidを返す
-        return OrderCategoryEnum::QOO10_ID;
-
+        if(in_array('カート番号', $import_data_header)) {
+            // Qoo10のidを返す
+            return OrderCategoryEnum::QOO10_ID;
+        }elseif(in_array('Lineitem sku', $import_data_header)) {
+            // shopifyのidを返す
+            return OrderCategoryEnum::SHOPIFY_ID;
+        }else{
+            // どちらでもない場合
+            throw new OrderImportException('受注区分が判別できませんでした。', null, null, null);
+        }
     }
 
     // インポートしたデータのヘッダーを確認

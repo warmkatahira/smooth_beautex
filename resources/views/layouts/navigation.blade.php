@@ -33,7 +33,7 @@
         <div class="flex flex-col gap-0.5">
             <x-navigation-btn label="商品" icon="las la-tshirt" openCloseKey="item" />
              <div class="navigation-content hidden">
-                <x-navigation-btn route="item.index" label="単品商品" isLeftMargin="true" isRightMargin="true" />
+                <x-navigation-btn route="item.index" label="商品" isLeftMargin="true" isRightMargin="true" />
                 <x-navigation-btn route="item_upload.index" label="商品アップロード" isLeftMargin="true" isRightMargin="true" />
             </div>
         </div>

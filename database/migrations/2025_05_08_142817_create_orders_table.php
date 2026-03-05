@@ -19,7 +19,6 @@ return new class extends Migration
             $table->unsignedInteger('order_status_id');
             $table->unsignedInteger('shipping_method_id');
             $table->string('shipping_base_id', 10)->nullable();
-            $table->unsignedInteger('shipper_id');
             $table->date('desired_delivery_date')->nullable();
             $table->string('desired_delivery_time', 20)->nullable();
             $table->boolean('is_allocated')->default(0);
@@ -34,8 +33,12 @@ return new class extends Migration
             $table->time('order_time');
             $table->string('ship_name', 255);
             $table->string('ship_zip_code', 8);
-            $table->string('ship_prefecture_name', 5);
-            $table->string('ship_address');
+            $table->string('ship_country_code', 5)->nullable();
+            $table->string('ship_province_code', 10)->nullable();
+            $table->string('ship_province_name', 5)->nullable();
+            $table->string('ship_city', 255);
+            $table->string('ship_address_1', 255);
+            $table->string('ship_address_2', 255);
             $table->string('ship_tel', 15);
             // ここまで受注データの内容
             $table->text('order_memo')->nullable();
@@ -47,7 +50,6 @@ return new class extends Migration
             $table->foreign('shipping_group_id')->references('shipping_group_id')->on('shipping_groups')->cascadeOnUpdate()->onDelete('set null');
             $table->foreign('shipping_method_id')->references('shipping_method_id')->on('shipping_methods')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('shipping_base_id')->references('base_id')->on('bases')->cascadeOnUpdate();
-            $table->foreign('shipper_id')->references('shipper_id')->on('shippers')->cascadeOnUpdate();
             $table->foreign('order_category_id')->references('order_category_id')->on('order_categories')->cascadeOnUpdate();
         });
     }

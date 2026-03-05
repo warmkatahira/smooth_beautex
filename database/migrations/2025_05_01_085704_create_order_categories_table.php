@@ -14,11 +14,12 @@ return new class extends Migration
         Schema::create('order_categories', function (Blueprint $table) {
             $table->increments('order_category_id');
             $table->string('order_category_name', 10);
-            $table->string('order_category_image_file_name', 50)->default('no_image.png');
+            $table->unsignedInteger('mall_id');
             $table->unsignedInteger('shipper_id');
             $table->unsignedInteger('sort_order');
             $table->timestamps();
             // 外部キー
+            $table->foreign('mall_id')->references('mall_id')->on('malls');
             $table->foreign('shipper_id')->references('shipper_id')->on('shippers');
         });
     }

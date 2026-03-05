@@ -16,9 +16,21 @@ class OrderCategorySeeder extends Seeder
     {
         OrderCategory::create([
             'order_category_name'   => 'Qoo10',
-            'order_category_image_file_name'  => 'Qoo10.svg',
+            'mall_id'               => 1,
             'shipper_id'            => 1,
             'sort_order'            => 1,
+        ]);
+        OrderCategory::create([
+            'order_category_name'   => 'shopify_1',
+            'mall_id'               => 2,
+            'shipper_id'            => 1,
+            'sort_order'            => 2,
+        ]);
+        OrderCategory::create([
+            'order_category_name'   => 'shopify_2',
+            'mall_id'               => 2,
+            'shipper_id'            => 1,
+            'sort_order'            => 3,
         ]);
     }
 }

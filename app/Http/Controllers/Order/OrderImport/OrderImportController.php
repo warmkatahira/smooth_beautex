@@ -6,12 +6,17 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 // モデル
 use App\Models\OrderImportHistory;
+// リクエスト
+use App\Http\Requests\Order\OrderImport\OrderImportRequest;
 // サービス
 use App\Services\Order\OrderImport\OrderImportService;
 use App\Services\Order\OrderImport\OrderImportForQoo10Service;
+use App\Services\Order\OrderImport\OrderImportForShopifyService;
 use App\Services\Common\ImportErrorCreateService;
 use App\Services\Order\OrderAllocate\OrderAllocateService;
 use App\Services\Order\OrderImport\AutoProcessApplyService;
+// 列挙
+use App\Enums\OrderCategoryEnum;
 // 例外
 use App\Exceptions\OrderImportException;
 // その他
@@ -30,7 +35,7 @@ class OrderImportController extends Controller
         ]);
     }
 
-    public function import(Request $request)
+    public function import(OrderImportRequest $request)
     {
         // インスタンス化
         $OrderImportService = new OrderImportService;
@@ -45,6 +50,7 @@ class OrderImportController extends Controller
             $result = DB::transaction(function () use ($request, $OrderImportService, $ImportErrorCreateService, $AutoProcessApplyService, &$import_info, &$order_no_num, &$error_file_name){
                 // インスタンス化
                 $OrderImportForQoo10Service = new OrderImportForQoo10Service;
+                $OrderImportForShopifyService = new OrderImportForShopifyService;
                 // 変数を初期化
                 $message = null;
                 // 現在の日時を取得
@@ -55,8 +61,20 @@ class OrderImportController extends Controller
                 $order_category_id = $OrderImportService->getOrderCategoryId($import_info['save_file_path']);
                 // インポートしたデータのヘッダーを確認
                 $OrderImportService->checkHeader($import_info['save_file_path'], $nowDate, $import_info, $order_category_id);
-                // 追加する受注データを配列に格納（同時にバリデーションも実施）
-                $order = $OrderImportForQoo10Service->setArrayImport($import_info['save_file_path'], $nowDate, $order_category_id);
+                // 受注区分で処理を分岐
+                // Qoo10の場合
+                if($order_category_id === OrderCategoryEnum::QOO10_ID){
+                    // 追加する受注データを配列に格納（同時にバリデーションも実施）
+                    $order = $OrderImportForQoo10Service->setArrayImport($import_info['save_file_path'], $nowDate, $order_category_id);
+                }
+                // shopifyの場合
+                if($order_category_id === OrderCategoryEnum::SHOPIFY_ID){
+                    // 追加する受注データを配列に格納（同時にバリデーションも実施）
+                    $order = $OrderImportForShopifyService->setArrayImport($import_info['save_file_path'], $nowDate, $order_category_id);
+                }
+                
+                
+                
                 // バリデーションエラー配列の中にnull以外があれば、エラー情報を出力
                 if(count(array_filter($order['validation_error'])) != 0){
                     // インポートエラー情報のファイルを作成

@@ -18,7 +18,6 @@ class OrderImport extends Model
         'order_status_id',
         'shipping_method_id',
         'shipping_base_id',
-        'shipper_id',
         'desired_delivery_date',
         'desired_delivery_time',
         'order_no',
@@ -26,15 +25,18 @@ class OrderImport extends Model
         'order_time',
         'ship_name',
         'ship_zip_code',
-        'ship_prefecture_name',
-        'ship_address',
+        'ship_country_code',
+        'ship_province_code',
+        'ship_province_name',
+        'ship_city',
+        'ship_address_1',
+        'ship_address_2',
         'ship_tel',
         'order_item_code',
         'order_item_name',
         'order_quantity',
         'unallocated_quantity',
         'order_category_id',
-        'seller_item_code',
     ];
     // 指定したレコードを取得
     public static function getSpecifyByOrderNo($order_no)
@@ -58,7 +60,24 @@ class OrderImport extends Model
                 '受取人携帯電話番号',
                 '住所',
                 '郵便番号',
-                '販売者商品コード',
+            ];
+        }
+        // shopifyの場合
+        if($order_category_id === OrderCategoryEnum::SHOPIFY_ID){
+            return [
+                'Name',
+                'Shipping Method',
+                'Lineitem quantity',
+                'Lineitem name',
+                'Lineitem sku',
+                'Shipping Name',
+                'Shipping Address1',
+                'Shipping Address2',
+                'Shipping City',
+                'Shipping Zip',
+                'Shipping Province',
+                'Shipping Country',
+                'Shipping Phone',
             ];
         }
     }
