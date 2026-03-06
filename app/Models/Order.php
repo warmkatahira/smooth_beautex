@@ -163,7 +163,7 @@ class Order extends Model
                     ->where('order_status_id', OrderStatusEnum::SHUKKA_ZUMI)
                     ->whereDate('shipping_date', '>=', $from)
                     ->whereDate('shipping_date', '<=', $to)
-                    ->selectRaw('SUM(order_items.order_quantity) as total_quantity')
+                    ->selectRaw('SUM(order_items.shipping_quantity) as total_quantity')
                     ->value('total_quantity');
     }
     // 渡された配列から受注マークの重複を取り除く

@@ -14,11 +14,15 @@ use App\Models\Prefecture;
 use App\Services\Order\OrderMgt\OrderMgtService;
 use App\Services\Order\OrderMgt\OrderSearchService;
 use App\Services\Order\OrderAllocate\OrderAllocateService;
+// トレイト
+use App\Traits\PaginatesResultsTrait;
 
 class OrderMgtController extends Controller
 {
     public function index(Request $request)
     {
+        use PaginatesResultsTrait;
+
         // ページヘッダーをセッションに格納
         session(['page_header' => '受注管理']);
         // インスタンス化
@@ -31,7 +35,7 @@ class OrderMgtController extends Controller
         // 検索結果を取得
         $result = $OrderSearchService->getSearchResult();
         // ページネーションを実施
-        $orders = $OrderSearchService->setPagination($result);
+        $orders = $this->setPagination($result);
         // 表示する注文ステータス毎の情報を取得
         $disp_statuses = $OrderMgtService->getDispStatusInfo();
         // 倉庫を取得

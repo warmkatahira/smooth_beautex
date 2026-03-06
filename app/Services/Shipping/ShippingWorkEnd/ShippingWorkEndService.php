@@ -50,31 +50,31 @@ class ShippingWorkEndService
                             ->join('bases', 'bases.base_id', 'orders.shipping_base_id')
                             ->whereIn('orders.order_control_id', $order_control_ids)
                             ->where('is_stock_managed', 1)
-                            ->select('items.item_id', 'items.item_code', 'base_name', 'shipping_base_id', DB::raw('SUM(order_items.order_quantity) as total_order_quantity'))
+                            ->select('items.item_id', 'items.item_code', 'base_name', 'shipping_base_id', DB::raw('SUM(order_items.shipping_quantity) as total_shipping_quantity'))
                             ->groupBy('items.item_id', 'items.item_code', 'base_name', 'shipping_base_id')
                             ->lockForUpdate()
                             ->get();
         // 更新に必要な情報を格納する配列を初期化
         $stocks = [];
         // 検品結果の在庫情報の分だけループ処理
-        foreach($order_quantities as $order_quantity){
+        foreach($order_quantities as $shipping_quantity){
             // 在庫テーブルから情報を取得
-            $stock = Stock::where('base_id', $order_quantity->shipping_base_id)
-                        ->where('item_id', $order_quantity->item_id)
+            $stock = Stock::where('base_id', $shipping_quantity->shipping_base_id)
+                        ->where('item_id', $shipping_quantity->item_id)
                         ->first();
             // 在庫が取得できなかった場合エラーを返す
             if(is_null($stock)){
                 throw new ShippingWorkEndException("在庫が取得できない商品があったため、出荷完了を中断しました。\n".
-                        "出荷倉庫：".$order_quantity->base_name."\n".
-                        "商品コード:".$order_quantity->item_code,
+                        "出荷倉庫：".$shipping_quantity->base_name."\n".
+                        "商品コード:".$shipping_quantity->item_code,
                         $order_control_ids->count(), 0);
             }
             // 配列に情報を格納(在庫履歴でマイナスにしておく必要があるので、マイナス符号をつけている)
             $stocks[] = [
                             'stock_id' => $stock->stock_id,
-                            'base_name' => $order_quantity->base_name,
-                            'item_code' => $order_quantity->item_code,
-                            'quantity' => '-'.$order_quantity->total_order_quantity,
+                            'base_name' => $shipping_quantity->base_name,
+                            'item_code' => $shipping_quantity->item_code,
+                            'quantity' => '-'.$shipping_quantity->total_shipping_quantity,
                         ];
         }
         // stock_idだけを抜き出し

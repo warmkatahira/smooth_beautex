@@ -16,7 +16,7 @@ class OrderItem extends Model
         'unallocated_quantity',
         'order_item_code',
         'order_item_name',
-        'order_quantity',
+        'shipping_quantity',
         'is_auto_process_add',
     ];
     // 指定したレコードを取得

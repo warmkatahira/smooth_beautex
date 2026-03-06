@@ -24,7 +24,7 @@ class TotalPickingListController extends Controller
         }
         return view('shipping.document.total_picking_list')->with([
             'items' => $data['items'],
-            'report_total_order_quantity' => $data['report_total_order_quantity'],
+            'report_total_shipping_quantity' => $data['report_total_shipping_quantity'],
         ]);
     }
 }

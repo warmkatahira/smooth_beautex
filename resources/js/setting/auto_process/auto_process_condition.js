@@ -68,7 +68,7 @@ $('#conditions_wrapper').on('change', '.column_name', function () {
         // name属性を切り替え
         textInput.prop('name', 'value_dummy[]');
         deliverySelect.prop('name', 'value[]');
-    // 配送方法を変更以外の場合
+    // 配送方法を更新以外の場合
     }else{
         // 表示/非表示を切り替え
         textWrapper.show();

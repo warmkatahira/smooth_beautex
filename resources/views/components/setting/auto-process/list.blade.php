@@ -16,7 +16,7 @@
             </thead>
             <tbody class="bg-white">
                 @foreach($autoProcesses as $auto_process)
-                    <tr class="text-left whitespace-nowrap @if(!$auto_process->is_active) bg-gray-300 @endif">
+                    <tr class="text-left whitespace-nowrap hover:bg-theme-sub group @if(!$auto_process->is_active) bg-gray-300 @endif">
                         <td class="py-1 px-2 border">
                             <div class="flex flex-row gap-5">
                                 <a href="{{ route('auto_process_update.index', ['auto_process_id' => $auto_process->auto_process_id]) }}" class="btn bg-btn-enter text-white py-1 px-2">更新</a>
@@ -26,7 +26,12 @@
                         </td>
                         <td class="py-1 px-2 border auto_process_name">{{ $auto_process->auto_process_name }}</td>
                         <td class="py-1 px-2 border">{{ AutoProcessEnum::getActionTypeJP($auto_process->action_type) }}</td>
-                        <td class="py-1 px-2 border">{{ $auto_process->action_value_text }}</td>
+                        <td class="py-1 px-2 border">
+                            @if($auto_process->action_type === AutoProcessEnum::ORDER_ITEM_CREATE)
+                                <p class="text-[10px] text-gray-500">JANコード / 商品名 / 出荷数</p>
+                            @endif
+                            {{ $auto_process->action_value_text }}
+                        </td>
                         <td class="py-1 px-2 border">{{ AutoProcessEnum::getConditionMatchTypeJP($auto_process->condition_match_type) }}</td>
                         <td class="py-1 px-2 border text-right">{{ number_format($auto_process->auto_process_conditions->count()) }}</td>
                         <td class="py-1 px-2 border text-center">{{ $auto_process->is_active_text }}</td>

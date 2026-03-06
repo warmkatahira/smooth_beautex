@@ -86,7 +86,7 @@ class ItemIdCodeCheckService
                 session(['found' => true]);
             }
             // JANコードが一致しているかつ、検品できる商品であるか
-            if($value['item_jan_code'] == $item_id_code && $value['order_quantity'] > $value['inspection_quantity']){
+            if($value['item_jan_code'] == $item_id_code && $value['shipping_quantity'] > $value['inspection_quantity']){
                 // 特定した商品IDを取得
                 session(['item_id' => $value['item_id']]);
                 // 特定した配列のキーを取得
@@ -127,7 +127,7 @@ class ItemIdCodeCheckService
                     session(['found' => true]);
                 }
                 // 代表JANコードとS-POWERコードが一致しているかつ、検品できる商品であるか
-                if($value['model_jan_code'] == substr($item_id_code, 0, InspectionEnum::JAN_LENGTH) && $value['s_power_code'] == substr($item_id_code, $value['s_power_code_start_position'] - 1, InspectionEnum::S_POWER_CODE_LENGTH) && $value['order_quantity'] > $value['inspection_quantity']){
+                if($value['model_jan_code'] == substr($item_id_code, 0, InspectionEnum::JAN_LENGTH) && $value['s_power_code'] == substr($item_id_code, $value['s_power_code_start_position'] - 1, InspectionEnum::S_POWER_CODE_LENGTH) && $value['shipping_quantity'] > $value['inspection_quantity']){
                     // 特定した商品IDを取得
                     session(['item_id' => $value['item_id']]);
                     // 特定した配列のキーを取得
@@ -145,7 +145,7 @@ class ItemIdCodeCheckService
                     session(['found' => true]);
                 }
                 // JANコードが一致しているかつ、検品できる商品であるか
-                if($value['item_jan_code'] == substr($item_id_code, 0, InspectionEnum::JAN_LENGTH) && $value['order_quantity'] > $value['inspection_quantity']){
+                if($value['item_jan_code'] == substr($item_id_code, 0, InspectionEnum::JAN_LENGTH) && $value['shipping_quantity'] > $value['inspection_quantity']){
                     // 特定した商品IDを取得
                     session(['item_id' => $value['item_id']]);
                     // 特定した配列のキーを取得
@@ -217,7 +217,7 @@ class ItemIdCodeCheckService
         // 検品数を+1
         $progress[$key]['inspection_quantity'] = (int)$progress[$key]['inspection_quantity'] + 1;
         // 出荷数 = 検品数であれば、検品完了なのでtrueにする
-        $progress[$key]['inspection_complete'] = $progress[$key]['inspection_quantity'] == $progress[$key]['order_quantity'] ? true : false;
+        $progress[$key]['inspection_complete'] = $progress[$key]['inspection_quantity'] == $progress[$key]['shipping_quantity'] ? true : false;
         // 検品できたので、trueにする
         session(['inspection' => true]);
         // セッションへ戻す

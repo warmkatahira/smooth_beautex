@@ -8,7 +8,7 @@
                     <th class="font-thin py-1 px-2 text-center">商品コード</th>
                     <th class="font-thin py-1 px-2 text-center">商品JANコード</th>
                     <th class="font-thin py-1 px-2 text-center">商品名</th>
-                    <th class="font-thin py-1 px-2 text-center">商品カテゴリ</th>
+                    <th class="font-thin py-1 px-2 text-center">商品カテゴリ1</th>
                     <th class="font-thin py-1 px-2 text-center">商品ロケーション</th>
                     <th class="font-thin py-1 px-2 text-center">全在庫数</th>
                     <th class="font-thin py-1 px-2 text-center">受注数</th>
@@ -28,10 +28,10 @@
                                 <td class="py-1 px-2 border">{{ $stock->item_code }}</td>
                                 <td class="py-1 px-2 border">{{ $stock->item_jan_code }}</td>
                                 <td class="py-1 px-2 border">{{ $stock->item_name }}</td>
-                                <td class="py-1 px-2 border">{{ $stock->item_category }}</td>
+                                <td class="py-1 px-2 border">{{ $stock->item_category_1 }}</td>
                                 <td class="py-1 px-2 border">{{ $stock->item_location }}</td>
                                 <td class="py-1 px-2 border text-right">{{ number_format($stock->total_stock) }}</td>
-                                <td class="py-1 px-2 border text-right">{{ number_format($stock->total_order_quantity) }}</td>
+                                <td class="py-1 px-2 border text-right">{{ number_format($stock->total_shipping_quantity) }}</td>
                                 <td class="py-1 px-2 border text-right">{{ number_format($stock->available_stock) }}</td>
                                 <td class="py-1 px-2 border text-right">
                                     <input type="tel" name="quantity[{{ $stock->base_id }}][{{ $stock->item_id }}]" class="quantity text-xs text-right py-1 w-20" value="{{ old('quantity.' . $stock->base_id . '.' . $stock->item_id) }}" autocomplete="off">

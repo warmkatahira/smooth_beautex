@@ -47,7 +47,7 @@ class TrackingNoCheckService
                         'items.s_power_code',
                         'items.s_power_code_start_position',
                         'order_items.order_item_id',
-                        'order_items.order_quantity',
+                        'order_items.shipping_quantity',
                     )
                     ->orderBy('items.item_id', 'asc')
                     ->get();
@@ -76,7 +76,7 @@ class TrackingNoCheckService
                 's_power_code'                  => $inspection_target->s_power_code,
                 's_power_code_start_position'   => $inspection_target->s_power_code_start_position,
                 'order_item_id'                 => $inspection_target->order_item_id,
-                'order_quantity'                => $inspection_target->order_quantity,
+                'shipping_quantity'                => $inspection_target->shipping_quantity,
                 'inspection_quantity'           => 0,
                 'inspection_complete'           => false,
             ];

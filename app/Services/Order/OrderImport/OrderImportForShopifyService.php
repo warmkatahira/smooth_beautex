@@ -52,7 +52,7 @@ class OrderImportForShopifyService
                 'ship_tel'                  => $line['受取人携帯電話番号'] != '-' ? $line['受取人携帯電話番号'] : $line['受取人電話番号'],
                 'order_item_code'           => $line['オプションコード'],
                 'order_item_name'           => $line['商品名'],
-                'order_quantity'            => $line['数量'],
+                'shipping_quantity'            => $line['数量'],
                 'unallocated_quantity'      => $line['数量'],
                 'shipper_id'                => OrderCategory::getSpecify($order_category_id)->first()->shipper_id,
                 'order_category_id'         => $order_category_id,
@@ -91,7 +91,7 @@ class OrderImportForShopifyService
             'ship_tel'                  => 'required|string|max:15',
             'order_item_code'           => 'required|string|max:255',
             'order_item_name'           => 'required|string|max:255',
-            'order_quantity'            => 'required|integer|min:1',
+            'shipping_quantity'            => 'required|integer|min:1',
             'unallocated_quantity'      => 'required|integer|min:1',
             'shipper_id'                => 'required|exists:shippers,shipper_id',
             'order_category_id'         => 'required|exists:order_categories,order_category_id',
@@ -122,7 +122,7 @@ class OrderImportForShopifyService
             'ship_tel'                  => '配送先電話番号',
             'order_item_code'           => '商品コード',
             'order_item_name'           => '商品名',
-            'order_quantity'            => '出荷数',
+            'shipping_quantity'            => '出荷数',
             'unallocated_quantity'      => '未引当数',
             'shipper_id'                => '荷送人',
             'order_category_id'         => '受注区分',
@@ -187,7 +187,7 @@ class OrderImportForShopifyService
         // 配列の中にある販売者商品コードの場合、購入数を×2する
         OrderImport::whereIn('seller_item_code', $target_codes)
             ->update([
-                'order_quantity'        => DB::raw('order_quantity * 2'),
+                'shipping_quantity'        => DB::raw('shipping_quantity * 2'),
                 'unallocated_quantity'  => DB::raw('unallocated_quantity * 2'),
             ]);
         // 購入数を更新する対象が存在する場合

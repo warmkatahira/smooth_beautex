@@ -6,6 +6,9 @@ use Illuminate\Foundation\Http\FormRequest;
 use App\Http\Requests\BaseRequest;
 // 列挙
 use App\Enums\AutoProcessEnum;
+use App\Enums\DeliveryTimeZoneEnum;
+// その他
+use Illuminate\Validation\Rule;
 
 class AutoProcessCreateRequest extends BaseRequest
 {
@@ -34,23 +37,33 @@ class AutoProcessCreateRequest extends BaseRequest
         ];
         // 動的ルールを追加
         switch($this->input('action_type')){
-            // 配送方法を変更
-            case AutoProcessEnum::SHIPPING_METHOD_CHANGE:
+            // 配送方法を更新
+            case AutoProcessEnum::SHIPPING_METHOD_UPDATE:
                 $rules['action_value'] = 'required|exists:shipping_methods,shipping_method_id';
+                break;
+            // 配送希望時間を更新
+            case AutoProcessEnum::DESIRED_DELIVERY_TIME_UPDATE:
+                $rules['action_value'] = [
+                    'required',
+                    Rule::in(array_keys(DeliveryTimeZoneEnum::TIME_ZONE_LIST)),
+                ];
                 break;
             // 受注マークを更新
             case AutoProcessEnum::ORDER_MARK_UPDATE:
-                $rules['action_value'] = 'required|max:10';
+                $rules['action_value'] = 'required|max:5';
                 break;
             // 出荷作業メモを更新
             case AutoProcessEnum::SHIPPING_WORK_MEMO_UPDATE:
                 $rules['action_value'] = 'required|string|max:1000';
                 break;
-            // 受注商品を追加
+            // 出荷倉庫を更新
+            case AutoProcessEnum::SHIPPING_BASE_UPDATE:
+                $rules['action_value'] = 'required|exists:bases,base_id';
+                break;
+            // 注文商品を追加
             case AutoProcessEnum::ORDER_ITEM_CREATE:
-                $rules['order_item_code'] = 'required|string|max:255';
-                $rules['order_item_name'] = 'required|string|max:255';
-                $rules['order_quantity'] = 'required|integer|min:1';
+                $rules['order_item_id']     = 'required|exists:items,item_id';
+                $rules['shipping_quantity']    = 'required|integer|min:1';
                 break;
         }
         return $rules;

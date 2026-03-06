@@ -50,7 +50,7 @@ class ShippingHistoryDownloadService
                             $order_item->order_item_code,
                             $order_item->item->item_jan_code,
                             $order_item->item->item_name,
-                            $order_item->order_quantity,
+                            $order_item->shipping_quantity,
                         ];
                         // 書き込む
                         fputcsv($handle, $row);

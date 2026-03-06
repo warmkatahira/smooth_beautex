@@ -25,7 +25,7 @@ class ItemUpdateRequest extends BaseRequest
         return [
             'item_jan_code'                 => 'required|string|max:13',
             'item_name'                     => 'required|string|max:255',
-            'item_category'                 => 'nullable|string|max:20',
+            'item_category_1'                 => 'nullable|string|max:20',
             'model_jan_code'                => 'nullable|string|max:13',
             'exp_start_position'            => 'nullable|integer|min:1',
             'lot_1_start_position'          => 'nullable|integer|min:1',

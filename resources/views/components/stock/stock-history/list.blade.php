@@ -11,7 +11,7 @@
                     <th class="font-thin py-1 px-2 text-center">商品コード</th>
                     <th class="font-thin py-1 px-2 text-center">商品JANコード</th>
                     <th class="font-thin py-1 px-2 text-center">商品名</th>
-                    <th class="font-thin py-1 px-2 text-center">商品カテゴリ</th>
+                    <th class="font-thin py-1 px-2 text-center">商品カテゴリ1</th>
                     <th class="font-thin py-1 px-2 text-center">数量</th>
                     <th class="font-thin py-1 px-2 text-center">コメント</th>
                 </tr>
@@ -34,7 +34,7 @@
                         <td class="py-1 px-2 border">{{ $stock_history->item_code }}</td>
                         <td class="py-1 px-2 border">{{ $stock_history->item_jan_code }}</td>
                         <td class="py-1 px-2 border">{{ $stock_history->item_name }}</td>
-                        <td class="py-1 px-2 border">{{ $stock_history->item_category }}</td>
+                        <td class="py-1 px-2 border">{{ $stock_history->item_category_1 }}</td>
                         <td class="py-1 px-2 border text-right">{{ number_format($stock_history->quantity) }}</td>
                         <td class="py-1 px-2 border">{{ Str::limit($stock_history->comment, 20) }}</td>
                     </tr>

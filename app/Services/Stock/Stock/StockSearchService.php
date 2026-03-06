@@ -51,7 +51,7 @@ class StockSearchService
                         'items.item_code',
                         'items.item_jan_code',
                         'items.item_name',
-                        'items.item_category',
+                        'items.item_category_1',
                         'items.item_image_file_name',
                         'items.is_stock_managed',
                         'items.sort_order as item_sort_order',
@@ -93,19 +93,19 @@ class StockSearchService
             }
         }
         // 受注数を商品×出荷倉庫毎で取得
-        $order_quantity_sub_query = Order::join('order_items', 'order_items.order_control_id', 'orders.order_control_id')
+        $shipping_quantity_sub_query = Order::join('order_items', 'order_items.order_control_id', 'orders.order_control_id')
                                         ->join('items', 'items.item_code', 'order_items.order_item_code')
                                         ->where('order_status_id', '<', OrderStatusEnum::SHUKKA_ZUMI)
                                         ->select(
                                             'items.item_id',
                                             'orders.shipping_base_id',
-                                            DB::raw('SUM(order_items.order_quantity) as total_order_quantity')
+                                            DB::raw('SUM(order_items.shipping_quantity) as total_shipping_quantity')
                                         )
                                         ->groupBy('items.item_id', 'orders.shipping_base_id');
-        // queryとorder_quantity_sub_queryを結合
-        $query = $query->leftJoinSub($order_quantity_sub_query, 'order_quantity_sub_query', function($join){
-            $join->on('order_quantity_sub_query.item_id', '=', 'item_base.item_id')
-                ->on('order_quantity_sub_query.shipping_base_id', '=', 'item_base.base_id');
+        // queryとshipping_quantity_sub_queryを結合
+        $query = $query->leftJoinSub($shipping_quantity_sub_query, 'shipping_quantity_sub_query', function($join){
+            $join->on('shipping_quantity_sub_query.item_id', '=', 'item_base.item_id')
+                ->on('shipping_quantity_sub_query.shipping_base_id', '=', 'item_base.base_id');
         });
         // 商品単位表示の場合
         if($route_name === RouteNameEnum::STOCK_BY_ITEM){
@@ -115,7 +115,7 @@ class StockSearchService
                 'item_base.item_code',
                 'item_base.item_jan_code',
                 'item_base.item_name',
-                'item_base.item_category',
+                'item_base.item_category_1',
                 'item_base.item_image_file_name',
                 'item_base.is_stock_managed',
                 DB::raw("CASE item_base.is_stock_managed WHEN 0 THEN '無効' WHEN 1 THEN '有効' END as is_stock_managed_text"),
@@ -125,7 +125,7 @@ class StockSearchService
                 $query->addSelect(DB::raw("
                     SUM(CASE WHEN item_base.base_id = '{$base->base_id}' THEN stocks.total_stock ELSE 0 END) as total_stock_{$base->base_id},
                     SUM(CASE WHEN item_base.base_id = '{$base->base_id}' THEN stocks.available_stock ELSE 0 END) as available_stock_{$base->base_id},
-                    SUM(CASE WHEN item_base.base_id = '{$base->base_id}' THEN order_quantity_sub_query.total_order_quantity ELSE 0 END) as total_order_quantity_{$base->base_id}
+                    SUM(CASE WHEN item_base.base_id = '{$base->base_id}' THEN shipping_quantity_sub_query.total_shipping_quantity ELSE 0 END) as total_shipping_quantity_{$base->base_id}
                 "));
             }
             // グループ化
@@ -134,7 +134,7 @@ class StockSearchService
                 'item_base.item_code',
                 'item_base.item_jan_code',
                 'item_base.item_name',
-                'item_base.item_category',
+                'item_base.item_category_1',
                 'item_base.item_image_file_name',
             )->orderBy('item_base.item_sort_order', 'asc');
         }
@@ -146,7 +146,7 @@ class StockSearchService
                 'item_base.item_code',
                 'item_base.item_jan_code',
                 'item_base.item_name',
-                'item_base.item_category',
+                'item_base.item_category_1',
                 'item_base.item_image_file_name',
                 'item_base.is_stock_managed',
                 DB::raw("CASE item_base.is_stock_managed WHEN 0 THEN '無効' WHEN 1 THEN '有効' END as is_stock_managed_text"),
@@ -154,7 +154,7 @@ class StockSearchService
                 'item_base.base_name',
                 'item_base.base_color_code',
                 DB::raw('IFNULL(stocks.total_stock, 0) as total_stock'),
-                DB::raw('IFNULL(order_quantity_sub_query.total_order_quantity, 0) as total_order_quantity'),
+                DB::raw('IFNULL(shipping_quantity_sub_query.total_shipping_quantity, 0) as total_shipping_quantity'),
                 DB::raw('IFNULL(stocks.available_stock, 0) as available_stock'),
                 'stocks.item_location',
             );

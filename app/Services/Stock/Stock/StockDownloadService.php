@@ -37,14 +37,14 @@ class StockDownloadService
                             $stock->item_code,
                             $stock->item_jan_code,
                             $stock->item_name,
-                            $stock->item_category,
+                            $stock->item_category_1,
                             $stock->is_stock_managed_text,
                         ];
                         // 倉庫の分だけループ処理
                         foreach($bases as $base){
                             // 各在庫数をセット
                             $row[] = $stock->{'total_stock_'.$base->base_id} ?? 0;
-                            $row[] = $stock->{'total_order_quantity_'.$base->base_id} ?? 0;
+                            $row[] = $stock->{'total_shipping_quantity_'.$base->base_id} ?? 0;
                             $row[] = $stock->{'available_stock_'.$base->base_id} ?? 0;
                         }
                     }
@@ -55,11 +55,11 @@ class StockDownloadService
                             $stock->item_code,
                             $stock->item_jan_code,
                             $stock->item_name,
-                            $stock->item_category,
+                            $stock->item_category_1,
                             $stock->item_location,
                             $stock->is_stock_managed_text,
                             $stock->total_stock,
-                            $stock->total_order_quantity,
+                            $stock->total_shipping_quantity,
                             $stock->available_stock,
                         ];
                     }

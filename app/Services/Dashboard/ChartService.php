@@ -76,7 +76,7 @@ class ChartService
     public function getShippingQuantity($from, $to)
     {
         return Order::join('order_items', 'order_items.order_control_id', 'orders.order_control_id')
-                    ->selectRaw('DATE(orders.shipping_date) as date, SUM(order_items.order_quantity) as total_quantity')
+                    ->selectRaw('DATE(orders.shipping_date) as date, SUM(order_items.shipping_quantity) as total_quantity')
                     ->whereDate('orders.shipping_date', '>=', $from)
                     ->whereDate('orders.shipping_date', '<=', $to)
                     ->groupBy(DB::raw('DATE(orders.shipping_date)'))

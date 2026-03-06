@@ -17,7 +17,7 @@
                             'order_item_code' => $code,
                             'order_item_name' => $group->first()->order_item_name,
                             'item' => $group->first()->item, // item 情報は同じなので first() で取得
-                            'total_order_quantity' => $group->sum('order_quantity'),
+                            'total_shipping_quantity' => $group->sum('shipping_quantity'),
                             'total_unallocated_quantity' => $group->sum('unallocated_quantity'),
                         ];
                     })
@@ -48,7 +48,7 @@
                     <tr class="text-left bg-gray-200">
                         <th class="item_jan_code font-thin py-1 px-2 border border-black text-center">商品コード</th>
                         <th class="item_name font-thin py-1 px-2 border border-black text-center">商品名</th>
-                        <th class="order_quantity font-thin py-1 px-2 border border-black text-center">数量</th>
+                        <th class="shipping_quantity font-thin py-1 px-2 border border-black text-center">数量</th>
                         <th class="unallocated_quantity font-thin py-1 px-2 border border-black text-center">未引当数</th>
                     </tr>
                 </thead>
@@ -57,7 +57,7 @@
                         <tr class="text-left cursor-default whitespace-nowrap">
                             <td class="item_jan_code py-1 px-2 border border-black text-center">{{ $item['order_item_code'] }}</td>
                             <td class="item_name py-1 px-2 border border-black">{{ $item['order_item_name'] }}</td>
-                            <td class="order_quantity py-1 px-2 border border-black text-right">{{ $item['total_order_quantity'] }}</td>
+                            <td class="shipping_quantity py-1 px-2 border border-black text-right">{{ $item['total_shipping_quantity'] }}</td>
                             <td class="unallocated_quantity py-1 px-2 border border-black text-right">{{ $item['total_unallocated_quantity'] }}</td>
                         </tr>
                     @endforeach

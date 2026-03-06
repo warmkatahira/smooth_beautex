@@ -9,9 +9,13 @@ use App\Models\StockHistoryCategory;
 use App\Models\Item;
 // サービス
 use App\Services\Stock\StockHistory\StockHistorySearchService;
+// トレイト
+use App\Traits\PaginatesResultsTrait;
 
 class StockHistoryController extends Controller
 {
+    use PaginatesResultsTrait;
+    
     public function index(Request $request)
     {
         // ページヘッダーをセッションに格納
@@ -25,7 +29,7 @@ class StockHistoryController extends Controller
         // 検索結果を取得
         $result = $StockHistorySearchService->getSearchResult();
         // ページネーションを実施
-        $stock_histories = $StockHistorySearchService->setPagination($result);
+        $stock_histories = $this->setPagination($result);
         // 在庫履歴区分を取得
         $stock_history_categories = StockHistoryCategory::getAll()->get();       
         return view('stock.stock_history.index')->with([

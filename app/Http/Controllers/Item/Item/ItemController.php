@@ -8,9 +8,13 @@ use Illuminate\Http\Request;
 use App\Models\Item;
 // サービス
 use App\Services\Item\Item\ItemSearchService;
+// トレイト
+use App\Traits\PaginatesResultsTrait;
 
 class ItemController extends Controller
 {
+    use PaginatesResultsTrait;
+
     public function index(Request $request)
     {
         // ページヘッダーをセッションに格納
@@ -24,7 +28,7 @@ class ItemController extends Controller
         // 検索結果を取得
         $result = $ItemSearchService->getSearchResult();
         // ページネーションを実施
-        $items = $ItemSearchService->setPagination($result);
+        $items = $this->setPagination($result);
         return view('item.item.index')->with([
             'items' => $items,
         ]);

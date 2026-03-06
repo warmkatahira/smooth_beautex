@@ -1,9 +1,9 @@
 <form method="GET" action="{{ route($route) }}" id="search_form">
     <p class="text-xs bg-black text-white py-1 text-center">検索条件</p>
     <div class="flex flex-col gap-y-2 p-3 bg-white min-w-60 text-xs border border-black">
-        <x-search.input type="text" label="自動処理名" id="search_auto_process_name" />
-        <x-search.select-array label="アクション区分" id="search_action_type" :items="$actionTypes" required="true" />
-        <x-search.select-boolean label="有効/無効" id="search_is_active" label0="無効" label1="有効" />
+        <x-search.input type="text" label="自動処理名" id="search_auto_process_name" name="search_auto_process_name" />
+        <x-search.select-array label="アクション区分" id="search_action_type" name="search_action_type" :items="$actionTypes" required="true" />
+        <x-search.select-boolean label="有効/無効" id="search_is_active" name="search_is_active" label0="無効" label1="有効" />
         <input type="hidden" id="search_type" name="search_type" value="default">
         <div class="flex flex-row">
             <!-- 検索ボタン -->

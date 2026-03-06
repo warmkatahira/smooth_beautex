@@ -33,7 +33,7 @@ class OrderDeleteService
                             ->join('order_items', 'order_items.order_control_id', 'orders.order_control_id')
                             ->join('items', 'items.item_code', 'order_items.order_item_code')
                             ->where('is_stock_managed', 1)
-                            ->select(DB::raw("sum(order_items.order_quantity - order_items.unallocated_quantity) as total_allocated_quantity, shipping_base_id, items.item_id"))
+                            ->select(DB::raw("sum(order_items.shipping_quantity - order_items.unallocated_quantity) as total_allocated_quantity, shipping_base_id, items.item_id"))
                             ->groupBy('shipping_base_id', 'items.item_id')
                             ->having('total_allocated_quantity', '>', 0)
                             ->get();

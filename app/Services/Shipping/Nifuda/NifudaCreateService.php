@@ -15,6 +15,7 @@ use App\Enums\DeliveryCompanyEnum;
 use App\Enums\DeliveryTimeZoneChangeEnum;
 use App\Enums\SystemEnum;
 use App\Enums\ShippingMethodEnum;
+use App\Enums\SagawaSealCodeEnum;
 // その他
 use Carbon\CarbonImmutable;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -118,7 +119,7 @@ class NifudaCreateService
                 $worksheet->setCellValue('AS'.$row, is_null($order->desired_delivery_date) ? '' : CarbonImmutable::parse($order->desired_delivery_date)->format('Y/m/d')); // 配送希望日
                 $worksheet->setCellValue('AT'.$row, DeliveryTimeZoneChangeEnum::sagawa_time_zone_get($order->desired_delivery_time));   // 配送希望時間
                 $worksheet->setCellValue('AZ'.$row, '011'); // 指定シール1(取注)
-                $worksheet->setCellValue('BA'.$row, DeliveryTimeZoneChangeEnum::sagawa_seal_code_get($base_shipping_method->e_hiden_version, $order->desired_delivery_date, $order->desired_delivery_time)); // 指定シール2(日時指定)
+                $worksheet->setCellValue('BA'.$row, SagawaSealCodeEnum::sagawa_seal_code_get($base_shipping_method->e_hiden_version, $order->desired_delivery_date, $order->desired_delivery_time)); // 指定シール2(日時指定)
                 $worksheet->setCellValue('BB'.$row, ''); // 指定シール3
                 $worksheet->setCellValue('BI'.$row, CarbonImmutable::parse($shipping_group->estimated_shipping_date)->format('Y/m/d'));  // 出荷日
                 // データを書き込む位置をカウントアップ

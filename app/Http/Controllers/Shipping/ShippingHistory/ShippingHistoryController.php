@@ -14,9 +14,13 @@ use App\Services\Order\OrderMgt\OrderSearchService;
 use App\Services\Shipping\ShippingHistory\ShippingHistoryService;
 // 列挙
 use App\Enums\OrderStatusEnum;
+// トレイト
+use App\Traits\PaginatesResultsTrait;
 
 class ShippingHistoryController extends Controller
 {
+    use PaginatesResultsTrait;
+    
     public function index(Request $request)
     {
         // ページヘッダーをセッションに格納
@@ -36,7 +40,7 @@ class ShippingHistoryController extends Controller
         // 検索結果を取得
         $result = $OrderSearchService->getSearchResult();
         // ページネーションを実施
-        $orders = $OrderSearchService->setPagination($result);
+        $orders = $this->setPagination($result);
         // 倉庫を取得
         $bases = Base::getAll()->get();
         // 受注区分を取得

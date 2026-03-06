@@ -6,7 +6,7 @@
         <x-search.input type="text" label="商品コード" id="search_item_code" />
         <x-search.input type="text" label="商品JANコード" id="search_item_jan_code" />
         <x-search.input type="text" label="商品名" id="search_item_name" />
-        <x-search.input type="text" label="商品カテゴリ" id="search_item_category" />
+        <x-search.input type="text" label="商品カテゴリ1" id="search_item_category_1" />
         <input type="hidden" id="search_type" name="search_type" value="default">
         <div class="flex flex-row">
             <!-- 検索ボタン -->

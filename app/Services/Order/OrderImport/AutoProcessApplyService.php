@@ -119,7 +119,7 @@ class AutoProcessApplyService
                 // 追加する商品の在庫を取得
                 $stock = Stock::getSpecifyByBaseIdItemId($order->shipping_base_id, $item->item_id)->lockForUpdate()->first();
                 // 在庫レコードが存在しないまたは、有効在庫数が出荷数よりも小さい場合
-                if(empty($stock) || $stock->available_stock < $auto_process->auto_process_order_item->order_quantity){
+                if(empty($stock) || $stock->available_stock < $auto_process->auto_process_order_item->shipping_quantity){
                     // 処理を抜ける
                     return;
                 }
@@ -132,13 +132,13 @@ class AutoProcessApplyService
                 'unallocated_quantity'  => 0,
                 'order_item_code'       => $auto_process->auto_process_order_item->order_item_code,
                 'order_item_name'       => $auto_process->auto_process_order_item->order_item_name,
-                'order_quantity'        => $auto_process->auto_process_order_item->order_quantity,
+                'shipping_quantity'        => $auto_process->auto_process_order_item->shipping_quantity,
                 'is_auto_process_add'   => 1,
             ]);
             // 在庫管理を行っている場合
             if($item->is_stock_managed){
                 // 有効在庫数から出荷数を引く
-                $stock->decrement('available_stock', $auto_process->auto_process_order_item->order_quantity);
+                $stock->decrement('available_stock', $auto_process->auto_process_order_item->shipping_quantity);
             }
         }
     }

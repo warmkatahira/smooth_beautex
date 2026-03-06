@@ -218,7 +218,8 @@ class ItemUploadJobs implements ShouldQueue
                 case 'item_name':
                     $rules += ['*.'.$column => 'required|max:255'];
                     break;
-                case 'item_category':
+                case 'item_category_1':
+                case 'item_category_2':
                     $rules += ['*.'.$column => 'nullable|max:20'];
                     break;
                 case 'model_jan_code':
@@ -272,7 +273,8 @@ class ItemUploadJobs implements ShouldQueue
         $attributes = [
             '*.item_jan_code'               => '商品JANコード',
             '*.item_name'                   => '商品名',
-            '*.item_category'               => '商品カテゴリ',
+            '*.item_category_1'             => '商品カテゴリ1',
+            '*.item_category_2'             => '商品カテゴリ2',
             '*.model_jan_code'              => '代表JANコード',
             '*.exp_start_position'          => 'EXP開始位置',
             '*.lot_1_start_position'        => 'LOT1開始位置',

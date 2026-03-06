@@ -7,7 +7,7 @@
             </div>
             <div class="flex text-center text-2xl ml-auto mr-1">
                 <p class="bg-theme-sub border border-black py-2 px-5">合計数</p>
-                <p class="py-2 px-10 border-y border-r border-black">{{ number_format($report_total_order_quantity) }}</p>
+                <p class="py-2 px-10 border-y border-r border-black">{{ number_format($report_total_shipping_quantity) }}</p>
             </div>
         </div>
         <table class="w-full mt-5">
@@ -16,7 +16,7 @@
                     <th class="item_location text-left py-2 font-thin pl-2">ロケ</th>
                     <th class="item_jan_code text-left py-2 font-thin">商品JANコード</th>
                     <th class="item_name text-left py-2 font-thin">商品名</th>
-                    <th class="order_quantity text-right py-2 font-thin pr-2">数量</th>
+                    <th class="shipping_quantity text-right py-2 font-thin pr-2">数量</th>
                     <th class="remaining_stock text-right py-2 font-thin pr-2">残数</th>
                 </tr>
             </thead>
@@ -29,7 +29,7 @@
                         <td class="item_location text-left py-2 pl-2">{{ $item->item_location }}</td>
                         <td class="item_jan_code text-left py-2">{{ $item->item_jan_code }}</td>
                         <td class="item_name text-left py-2">{{ $item->item_name }}</td>
-                        <td class="order_quantity text-right py-2 pr-2 text-2xl">{{ number_format($item->total_order_quantity) }}</td>
+                        <td class="shipping_quantity text-right py-2 pr-2 text-2xl">{{ number_format($item->total_shipping_quantity) }}</td>
                         <td class="remaining_stock text-right py-2 pr-2 text-xl">{{ number_format($item->remaining_stock) }}</td>
                     </tr>
                 @endforeach

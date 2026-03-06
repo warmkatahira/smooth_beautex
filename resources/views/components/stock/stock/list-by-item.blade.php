@@ -13,7 +13,7 @@
                     <th class="font-thin py-1 px-2 text-center">商品コード</th>
                     <th class="font-thin py-1 px-2 text-center">商品JANコード</th>
                     <th class="font-thin py-1 px-2 text-center">商品名</th>
-                    <th class="font-thin py-1 px-2 text-center">商品カテゴリ</th>
+                    <th class="font-thin py-1 px-2 text-center">商品カテゴリ1</th>
                     <th class="font-thin py-1 px-2 text-center">在庫管理</th>
                     @foreach($bases as $base)
                         <th class="font-thin py-1 px-2 text-center">全在庫数</th>
@@ -31,11 +31,11 @@
                         <td class="py-1 px-2 border">{{ $stock->item_code }}</td>
                         <td class="py-1 px-2 border">{{ $stock->item_jan_code }}</td>
                         <td class="py-1 px-2 border">{{ $stock->item_name }}</td>
-                        <td class="py-1 px-2 border">{{ $stock->item_category }}</td>
+                        <td class="py-1 px-2 border">{{ $stock->item_category_1 }}</td>
                         <td class="py-1 px-2 border text-center">{{ $stock->is_stock_managed_text }}</td>
                         @foreach ($bases as $base)
                             <td style="--base-color: {{ $base->base_color_code }};" class="py-1 px-2 border text-right bg-[var(--base-color)] group-hover:bg-theme-sub">{{ number_format($stock->{'total_stock_'.$base->base_id}) }}</td>
-                            <td style="--base-color: {{ $base->base_color_code }};" class="py-1 px-2 border text-right bg-[var(--base-color)] group-hover:bg-theme-sub">{{ number_format($stock->{'total_order_quantity_'.$base->base_id}) }}</td>
+                            <td style="--base-color: {{ $base->base_color_code }};" class="py-1 px-2 border text-right bg-[var(--base-color)] group-hover:bg-theme-sub">{{ number_format($stock->{'total_shipping_quantity_'.$base->base_id}) }}</td>
                             <td style="--base-color: {{ $base->base_color_code }};" class="py-1 px-2 border text-right bg-[var(--base-color)] group-hover:bg-theme-sub">{{ number_format($stock->{'available_stock_'.$base->base_id}) }}</td>
                         @endforeach
                     </tr>

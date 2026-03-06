@@ -42,7 +42,7 @@ class ItemUpdateService
         $item->update([
             'item_jan_code'                 => $request->item_jan_code,
             'item_name'                     => $request->item_name,
-            'item_category'                 => $request->item_category,
+            'item_category_1'                 => $request->item_category_1,
             'model_jan_code'                => $request->model_jan_code,
             'exp_start_position'            => $request->exp_start_position,
             'lot_1_start_position'          => $request->lot_1_start_position,

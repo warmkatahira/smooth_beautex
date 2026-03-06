@@ -20,7 +20,7 @@ return new class extends Migration
             // ここから受注データの内容
             $table->string('order_item_code', 255);
             $table->string('order_item_name', 255);
-            $table->unsignedInteger('order_quantity');
+            $table->unsignedInteger('shipping_quantity');
             $table->boolean('is_auto_process_add')->default(0);
             $table->timestamps();
             // 外部キー

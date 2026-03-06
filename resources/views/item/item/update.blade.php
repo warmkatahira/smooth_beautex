@@ -8,7 +8,7 @@
                 <x-form.p label="商品コード" :value="$item->item_code" />
                 <x-form.input type="text" label="商品JANコード" id="item_jan_code" name="item_jan_code" :value="$item->item_jan_code" required="true" />
                 <x-form.input type="text" label="商品名" id="item_name" name="item_name" :value="$item->item_name" required="true" />
-                <x-form.input type="text" label="商品カテゴリ" id="item_category" name="item_category" :value="$item->item_category" />
+                <x-form.input type="text" label="商品カテゴリ1" id="item_category_1" name="item_category_1" :value="$item->item_category_1" />
                 <x-form.input type="text" label="代表JANコード" id="model_jan_code" name="model_jan_code" :value="$item->model_jan_code" />
                 <x-form.input type="tel" label="EXP開始位置" id="exp_start_position" name="exp_start_position" :value="$item->exp_start_position" />
                 <x-form.input type="tel" label="LOT1開始位置" id="lot_1_start_position" name="lot_1_start_position" :value="$item->lot_1_start_position" />

@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Setting\AutoProcess;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 // モデル
+use App\Models\Base;
 use App\Models\AutoProcess;
 use App\Models\DeliveryCompany;
 // 列挙
 use App\Enums\AutoProcessEnum;
+use App\Enums\DeliveryTimeZoneEnum;
 // サービス
 use App\Services\Setting\AutoProcess\AutoProcessUpdateService;
 // リクエスト
@@ -32,12 +34,18 @@ class AutoProcessUpdateController extends Controller
         $condition_match_types = AutoProcessEnum::CONDITION_MATCH_TYPE_LIST;
         // 運送会社を取得
         $delivery_companies = DeliveryCompany::getAll()->with('shipping_methods')->get();
+        // 配送希望時間を取得
+        $time_zones = DeliveryTimeZoneEnum::TIME_ZONE_LIST;
+        // 倉庫を取得
+        $bases = Base::getAll()->get();
         return view('setting.auto_process.update')->with([
             'auto_process' => $auto_process,
             'action_types' => $action_types,
             'column_names' => $column_names,
             'condition_match_types' => $condition_match_types,
             'delivery_companies' => $delivery_companies,
+            'time_zones' => $time_zones,
+            'bases' => $bases,
         ]);
     }
 

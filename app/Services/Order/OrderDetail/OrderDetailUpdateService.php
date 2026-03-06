@@ -47,11 +47,11 @@ class OrderDetailUpdateService
             // 引当済みの在庫数を有効在庫数に加算（戻す）
             Stock::where('base_id', $order->shipping_base_id)
                 ->where('item_id', $order_item->item->item_id)
-                ->increment('available_stock', ($order_item->order_quantity - $order_item->unallocated_quantity));
+                ->increment('available_stock', ($order_item->shipping_quantity - $order_item->unallocated_quantity));
             // 在庫引当状態を初期化
             $order_item->update([
                 'is_stock_allocated'    => 0,
-                'unallocated_quantity'  => DB::raw("order_quantity"),
+                'unallocated_quantity'  => DB::raw("shipping_quantity"),
             ]);
             // 在庫引当状態を初期化
             $order_item->update([

@@ -20,14 +20,14 @@ class InfoGetService
         $orders = Order::getOrderSpecifyOrderStatus('<=', OrderStatusEnum::SHUKKA_MACHI)->with('order_items')->get();
         $sagyo_mae_ship_quantity = $orders->flatMap(function($order) {
                                         return $order->order_items;
-                                    })->sum('order_quantity');
+                                    })->sum('shipping_quantity');
         // 作業中の注文件数を取得
         $sagyo_chu_order_count = Order::getOrderSpecifyOrderStatus('=', OrderStatusEnum::SAGYO_CHU)->get()->count();
         // 作業中の注文の出荷数量を取得
         $orders = Order::getOrderSpecifyOrderStatus('=', OrderStatusEnum::SAGYO_CHU)->with('order_items')->get();
         $sagyo_chu_ship_quantity = $orders->flatMap(function($order) {
                                         return $order->order_items;
-                                    })->sum('order_quantity');
+                                    })->sum('shipping_quantity');
         // 当月の出荷件数を取得
         $month_shipped_count = Order::getShippedOrder($from, $to)->get()->count();
         // 当月の出荷数量を取得

@@ -39,7 +39,7 @@ class StockHistoryDownloadService
                         $stock_history->item_code,
                         $stock_history->item_jan_code,
                         $stock_history->item_name,
-                        $stock_history->item_category,
+                        $stock_history->item_category_1,
                         $stock_history->quantity,
                         $stock_history->comment,
                     ];

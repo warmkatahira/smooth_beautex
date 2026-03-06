@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('auto_process_order_items', function (Blueprint $table) {
             $table->increments('auto_process_order_item_id');
             $table->unsignedInteger('auto_process_id');
-            $table->string('order_item_code', 255);
-            $table->string('order_item_name', 255);
-            $table->unsignedInteger('order_quantity');
+            $table->unsignedInteger('order_item_id');
+            $table->unsignedInteger('shipping_quantity');
             $table->timestamps();
             // 外部キー
             $table->foreign('auto_process_id')->references('auto_process_id')->on('auto_processes')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreign('order_item_id')->references('item_id')->on('items')->cascadeOnUpdate()->cascadeOnDelete();
         });
     }
 

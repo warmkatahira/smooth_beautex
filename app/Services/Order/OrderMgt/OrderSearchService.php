@@ -136,11 +136,4 @@ class OrderSearchService
                     ->orderBy('order_import_time', 'asc')
                     ->orderBy('order_control_id', 'asc');
     }
-
-    // ページネーションを実施
-    public function setPagination($query)
-    {
-        // 指定された件数でページネーション
-        return $query->paginate(SystemEnum::PAGINATE_DEFAULT);
-    }
 }

@@ -36,7 +36,7 @@ class StockHistory extends Model
             '商品コード',
             '商品JANコード',
             '商品名',
-            '商品カテゴリ',
+            '商品カテゴリ1',
             '数量',
             'コメント',
         ];

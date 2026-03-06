@@ -34,7 +34,7 @@ class OrderImport extends Model
         'ship_tel',
         'order_item_code',
         'order_item_name',
-        'order_quantity',
+        'shipping_quantity',
         'unallocated_quantity',
         'order_category_id',
     ];
@@ -116,7 +116,7 @@ class OrderImport extends Model
             'unallocated_quantity',
             'order_item_code',
             'order_item_name',
-            'order_quantity',
+            'shipping_quantity',
         ]);
     }
 }

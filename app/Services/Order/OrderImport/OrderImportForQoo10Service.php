@@ -49,7 +49,7 @@ class OrderImportForQoo10Service
                 'ship_tel'                  => $line['受取人携帯電話番号'] != '-' ? $line['受取人携帯電話番号'] : $line['受取人電話番号'], // 携帯電話番号がなければ、電話番号を適用
                 'order_item_code'           => $line['オプションコード'],
                 'order_item_name'           => $line['商品名'],
-                'order_quantity'            => $line['数量'],
+                'shipping_quantity'            => $line['数量'],
                 'unallocated_quantity'      => $line['数量'],
                 'order_category_id'         => $order_category_id,
             ];
@@ -87,7 +87,7 @@ class OrderImportForQoo10Service
             'ship_tel'                  => 'required|string|max:30',
             'order_item_code'           => 'required|string|max:255',
             'order_item_name'           => 'required|string|max:255',
-            'order_quantity'            => 'required|integer|min:1',
+            'shipping_quantity'            => 'required|integer|min:1',
             'unallocated_quantity'      => 'required|integer|min:1',
             'order_category_id'         => 'required|exists:order_categories,order_category_id',
         ];
@@ -118,7 +118,7 @@ class OrderImportForQoo10Service
             'ship_tel'                  => '配送先電話番号',
             'order_item_code'           => '商品コード',
             'order_item_name'           => '商品名',
-            'order_quantity'            => '出荷数',
+            'shipping_quantity'            => '出荷数',
             'unallocated_quantity'      => '未引当数',
             'order_category_id'         => '受注区分',
         ];

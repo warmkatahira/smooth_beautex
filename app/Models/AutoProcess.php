@@ -5,8 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 // モデル
 use App\Models\ShippingMethod;
+use App\Models\Base;
 // 列挙
 use App\Enums\AutoProcessEnum;
+use App\Enums\DeliveryTimeZoneEnum;
 
 class AutoProcess extends Model
 {
@@ -35,7 +37,7 @@ class AutoProcess extends Model
     // is_activeが「1」(有効)の自動処理を取得
     public static function getIsActive()
     {
-        return self::where('is_active', 1)->orderBy('sort_order', 'asc')->orderBy('auto_process_id', 'asc');
+        return self::where('is_active', true)->orderBy('sort_order', 'asc')->orderBy('auto_process_id', 'asc');
     }
     // 全てのレコードを取得
     public static function getAll()
@@ -55,20 +57,27 @@ class AutoProcess extends Model
     // 「action_type」によって「action_value」を変換して返すアクセサ
     public function getActionValueTextAttribute(): string
     {
-        // 配送方法を変更の場合
-        if($this->action_type === AutoProcessEnum::SHIPPING_METHOD_CHANGE){
+        // 配送方法を更新の場合
+        if($this->action_type === AutoProcessEnum::SHIPPING_METHOD_UPDATE){
             // 運送会社+配送方法を返す
             return ShippingMethod::getSpecify($this->action_value)->first()->delivery_company_and_shipping_method;
         }
-        // 受注商品を追加の場合
+        // 配送希望時間を更新の場合
+        if($this->action_type === AutoProcessEnum::DESIRED_DELIVERY_TIME_UPDATE){
+            // 配送希望時間を返す
+            return DeliveryTimeZoneEnum::TIME_ZONE_LIST[$this->action_value] ?? null;
+        }
+        // 出荷倉庫を更新の場合
+        if($this->action_type === AutoProcessEnum::SHIPPING_BASE_UPDATE){
+            // 倉庫を返す
+            return Base::getSpecify($this->action_value)->first()->base_name;
+        }
+        // 注文商品を追加の場合
         if($this->action_type === AutoProcessEnum::ORDER_ITEM_CREATE){
             // 受注商品の情報を返す
-            return $this->auto_process_order_item->order_item_code.' / '.$this->auto_process_order_item->order_item_name.' / '.$this->auto_process_order_item->order_quantity;
+            return $this->auto_process_order_item->item->item_jan_code .' / '. $this->auto_process_order_item->item->item_name .' / '. $this->auto_process_order_item->shipping_quantity;
         }
-        // 配送方法を変更以外の場合
-        if($this->action_type !== AutoProcessEnum::SHIPPING_METHOD_CHANGE){
-            // そのままの値を返す
-            return $this->action_value;
-        }
+        // そのままの値を返す
+        return $this->action_value;
     }
 }

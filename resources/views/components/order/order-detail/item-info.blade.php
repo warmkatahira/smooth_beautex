@@ -26,7 +26,7 @@
                             <td class="py-1 px-2 border">{{ $order_item->order_item_code }}</td>
                             <td class="py-1 px-2 border">{{ $order_item->item?->item_jan_code }}</td>
                             <td class="py-1 px-2 border">{{ $order_item->order_item_name }}</td>
-                            <td class="py-1 px-2 border text-right">{{ number_format($order_item->order_quantity) }}</td>
+                            <td class="py-1 px-2 border text-right">{{ number_format($order_item->shipping_quantity) }}</td>
                             <td class="py-1 px-2 border text-right">{{ number_format($order_item->unallocated_quantity) }}</td>
                         </tr>
                     @endforeach

@@ -10,9 +10,13 @@ use App\Models\AutoProcess;
 use App\Enums\AutoProcessEnum;
 // サービス
 use App\Services\Setting\AutoProcess\AutoProcessSearchService;
+// トレイト
+use App\Traits\PaginatesResultsTrait;
 
 class AutoProcessController extends Controller
 {
+    use PaginatesResultsTrait;
+
     public function index(Request $request)
     {
         // ページヘッダーをセッションに格納
@@ -26,7 +30,7 @@ class AutoProcessController extends Controller
         // 検索結果を取得
         $result = $AutoProcessSearchService->getSearchResult();
         // ページネーションを実施
-        $auto_processes = $AutoProcessSearchService->setPagination($result);
+        $auto_processes = $this->setPagination($result);
         // アクション区分を取得
         $action_types = AutoProcessEnum::ACTION_TYPE_LIST;
         return view('setting.auto_process.index')->with([

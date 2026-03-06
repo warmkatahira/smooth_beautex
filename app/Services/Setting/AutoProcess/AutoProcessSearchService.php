@@ -18,8 +18,7 @@ class AutoProcessSearchService
             'search_auto_process_name',
             'search_action_type',
             'search_is_active',
-        ]);
-        return;
+        ]);  
     }
 
     // セッションに検索条件を格納
@@ -36,7 +35,6 @@ class AutoProcessSearchService
             session(['search_action_type' => $request->search_action_type]);
             session(['search_is_active' => $request->search_is_active]);
         }
-        return;
     }
 
     // 検索結果を取得
@@ -61,12 +59,5 @@ class AutoProcessSearchService
         }
         // 並び替えを実施
         return $query->orderBy('sort_order', 'asc')->orderBy('auto_process_id', 'asc');
-    }
-
-    // ページネーションを実施
-    public function setPagination($query)
-    {
-        // 指定された件数でページネーション
-        return $query->paginate(SystemEnum::PAGINATE_DEFAULT);
     }
 }

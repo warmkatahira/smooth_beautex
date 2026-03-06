@@ -11,9 +11,13 @@ use App\Services\Item\Item\ItemSearchService;
 use App\Services\Stock\Stock\StockSearchService;
 // その他
 use Illuminate\Support\Facades\Route;
+// トレイト
+use App\Traits\PaginatesResultsTrait;
 
 class InputStockOperationController extends Controller
 {
+    use PaginatesResultsTrait;
+    
     public function index(Request $request)
     {
         // ページヘッダーをセッションに格納
@@ -31,7 +35,7 @@ class InputStockOperationController extends Controller
         $result = $ItemSearchService->getSearchResult();
         $result = $StockSearchService->getSearchResult($result, Route::currentRouteName());
         // ページネーションを実施
-        $stocks = $ItemSearchService->setPagination($result['stocks']);
+        $stocks = $this->setPagination($result['stocks']);
         return view('stock.input_stock_operation.index')->with([
             'stocks' => $stocks,
             'bases' => $result['bases'],

@@ -22,12 +22,13 @@ export default {
                     'main'          : "#FEA4A4",
                     'sub'           : "#FFDEDE",
                     'body'          : "#ebe6e6",
-                    'merge'         : "#99f6e4",
                 },
                 btn: {
                     'enter'         : "#3b82f6",
                     'cancel'        : "#ef4444",
                     'check'         : "#f9f1e4",
+                    'open'          : "#16a34a",
+                    'close'         : "#ea580c",
                 },
                 common: {
                     'disabled'      : "#d1d5db",
@@ -37,7 +38,13 @@ export default {
                 'modal-window'      : "700px",
             },
             width: {
-                '1/7'               : '14.2857143%', // 100 ÷ 7
+                '1/7'               : '14.2857143%',
+                'form-div'          : '600px',
+            },
+            maxWidth: {
+                '8xl': '1440px',
+                '9xl': '1600px',
+                '10xl': '1800px',
             }
         },
     },

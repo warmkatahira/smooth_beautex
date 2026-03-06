@@ -26,5 +26,13 @@ class ShippingMethodSeeder extends Seeder
             'shipping_method' => '宅急便',
             'delivery_company_id' => 1,
         ]);
+        ShippingMethod::create([
+            'shipping_method' => '宅配便',
+            'delivery_company_id' => 2,
+        ]);
+        ShippingMethod::create([
+            'shipping_method' => 'EMS',
+            'delivery_company_id' => 2,
+        ]);
     }
 }

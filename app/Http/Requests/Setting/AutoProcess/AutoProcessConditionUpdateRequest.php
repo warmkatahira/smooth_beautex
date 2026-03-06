@@ -51,7 +51,7 @@ class AutoProcessConditionUpdateRequest extends BaseRequest
                     $rules["value.$index"] = ($is_value_required ? 'required|' : 'nullable|') . 'string|max:20';
                     break;
                 // 配送先都道府県
-                case AutoProcessEnum::SHIP_PREFECTURE_NAME:
+                case AutoProcessEnum::SHIP_PROVINCE_NAME:
                     $rules["value.$index"] = ($is_value_required ? 'required|' : 'nullable|') . 'string|max:4';
                     break;
                 // 配送先名
@@ -62,16 +62,16 @@ class AutoProcessConditionUpdateRequest extends BaseRequest
                 case AutoProcessEnum::ORDER_MARK:
                     $rules["value.$index"] = ($is_value_required ? 'required|' : 'nullable|') . 'string|max:10';
                     break;
-                // 受注商品コード
+                // 注文商品コード
                 case AutoProcessEnum::ORDER_ITEM_CODE:
                     $rules["value.$index"] = ($is_value_required ? 'required|' : 'nullable|') . 'string|max:255';
                     break;
-                // 受注商品名
+                // 注文商品名
                 case AutoProcessEnum::ORDER_ITEM_NAME:
                     $rules["value.$index"] = ($is_value_required ? 'required|' : 'nullable|') . 'string|max:255';
                     break;
                 // 出荷数
-                case AutoProcessEnum::ORDER_QUANTITY:
+                case AutoProcessEnum::SHIPPING_QUANTITY:
                     $rules["value.$index"] = ($is_value_required ? 'required|' : 'nullable|') . 'integer';
                     break;
             }

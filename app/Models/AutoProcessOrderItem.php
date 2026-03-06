@@ -16,13 +16,17 @@ class AutoProcessOrderItem extends Model
     // 操作可能なカラムを定義
     protected $fillable = [
         'auto_process_id',
-        'order_item_code',
-        'order_item_name',
-        'order_quantity',
+        'order_item_id',
+        'shipping_quantity',
     ];
     // auto_processesテーブルとのリレーション
     public function auto_process()
     {
         return $this->belongsTo(AutoProcess::class, 'auto_process_id', 'auto_process_id');
+    }
+    // itemsテーブルとのリレーション
+    public function item()
+    {
+        return $this->belongsTo(Item::class, 'order_item_id', 'item_id');
     }
 }

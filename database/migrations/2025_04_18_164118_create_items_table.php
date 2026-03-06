@@ -16,7 +16,8 @@ return new class extends Migration
             $table->string('item_code', 255)->unique();
             $table->string('item_jan_code', 13);
             $table->string('item_name', 255);
-            $table->string('item_category', 20)->nullable();
+            $table->string('item_category_1', 20)->nullable();
+            $table->string('item_category_2', 20)->nullable();
             $table->string('model_jan_code', 13)->nullable();
             $table->unsignedInteger('exp_start_position')->nullable();
             $table->unsignedInteger('lot_1_start_position')->nullable();

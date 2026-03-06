@@ -34,7 +34,7 @@ class ItemDownloadService
                         $item->item_code,
                         $item->item_jan_code,
                         $item->item_name,
-                        $item->item_category,
+                        $item->item_category_1,
                         $item->model_jan_code,
                         $item->exp_start_position,
                         $item->lot_1_start_position,

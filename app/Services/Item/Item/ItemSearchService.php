@@ -18,7 +18,7 @@ class ItemSearchService
             'search_item_code',
             'search_item_jan_code',
             'search_item_name',
-            'search_item_category',
+            'search_item_category_1',
         ]);
         return;
     }
@@ -36,7 +36,7 @@ class ItemSearchService
             session(['search_item_code' => $request->search_item_code]);
             session(['search_item_jan_code' => $request->search_item_jan_code]);
             session(['search_item_name' => $request->search_item_name]);
-            session(['search_item_category' => $request->search_item_category]);
+            session(['search_item_category_1' => $request->search_item_category_1]);
         }
         return;
     }
@@ -61,19 +61,12 @@ class ItemSearchService
             // 条件を指定して取得
             $query = $query->where('item_name', 'LIKE', '%'.session('search_item_name').'%');
         }
-        // 商品カテゴリの条件がある場合
-        if(session('search_item_category') != null){
+        // 商品カテゴリ1の条件がある場合
+        if(session('search_item_category_1') != null){
             // 条件を指定して取得
-            $query = $query->where('item_category', 'LIKE', '%'.session('search_item_category').'%');
+            $query = $query->where('item_category_1', 'LIKE', '%'.session('search_item_category_1').'%');
         }
         // 並び替えを実施
         return $query->orderBy('items.sort_order', 'asc')->orderBy('items.item_code', 'asc');
-    }
-
-    // ページネーションを実施
-    public function setPagination($query)
-    {
-        // 指定された件数でページネーション
-        return $query->paginate(SystemEnum::PAGINATE_DEFAULT);
     }
 }

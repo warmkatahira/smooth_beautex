@@ -36,7 +36,7 @@ return new class extends Migration
             $table->string('ship_tel', 30);
             $table->string('order_item_code', 255);
             $table->string('order_item_name', 255);
-            $table->unsignedInteger('order_quantity');
+            $table->unsignedInteger('shipping_quantity');
             // ここまで受注データの内容
             $table->unsignedInteger('unallocated_quantity');
             $table->unsignedInteger('order_category_id');

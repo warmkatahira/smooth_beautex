@@ -44,7 +44,7 @@ class BaseRequest extends FormRequest
             'item_id'                       => '商品',
             'item_jan_code'                 => '商品JANコード',
             'item_name'                     => '商品名',
-            'item_category'                 => '商品カテゴリ',
+            'item_category_1'                 => '商品カテゴリ1',
             'model_jan_code'                => '代表JANコード',
             'exp_start_position'            => 'EXP開始位置',
             'lot_1_start_position'          => 'LOT1開始位置',
@@ -103,7 +103,7 @@ class BaseRequest extends FormRequest
             'order_category_name'               => '受注区分名',
             'order_item_code'                   => '商品コード',
             'order_item_name'                   => '商品名',
-            'order_quantity'                    => '出荷数',
+            'shipping_quantity'                    => '出荷数',
         ];
     }
 }

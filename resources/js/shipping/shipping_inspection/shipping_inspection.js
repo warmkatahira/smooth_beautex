@@ -112,7 +112,7 @@ function inspection_target_table_set(inspection_targets){
         newRow.append($("<td class='py-1 px-2 border'>").text(inspection_target['item_jan_code']));
         newRow.append($("<td class='py-1 px-2 border'>").text(inspection_target['model_jan_code']));
         newRow.append($("<td class='py-1 px-2 border'>").text(inspection_target['item_name']));
-        newRow.append($("<td class='order_quantity py-1 px-2 border text-right'>").text(inspection_target['order_quantity']));
+        newRow.append($("<td class='shipping_quantity py-1 px-2 border text-right'>").text(inspection_target['shipping_quantity']));
         newRow.append($("<td class='inspection_quantity py-1 px-2 border text-right'>").text(0));
         // テーブルの末尾に新しい行を追加
         $('#inspection_target_table').append(newRow);
@@ -278,16 +278,16 @@ function set_item_id_code(){
 // 残PCSをセット
 function set_remaining_pcs(){
     // 出荷数と検品数の合計を取得
-    let total_order_quantity = 0;
+    let total_shipping_quantity = 0;
     let total_inspection_quantity = 0;
-    $('.order_quantity').each(function(){
-        total_order_quantity += parseInt($(this).text());
+    $('.shipping_quantity').each(function(){
+        total_shipping_quantity += parseInt($(this).text());
     });
     $('.inspection_quantity').each(function(){
         total_inspection_quantity += parseInt($(this).text());
     });
     // 残PCSをセット
-    $('#remaining_pcs').html(total_order_quantity - total_inspection_quantity);
+    $('#remaining_pcs').html(total_shipping_quantity - total_inspection_quantity);
     return;
 }
 
