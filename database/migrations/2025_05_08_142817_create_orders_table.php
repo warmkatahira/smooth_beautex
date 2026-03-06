@@ -17,7 +17,7 @@ return new class extends Migration
             $table->date('order_import_date');
             $table->time('order_import_time');
             $table->unsignedInteger('order_status_id');
-            $table->unsignedInteger('shipping_method_id');
+            $table->unsignedInteger('shipping_method_id')->nullable();
             $table->string('shipping_base_id', 10)->nullable();
             $table->date('desired_delivery_date')->nullable();
             $table->string('desired_delivery_time', 20)->nullable();
@@ -36,10 +36,10 @@ return new class extends Migration
             $table->string('ship_country_code', 5)->nullable();
             $table->string('ship_province_code', 10)->nullable();
             $table->string('ship_province_name', 5)->nullable();
-            $table->string('ship_city', 255);
+            $table->string('ship_city', 255)->nullable();
             $table->string('ship_address_1', 255);
-            $table->string('ship_address_2', 255);
-            $table->string('ship_tel', 15);
+            $table->string('ship_address_2', 255)->nullable();
+            $table->string('ship_tel', 30);
             // ここまで受注データの内容
             $table->text('order_memo')->nullable();
             $table->text('shipping_work_memo')->nullable();

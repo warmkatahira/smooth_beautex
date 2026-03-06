@@ -100,10 +100,11 @@ class OrderImportController extends Controller
                 $OrderImportService->updateShippingBaseId();
                 // 受注管理IDを採番
                 $OrderImportService->updateOrderControlId();
-                // order_item_codeを更新
-                $OrderImportForQoo10Service->updateOrderItemCode();
-                // 購入数を更新
-                $OrderImportForQoo10Service->updateOrderQuantity();
+                // Qoo10の場合
+                if($order_category_id === OrderCategoryEnum::QOO10_ID){
+                    // 「配送会社」を注文番号毎で1つになるように更新
+                    $OrderImportForQoo10Service->updateShippingMethod();
+                }
                 // ordersとorder_itemsテーブルへ追加
                 $OrderImportService->createOrder();
                 // order_import_historiesテーブルへ追加

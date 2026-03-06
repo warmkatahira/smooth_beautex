@@ -5,16 +5,13 @@ namespace App\Services\Order\OrderImport;
 // モデル
 use App\Models\OrderImport;
 use App\Models\OrderImportHistory;
-use App\Models\Prefecture;
 use App\Models\Order;
 use App\Models\OrderItem;
 // サービス
 use App\Services\Common\ImportErrorCreateService;
 // 列挙
-use App\Enums\OrderStatusEnum;
 use App\Enums\SystemEnum;
 use App\Enums\OrderCategoryEnum;
-use App\Enums\ShippingMethodEnum;
 // 例外
 use App\Exceptions\OrderImportException;
 // その他
@@ -126,14 +123,10 @@ class OrderImportService
         $import_already = [];
         // 削除処理前の注文番号数を取得
         $before_order_no_num = OrderImport::groupBy('order_no')->select('order_no')->get()->count();
-        // ordersテーブルとorder_importsテーブルを注文番号と受注区分と荷送人で結合
-        $orders = Order::join('order_imports', function($join){
-                            $join->on('order_imports.order_no', 'orders.order_no')
-                            ->on('order_imports.order_category_id', 'orders.order_category_id')
-                            ->on('order_imports.shipper_id', 'orders.shipper_id');
-                        })
-                        ->groupBy('order_imports.order_no')
+        // ordersテーブルとorder_importsテーブルを注文番号で結合して注文番号の重複を取り除く
+        $orders = Order::join('order_imports', 'order_imports.order_no', 'orders.order_no')
                         ->select('order_imports.order_no')
+                        ->distinct()
                         ->get();
         // 削除対象がいれば、情報をセッションに格納
         if($orders->count() > 0){
@@ -168,7 +161,7 @@ class OrderImportService
         // $checkがtrueになるまでループ処理
         while(!$check){
             // 文字列を生成
-            $order_control_id_head = 'MO'.Str::random(9);
+            $order_control_id_head = 'BE'.Str::random(9);
             // LIKE検索で生成した文字列をordersテーブルでカウント
             $count = Order::where('order_control_id', 'LIKE', '%'.$order_control_id_head.'%')->count();
             // countが0の場合
