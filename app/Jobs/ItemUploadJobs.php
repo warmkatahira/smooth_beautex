@@ -33,16 +33,18 @@ class ItemUploadJobs implements ShouldQueue
     public $save_file_full_path;        // プロパティの定義
     public $upload_original_file_name;  // プロパティの定義
     public $upload_type;                // プロパティの定義
+    public $file_type;                  // プロパティの定義
 
     /**
      * Create a new job instance.
      */
-    public function __construct($user_no, $save_file_full_path, $upload_original_file_name, $upload_type)
+    public function __construct($user_no, $save_file_full_path, $upload_original_file_name, $upload_type, $file_type)
     {
         $this->user_no = $user_no;
         $this->save_file_full_path = $save_file_full_path;
         $this->upload_original_file_name = $upload_original_file_name;
         $this->upload_type = $upload_type;
+        $this->file_type = $file_type;
     }
 
     /* public function queue($queue, $job)
@@ -59,20 +61,22 @@ class ItemUploadJobs implements ShouldQueue
         $job_id = $this->job->getJobId();
         // カラムにパラメータの値を更新
         Job::where('id', $job_id)->update([
-            'user_no' => $this->user_no,
-            'upload_file_path' => $this->save_file_full_path,
+            'user_no'           => $this->user_no,
+            'upload_file_path'  => $this->save_file_full_path,
         ]);
         // ジョブを管理するテーブルにレコードを追加
         $item_upload_history = ItemUploadHistory::create([
-            'job_id' => $job_id,
-            'user_no' => $this->user_no,
-            'upload_target' => ItemUploadEnum::UPLOAD_TARGET_ITEM,
-            'upload_file_path' => $this->save_file_full_path,
-            'upload_file_name' => $this->upload_original_file_name,
-            'upload_type' => $this->upload_type,
+            'job_id'            => $job_id,
+            'user_no'           => $this->user_no,
+            'upload_target'     => ItemUploadEnum::UPLOAD_TARGET_ITEM,
+            'upload_file_path'  => $this->save_file_full_path,
+            'upload_file_name'  => $this->upload_original_file_name,
+            'upload_type'       => $this->upload_type,
         ]);
         // 処理タイプを変数にセット
         $upload_type = $this->upload_type;
+        // ファイルタイプを変数にセット
+        $file_type = $this->file_type;
         // 全データを取得
         $all_line = (new FastExcel)->import($this->save_file_full_path);
         // インポートしたデータのヘッダーを取得
@@ -90,11 +94,11 @@ class ItemUploadJobs implements ShouldQueue
         // テーブルをクリア
         $this->clearItemImport();
         try {
-            $proc_count = DB::transaction(function () use ($headers, $upload_type, $chunk_size, $chunks, $nowDate, $item_upload_history){
+            $proc_count = DB::transaction(function () use ($headers, $upload_type, $file_type, $chunk_size, $chunks, $nowDate, $item_upload_history){
                 // チャンク毎のループ処理
                 foreach ($chunks as $chunk_index => $chunk){
                     // 追加するデータを配列に格納（同時にバリデーションも実施）
-                    $data = $this->setArrayImportData($chunk, $headers, $chunk_size, $chunk_index);
+                    $data = $this->setArrayImportData($chunk, $headers, $chunk_size, $chunk_index, $file_type);
                     // バリデーションエラーがある場合
                     if(count(array_filter($data['validation_error'])) != 0){
                         throw new ItemUploadException('データが正しくない為、アップロードできませんでした。', $data['validation_error'], $nowDate, $item_upload_history);
@@ -145,7 +149,7 @@ class ItemUploadJobs implements ShouldQueue
         ItemImport::query()->delete();
     }
 
-    public function setArrayImportData($chunk, $headers, $chunk_size, $chunk_index)
+    public function setArrayImportData($chunk, $headers, $chunk_size, $chunk_index, $file_type)
     {
         // 配列をセット
         $create_data = [];
@@ -171,7 +175,7 @@ class ItemUploadJobs implements ShouldQueue
             $create_data[] = $param;
         }
         // バリデーション（共通）
-        $validation_error = $this->commonValidation($create_data, $headers, $chunk_size, $chunk_index);
+        $validation_error = $this->commonValidation($create_data, $headers, $chunk_size, $chunk_index, $file_type);
         // エラーメッセージがあればバリデーションエラーを配列に格納
         if(!empty($validation_error)){
             return compact('validation_error');
@@ -205,7 +209,7 @@ class ItemUploadJobs implements ShouldQueue
         return $adjustment_value === '' ? null : $adjustment_value;
     }
 
-    public function commonValidation($params, $headers, $chunk_size, $chunk_index)
+    public function commonValidation($params, $headers, $chunk_size, $chunk_index, $file_type)
     {
         // ルールを格納する配列をセット
         $rules = [];
@@ -249,6 +253,12 @@ class ItemUploadJobs implements ShouldQueue
                 case 'is_stock_managed':
                     $rules += ['*.'.$column => 'required|boolean'];
                     break;
+                case 'country_of_origin':
+                    $rules += ['*.'.$column => 'nullable|max:10'];
+                    break;
+                case 'hs_code':
+                    $rules += ['*.'.$column => 'nullable|max:10'];
+                    break;
                 case 'sort_order':
                     $rules += ['*.'.$column => 'nullable|integer|min:1'];
                     break;
@@ -284,6 +294,8 @@ class ItemUploadJobs implements ShouldQueue
             '*.s_power_code'                => 'S-POWERコード',
             '*.s_power_code_start_position' => 'S-POWERコード開始位置',
             '*.is_stock_managed'            => '在庫管理',
+            '*.country_of_origin'           => '原産国',
+            '*.hs_code'                     => 'HSコード',
             '*.sort_order'                  => '並び順',
         ];
         // バリデーション実施

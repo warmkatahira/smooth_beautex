@@ -38,7 +38,7 @@ class OrderImportForQoo10Service
                 'order_import_date'         => $nowDate->toDateString(),
                 'order_import_time'         => $nowDate->toTimeString(),
                 'order_status_id'           => OrderStatusEnum::KAKUNIN_MACHI,
-                'shipping_method'           => $line['配送会社'],
+                'mall_shipping_method'      => $line['配送会社'],
                 'order_no'                  => $line['カート番号'],
                 'order_date'                => CarbonImmutable::parse($line['注文日'])->toDateString(),
                 'order_time'                => CarbonImmutable::parse($line['注文日'])->toTimeString(),
@@ -79,7 +79,7 @@ class OrderImportForQoo10Service
             'order_date'                => 'required|date',
             'order_time'                => 'required|date_format:H:i:s',
             'order_status_id'           => 'required|in:' . implode(',', array_keys(OrderStatusEnum::CHANGE_LIST_FROM_ID_TO_JP)),
-            'shipping_method'           => 'required|string|max:20|in:' . implode(',', ShippingMethodEnum::QOO10_SHIPPING_METHOD_LIST),
+            'mall_shipping_method'      => 'required|string|max:20|in:' . implode(',', ShippingMethodEnum::QOO10_SHIPPING_METHOD_LIST),
             'ship_name'                 => 'required|string|max:255',
             'ship_zip_code'             => 'required|string|max:8',
             'ship_province_name'        => 'required|string|max:5|exists:prefectures,prefecture_name',
@@ -110,7 +110,7 @@ class OrderImportForQoo10Service
             'order_date'                => '注文日',
             'order_time'                => '注文時間',
             'order_status_id'           => '注文ステータス',
-            'shipping_method'           => '配送方法',
+            'mall_shipping_method'      => '配送方法',
             'ship_name'                 => '配送先名',
             'ship_zip_code'             => '配送先郵便番号',
             'ship_province_name'        => '配送先都道府県',
@@ -137,15 +137,15 @@ class OrderImportForQoo10Service
     // 「配送会社」を注文番号毎で1つになるように更新
     // 1つの注文番号で配送方法が混ざってくる場合があるので、注文番号で1つに揃える
     // 上位（大きいサイズ）に合わせる
-    public function updateShippingMethod()
+    public function updateMallShippingMethod()
     {
         // 注文番号と配送方法の種類数を取得(種類数が2以上の注文のみ取得)
         $orders = OrderImport::select(
                         'order_control_id',
-                        DB::raw('COUNT(DISTINCT shipping_method) as shipping_method_count'),
+                        DB::raw('COUNT(DISTINCT mall_shipping_method) as mall_shipping_method_count'),
                     )
                     ->groupBy('order_control_id')
-                    ->having('shipping_method_count', '>=', 2)
+                    ->having('mall_shipping_method_count', '>=', 2)
                     ->get();
         // 複数の配送方法がある注文がない場合
         if($orders->isEmpty()){
@@ -157,7 +157,7 @@ class OrderImportForQoo10Service
         // 配送方法を佐川急便に更新
         OrderImport::whereIn('order_control_id', $order_control_ids)
                     ->update([
-                        'shipping_method' => '佐川急便'
+                        'mall_shipping_method' => '佐川急便'
                     ]);
     }
 }

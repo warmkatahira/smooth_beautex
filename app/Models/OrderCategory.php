@@ -25,9 +25,9 @@ class OrderCategory extends Model
     {
         return self::where('order_category_id', $order_category_id);
     }
-    // shippersテーブルとのリレーション
-    public function shipper()
+    // mallsテーブルとのリレーション
+    public function mall()
     {
-        return $this->belongsTo(Shipper::class, 'shipper_id', 'shipper_id');
+        return $this->belongsTo(Mall::class, 'mall_id', 'mall_id');
     }
 }

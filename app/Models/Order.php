@@ -20,6 +20,7 @@ class Order extends Model
         'order_import_date',
         'order_import_time',
         'order_status_id',
+        'mall_shipping_method',
         'shipping_method_id',
         'shipping_base_id',
         'desired_delivery_date',
@@ -86,7 +87,7 @@ class Order extends Model
     // 運送会社と配送方法を返すアクセサ
     public function getDeliveryCompanyAndShippingMethodAttribute(): string
     {
-        return $this->shipping_method->delivery_company->delivery_company . ' ' . $this->shipping_method->shipping_method;
+        return $this->shipping_method?->delivery_company->delivery_company . ' ' . $this->shipping_method?->shipping_method;
     }
     // 出荷完了対象の受注を取得
     public static function getShippingWorkEndTarget()

@@ -147,7 +147,7 @@ class OrderImportService
         // 都道府県名でテーブルを結合して、prefecturesの出荷倉庫IDでorder_importsの出荷倉庫IDを更新する
         DB::statement("
             UPDATE order_imports
-            JOIN prefectures ON prefectures.prefecture_name = order_imports.ship_prefecture_name
+            JOIN prefectures ON prefectures.prefecture_name = order_imports.ship_province_name
             SET order_imports.shipping_base_id = prefectures.shipping_base_id
         ");
     }

@@ -39,15 +39,11 @@ class ItemUploadController extends Controller
                 // 選択したデータをストレージにインポート
                 $import = $ItemUploadService->importData($request->file('select_file'));
                 // インポートしたデータのヘッダーを確認
-                $result = $ItemUploadService->checkHeader($import['save_file_full_path'], $request->upload_type);
-                // エラーがあれば処理を中断
-                if(!is_null($result)){
-                    throw new \Exception($result);
-                }
+                $file_type = $ItemUploadService->checkHeader($import['save_file_full_path'], $request->upload_type);
                 // user_noを取得
                 $user_no = Auth::user()->user_no;
                 // ジョブを溜める
-                ItemUploadJobs::dispatch($user_no, $import['save_file_full_path'], $import['upload_original_file_name'], $request->upload_type)->onQueue('item_upload');
+                ItemUploadJobs::dispatch($user_no, $import['save_file_full_path'], $import['upload_original_file_name'], $request->upload_type, $file_type)->onQueue('item_upload');
                 
             });
         } catch (\Exception $e){

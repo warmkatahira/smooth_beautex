@@ -26,9 +26,11 @@ return new class extends Migration
             $table->unsignedInteger('lot_2_length')->nullable();
             $table->unsignedInteger('s_power_code')->nullable();
             $table->unsignedInteger('s_power_code_start_position')->nullable();
-            $table->boolean('is_stock_managed');
+            $table->boolean('is_stock_managed')->default(true);
             $table->string('item_image_file_name', 50)->default('no_image.png');
-            $table->unsignedInteger('sort_order')->nullable();
+            $table->string('country_of_origin', 10)->nullable();
+            $table->string('hs_code', 10)->nullable();
+            $table->unsignedInteger('sort_order')->default(99999);
             $table->timestamps();
         });
         // 文字セット・照合順序を変更

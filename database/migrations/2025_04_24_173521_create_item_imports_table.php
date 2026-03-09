@@ -27,6 +27,8 @@ return new class extends Migration
             $table->unsignedInteger('s_power_code')->nullable();
             $table->unsignedInteger('s_power_code_start_position')->nullable();
             $table->boolean('is_stock_managed')->nullable();
+            $table->string('country_of_origin', 10)->nullable();
+            $table->string('hs_code', 10)->nullable();
             $table->unsignedInteger('sort_order')->nullable();
             $table->timestamps();
         });

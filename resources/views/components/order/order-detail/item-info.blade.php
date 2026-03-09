@@ -19,7 +19,9 @@
                     @foreach($order->order_items as $order_item)
                         <tr class="text-left cursor-default whitespace-nowrap">
                             <td class="py-1 px-2 border">
-                                <img src="{{ asset('storage/item_images/'.$order_item->item?->item_image_file_name) }}" class="w-10 h-10 mx-auto image_fade_in_modal_open">
+                                @if($image = $order_item->item?->item_image_file_name)
+                                    <img src="{{ asset('storage/item_images/'.$image) }}" class="w-10 h-10 mx-auto image_fade_in_modal_open">
+                                @endif
                             </td>
                             <td class="py-1 px-2 border text-center">{!! displayCheckIfTrue($order_item->is_item_allocated) !!}</td>
                             <td class="py-1 px-2 border text-center">{!! displayCheckIfTrue($order_item->is_stock_allocated) !!}</td>

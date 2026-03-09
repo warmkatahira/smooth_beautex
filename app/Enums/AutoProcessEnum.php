@@ -78,12 +78,12 @@ enum AutoProcessEnum
     const ORDER_NO                  = 'order_no';                   // 注文番号
     const ORDER_DATE                = 'order_date';                 // 注文日
     const ORDER_TIME                = 'order_time';                 // 注文時間
+    const MALL_SHIPPING_METHOD      = 'mall_shipping_method';       // モール配送方法
     const SHIPPING_METHOD_ID        = 'shipping_method_id';         // 配送方法
     const SHIPPING_BASE_ID          = 'shipping_base_id';           // 出荷倉庫
     const DESIRED_DELIVERY_TIME     = 'desired_delivery_time';      // 配送希望時間
-    const MALL_SHIPPING_METHOD      = 'mall_shipping_method';       // モール配送方法
-    const ITEM_CATEGORY_1           = 'item_category_1';            // 商品カテゴリ11
-    const ITEM_CATEGORY_2           = 'item_category_2';            // 商品カテゴリ12
+    const ITEM_CATEGORY_1           = 'item_category_1';            // 商品カテゴリ1
+    const ITEM_CATEGORY_2           = 'item_category_2';            // 商品カテゴリ2
     const SHIPPING_WORK_MEMO        = 'shipping_work_memo';         // 出荷作業メモ
     const SHIP_PROVINCE_NAME        = 'ship_province_name';         // 配送先都道府県
     const SHIP_NAME                 = 'ship_name';                  // 配送先名
@@ -95,23 +95,23 @@ enum AutoProcessEnum
 
     // カラム名を日本語の文字列と配列化
     const COLUMN_NAME_LIST = [
-        self::ORDER_NO              => '注文番号',
-        self::ORDER_DATE            => '注文日',
-        self::ORDER_TIME            => '注文時間',
-        self::SHIPPING_METHOD_ID    => '配送方法',
-        self::SHIPPING_BASE_ID      => '出荷倉庫',
-        self::DESIRED_DELIVERY_TIME => '配送希望時間',
-        self::MALL_SHIPPING_METHOD  => 'モール配送方法',
-        self::ITEM_CATEGORY_1       => '商品カテゴリ11',
-        self::ITEM_CATEGORY_2       => '商品カテゴリ12',
-        self::SHIPPING_WORK_MEMO    => '出荷作業メモ',
-        self::SHIP_PROVINCE_NAME    => '配送先都道府県',
-        self::SHIP_NAME             => '配送先名',
-        self::PAYMENT_AMOUNT        => '支払金額',
-        self::ORDER_MARK            => '受注マーク',
-        self::ORDER_ITEM_CODE       => '注文商品コード',
-        self::ORDER_ITEM_NAME       => '注文商品名',
-        self::SHIPPING_QUANTITY        => '出荷数',
+        self::ORDER_NO                  => '注文番号',
+        self::ORDER_DATE                => '注文日',
+        self::ORDER_TIME                => '注文時間',
+        self::MALL_SHIPPING_METHOD      => 'モール配送方法',
+        self::SHIPPING_METHOD_ID        => '配送方法',
+        self::SHIPPING_BASE_ID          => '出荷倉庫',
+        self::DESIRED_DELIVERY_TIME     => '配送希望時間',
+        self::ITEM_CATEGORY_1           => '商品カテゴリ1',
+        self::ITEM_CATEGORY_2           => '商品カテゴリ2',
+        self::SHIPPING_WORK_MEMO        => '出荷作業メモ',
+        self::SHIP_PROVINCE_NAME        => '配送先都道府県',
+        self::SHIP_NAME                 => '配送先名',
+        self::PAYMENT_AMOUNT            => '支払金額',
+        self::ORDER_MARK                => '受注マーク',
+        self::ORDER_ITEM_CODE           => '注文商品コード',
+        self::ORDER_ITEM_NAME           => '注文商品名',
+        self::SHIPPING_QUANTITY         => '出荷数',
     ];
 
     // テーブルとカラムをマッピング
@@ -119,10 +119,10 @@ enum AutoProcessEnum
         self::ORDER_NO              => 'orders',
         self::ORDER_DATE            => 'orders',
         self::ORDER_TIME            => 'orders',
+        self::MALL_SHIPPING_METHOD  => 'orders',
         self::SHIPPING_METHOD_ID    => 'orders',
         self::SHIPPING_BASE_ID      => 'orders',
         self::DESIRED_DELIVERY_TIME => 'orders',
-        self::MALL_SHIPPING_METHOD  => 'orders',
         self::ITEM_CATEGORY_1       => 'items',
         self::ITEM_CATEGORY_2       => 'items',
         self::SHIPPING_WORK_MEMO    => 'orders',
@@ -132,7 +132,7 @@ enum AutoProcessEnum
         self::ORDER_MARK            => 'orders',
         self::ORDER_ITEM_CODE       => 'order_items',
         self::ORDER_ITEM_NAME       => 'order_items',
-        self::SHIPPING_QUANTITY        => 'order_items',
+        self::SHIPPING_QUANTITY     => 'order_items',
     ];
 
     public static function checkCondition($order, $auto_process_condition)

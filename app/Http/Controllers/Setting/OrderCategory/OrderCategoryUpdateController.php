@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 // モデル
 use App\Models\OrderCategory;
-use App\Models\Shipper;
+use App\Models\Mall;
 // サービス
 use App\Services\Setting\OrderCategory\OrderCategoryUpdateService;
 // リクエスト
@@ -22,18 +22,18 @@ class OrderCategoryUpdateController extends Controller
         session(['page_header' => '受注区分更新']);
         // 受注区分を取得
         $order_category = OrderCategory::getSpecify($request->order_category_id)->first();
-        // 荷送人を取得
-        $shippers = Shipper::getAll()->get();
+        // モールを取得
+        $malls = Mall::getAll()->get();
         return view('setting.order_category.update')->with([
             'order_category' => $order_category,
-            'shippers' => $shippers,
+            'malls' => $malls,
         ]);
     }
 
     public function update(OrderCategoryUpdateRequest $request)
     {
-        /* try{
-            DB::transaction(function () use ($request){ */
+        try{
+            DB::transaction(function () use ($request){
                 // インスタンス化
                 $OrderCategoryUpdateService = new OrderCategoryUpdateService;
                 // 受注区分を更新
@@ -42,13 +42,13 @@ class OrderCategoryUpdateController extends Controller
                 $OrderCategoryUpdateService->deleteOrderCategoryImage($request, $order_category);
                 // 受注区分画像を保存
                 $OrderCategoryUpdateService->saveOrderCategoryImage($request, $order_category);
-           /*  });
+            });
         }catch (\Exception $e){
             return redirect()->back()->with([
                 'alert_type' => 'error',
                 'alert_message' => '受注区分の更新に失敗しました。',
             ]);
-        } */
+        }
         return redirect()->back()->with([
             'alert_type' => 'success',
             'alert_message' => '受注区分を更新しました。',

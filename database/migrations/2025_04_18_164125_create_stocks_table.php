@@ -15,6 +15,8 @@ return new class extends Migration
             $table->increments('stock_id');
             $table->string('base_id', 10);
             $table->unsignedInteger('item_id');
+            $table->string('lot', 20)->nullable();
+            $table->string('exp', 6)->nullable();
             $table->unsignedInteger('total_stock')->default(0);
             $table->unsignedInteger('available_stock')->default(0);
             $table->string('item_location', 20)->nullable();
@@ -23,7 +25,7 @@ return new class extends Migration
             $table->foreign('base_id')->references('base_id')->on('bases')->cascadeOnUpdate()->restrictOnDelete();
             $table->foreign('item_id')->references('item_id')->on('items')->cascadeOnUpdate()->restrictOnDelete();
             // 複合ユニーク制約を追加
-            $table->unique(['base_id', 'item_id']);
+            $table->unique(['base_id', 'item_id', 'lot', 'exp']);
         });
     }
 

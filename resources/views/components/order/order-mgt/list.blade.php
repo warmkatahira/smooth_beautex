@@ -43,15 +43,17 @@
                         <td class="py-1 px-2 border text-center">{{ $order->order_control_id }}</td>
                         <td class="py-1 px-2 border text-center">{{ $order->order_mark }}</td>
                         <td class="py-1 px-2 border">
-                            <img src="{{ asset('image/'.$order->order_category->order_category_image_file_name) }}" class="w-12 inline-block">
+                            <img src="{{ asset('image/'.$order->order_category->mall->mall_image_file_name) }}" class="w-12 inline-block">
                         </td>
                         <td class="py-1 px-2 border">{{ $order->base?->base_name }}</td>
                         <td class="py-1 px-2 border">{{ $order->ship_name }}</td>
                         <td class="py-1 px-2 border text-center">{{ $order->ship_prefecture_name }}</td>
                         <td class="py-1 px-2 border">
-                            <img src="{{ asset('image/'.$order->shipping_method->delivery_company->company_image) }}" class="inline-block">
+                            @if($image = $order->shipping_method?->delivery_company?->company_image)
+                                <img src="{{ asset('image/'.$image) }}" class="inline-block">
+                            @endif
                         </td>
-                        <td class="py-1 px-2 border">{{ $order->shipping_method->shipping_method }}</td>
+                        <td class="py-1 px-2 border">{{ $order->shipping_method?->shipping_method }}</td>
                         <td class="py-1 px-2 border text-center">
                             @if(!is_null($order->desired_delivery_date))
                                 {{ CarbonImmutable::parse($order->desired_delivery_date)->isoFormat('Y年MM月DD日(ddd)') }}

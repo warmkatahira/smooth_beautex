@@ -19,10 +19,10 @@ use App\Traits\PaginatesResultsTrait;
 
 class OrderMgtController extends Controller
 {
+    use PaginatesResultsTrait;
+    
     public function index(Request $request)
     {
-        use PaginatesResultsTrait;
-
         // ページヘッダーをセッションに格納
         session(['page_header' => '受注管理']);
         // インスタンス化

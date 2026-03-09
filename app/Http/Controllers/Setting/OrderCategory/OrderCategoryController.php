@@ -14,7 +14,7 @@ class OrderCategoryController extends Controller
         // ページヘッダーをセッションに格納
         session(['page_header' => '受注区分']);
         // 受注区分を取得
-        $order_categories = OrderCategory::getAll()->with('shipper')->get();
+        $order_categories = OrderCategory::getAll()->with('mall')->get();
         return view('setting.order_category.index')->with([
             'order_categories' => $order_categories,
         ]);
