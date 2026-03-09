@@ -35,6 +35,7 @@ class OrderImport extends Model
         'order_item_code',
         'order_item_name',
         'shipping_quantity',
+        'order_item_unit_price',
         'unallocated_quantity',
         'order_category_id',
     ];
@@ -81,6 +82,23 @@ class OrderImport extends Model
             ];
         }
     }
+    // 共通するカラムを定義
+    public static function CommonColumns()
+    {
+        return [
+            'Shipping Method',
+            'Shipping Name',
+            'Shipping Address1',
+            'Shipping Address2',
+            'Shipping Company',
+            'Shipping City',
+            'Shipping Zip',
+            'Shipping Province',
+            'Shipping Country',
+            'Shipping Phone',
+            'Shipping Province Name',
+        ];
+    }
     // ordersテーブルに追加する情報を取得
     public static function createTargetListForOrder($query)
     {
@@ -117,6 +135,7 @@ class OrderImport extends Model
             'order_item_code',
             'order_item_name',
             'shipping_quantity',
+            'order_item_unit_price',
         ]);
     }
 }

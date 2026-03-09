@@ -37,6 +37,7 @@ return new class extends Migration
             $table->string('order_item_code', 255);
             $table->string('order_item_name', 255);
             $table->unsignedInteger('shipping_quantity');
+            $table->unsignedInteger('order_item_unit_price');
             // ここまで受注データの内容
             $table->unsignedInteger('unallocated_quantity');
             $table->unsignedInteger('order_category_id');

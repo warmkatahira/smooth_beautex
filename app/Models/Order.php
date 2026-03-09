@@ -69,11 +69,6 @@ class Order extends Model
     {
         return $this->belongsTo(ShippingMethod::class, 'shipping_method_id', 'shipping_method_id');
     }
-    // shippersテーブルとのリレーション
-    public function shipper()
-    {
-        return $this->belongsTo(Shipper::class, 'shipper_id', 'shipper_id');
-    }
     // order_categoriesテーブルとのリレーション
     public function order_category()
     {
@@ -89,12 +84,44 @@ class Order extends Model
     {
         return $this->shipping_method?->delivery_company->delivery_company . ' ' . $this->shipping_method?->shipping_method;
     }
+    // 配送先が国内か海外かを返すアクセサ
+    public function getShipCountryTextAttribute()
+    {
+        return $this->ship_country_code === 'JP' ? '国内' : '海外';
+    }
     // 出荷完了対象の受注を取得
     public static function getShippingWorkEndTarget()
     {
         // 注文ステータスが「作業中」かつ、出荷検品が完了している
         return self::where('order_status_id', OrderStatusEnum::SAGYO_CHU)
                 ->where('is_shipping_inspection_complete', 1);
+    }
+    // 完全な配送先住所を返すアクセサ
+    public function getFullShipAddressAttribute(): string
+    {
+        // 国内の場合
+        if($this->ship_country_code === 'JP'){
+            // 都道府県と住所を変数に格納
+            $prefecture = $this->ship_province_name;
+            $address = $this->ship_city.$this->ship_address_1.$this->ship_address_2.$this->ship_company;
+            // 住所が都道府県で始まっているか
+            if($prefecture && str_starts_with($address, $prefecture)){
+                // 先頭の都道府県部分だけ削除
+                $address = mb_substr($address, mb_strlen($prefecture));
+            }else{
+                // 都道府県が住所に含まれていなければそのまま
+                $address = $address;
+            }
+            $ship_address = $prefecture.$address;
+        }else{
+            $ship_address = implode(', ', array_filter([
+                $this->ship_address_1,
+                $this->ship_address_2,
+                trim($this->ship_city . ' ' . $this->ship_province_code),
+                $this->ship_country_code,
+            ]));
+        }
+        return $ship_address;
     }
     // ダウンロード時のヘッダーを定義
     public static function downloadHeaderAtShippingHistory()

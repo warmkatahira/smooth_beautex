@@ -12,6 +12,7 @@
                         <th class="font-thin py-1 px-2 text-center">商品JANコード</th>
                         <th class="font-thin py-1 px-2 text-center">商品名</th>
                         <th class="font-thin py-1 px-2 text-center">出荷数</th>
+                        <th class="font-thin py-1 px-2 text-center">商品単価</th>
                         <th class="font-thin py-1 px-2 text-center">未引当数</th>
                     </tr>
                 </thead>
@@ -29,6 +30,7 @@
                             <td class="py-1 px-2 border">{{ $order_item->item?->item_jan_code }}</td>
                             <td class="py-1 px-2 border">{{ $order_item->order_item_name }}</td>
                             <td class="py-1 px-2 border text-right">{{ number_format($order_item->shipping_quantity) }}</td>
+                            <td class="py-1 px-2 border text-right">{{ number_format($order_item->order_item_unit_price) }}</td>
                             <td class="py-1 px-2 border text-right">{{ number_format($order_item->unallocated_quantity) }}</td>
                         </tr>
                     @endforeach

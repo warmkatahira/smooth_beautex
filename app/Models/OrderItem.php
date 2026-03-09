@@ -17,6 +17,7 @@ class OrderItem extends Model
         'order_item_code',
         'order_item_name',
         'shipping_quantity',
+        'order_item_unit_price',
         'is_auto_process_add',
     ];
     // 指定したレコードを取得

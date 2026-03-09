@@ -6,6 +6,9 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 // モデル
 use App\Models\Stock;
+// その他
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 
 class StockSeeder extends Seeder
 {
@@ -14,10 +17,10 @@ class StockSeeder extends Seeder
      */
     public function run(): void
     {
-        Stock::create(['base_id' => '1st', 'item_id' => 1, 'total_stock' => 100, 'available_stock' => 100]);
-        Stock::create(['base_id' => '1st', 'item_id' => 2, 'total_stock' => 100, 'available_stock' => 100]);
-        Stock::create(['base_id' => '1st', 'item_id' => 3, 'total_stock' => 100, 'available_stock' => 100]);
-        Stock::create(['base_id' => '1st', 'item_id' => 4, 'total_stock' => 100, 'available_stock' => 100]);
-        Stock::create(['base_id' => '1st', 'item_id' => 5, 'total_stock' => 100, 'available_stock' => 100]);
+        $path = database_path('seeders/sql/stock.sql');
+        // SQLファイルの読み込み
+        $sql = File::get($path);
+        // SQL実行
+        DB::unprepared($sql);
     }
 }

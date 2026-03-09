@@ -16,6 +16,7 @@
                     <th class="font-thin py-1 px-2 text-center">受注区分</th>
                     <th class="font-thin py-1 px-2 text-center">出荷倉庫</th>
                     <th class="font-thin py-1 px-2 text-center">配送先名</th>
+                    <th class="font-thin py-1 px-2 text-center">国内/海外</th>
                     <th class="font-thin py-1 px-2 text-center">配送先都道府県</th>
                     <th class="font-thin py-1 px-2 text-center">運送会社</th>
                     <th class="font-thin py-1 px-2 text-center">配送方法</th>
@@ -47,7 +48,8 @@
                         </td>
                         <td class="py-1 px-2 border">{{ $order->base?->base_name }}</td>
                         <td class="py-1 px-2 border">{{ $order->ship_name }}</td>
-                        <td class="py-1 px-2 border text-center">{{ $order->ship_prefecture_name }}</td>
+                        <td class="py-1 px-2 border text-center">{{ $order->ship_country_text }}</td>
+                        <td class="py-1 px-2 border">{{ $order->ship_province_name }}</td>
                         <td class="py-1 px-2 border">
                             @if($image = $order->shipping_method?->delivery_company?->company_image)
                                 <img src="{{ asset('image/'.$image) }}" class="inline-block">

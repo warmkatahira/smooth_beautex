@@ -18,4 +18,21 @@ enum ShippingMethodEnum
         self::QOO10_SHIPPING_METHOD_YAMATO_NEKOPOS,
         self::QOO10_SHIPPING_METHOD_SAGAWA_NORMAL,
     ];
+
+    // shopifyの配送会社に入ってくる値を定義
+    const SHOPIFY_SHIPPING_METHOD_SE        = 'Standard EMS';
+    const SHOPIFY_SHIPPING_METHOD_SS        = 'Standard Shipping';
+    const SHOPIFY_SHIPPING_METHOD_UPS       = 'UPS ( Fastest )';
+    const SHOPIFY_SHIPPING_METHOD_NORMAL    = '通常配送';
+    const SHOPIFY_SHIPPING_METHOD_MAIL      = 'メール便';
+    const SHOPIFY_SHIPPING_METHOD_TAKKYU    = '宅急便';
+
+    const SHOPIFY_SHIPPING_METHOD_LIST = [
+        self::SHOPIFY_SHIPPING_METHOD_SE,
+        self::SHOPIFY_SHIPPING_METHOD_SS,
+        self::SHOPIFY_SHIPPING_METHOD_UPS,
+        self::SHOPIFY_SHIPPING_METHOD_NORMAL,
+        self::SHOPIFY_SHIPPING_METHOD_MAIL,
+        self::SHOPIFY_SHIPPING_METHOD_TAKKYU,
+    ];
 }

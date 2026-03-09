@@ -69,12 +69,11 @@ class OrderImportController extends Controller
                 }
                 // shopifyの場合
                 if($order_category_id === OrderCategoryEnum::SHOPIFY_ID){
+                    // 注文番号ごとに共通するデータを取得
+                    $common_order_values = $OrderImportForShopifyService->getCommonOrderValue($import_info['save_file_path']);
                     // 追加する受注データを配列に格納（同時にバリデーションも実施）
-                    $order = $OrderImportForShopifyService->setArrayImport($import_info['save_file_path'], $nowDate, $order_category_id);
+                    $order = $OrderImportForShopifyService->setArrayImport($import_info['save_file_path'], $nowDate, $order_category_id, $common_order_values);
                 }
-                
-                
-                
                 // バリデーションエラー配列の中にnull以外があれば、エラー情報を出力
                 if(count(array_filter($order['validation_error'])) != 0){
                     // インポートエラー情報のファイルを作成

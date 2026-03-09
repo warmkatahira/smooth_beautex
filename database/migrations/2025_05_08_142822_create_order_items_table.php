@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('order_item_code', 255);
             $table->string('order_item_name', 255);
             $table->unsignedInteger('shipping_quantity');
+            $table->unsignedInteger('order_item_unit_price');
             $table->boolean('is_auto_process_add')->default(0);
             $table->timestamps();
             // 外部キー
