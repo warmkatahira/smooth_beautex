@@ -157,6 +157,8 @@ class StockSearchService
                 DB::raw('IFNULL(shipping_quantity_sub_query.total_shipping_quantity, 0) as total_shipping_quantity'),
                 DB::raw('IFNULL(stocks.available_stock, 0) as available_stock'),
                 'stocks.item_location',
+                'stocks.lot',
+                'stocks.exp',
             );
             // グループ化
             $query = $query->orderBy('item_base.base_sort_order', 'asc')

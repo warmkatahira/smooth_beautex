@@ -59,7 +59,7 @@ class StockController extends Controller
         $result = $ItemSearchService->getSearchResult();
         $result = $StockSearchService->getSearchResult($result, Route::currentRouteName());
         // ページネーションを実施
-        $stocks = $ItemSearchService->setPagination($result['stocks']);
+        $stocks = $this->setPagination($result['stocks']);
         return view('stock.stock.index_by_stock')->with([
             'stocks' => $stocks,
             'bases' => $result['bases'],

@@ -1,1 +1,0 @@
-import{s as e}from"./loading-ChqFcCVw.js";$("#shipper_update_enter").on("click",function(){try{window.confirm("荷送人を更新しますか？")==!0&&(e(),$("#shipper_update_form").submit())}catch(t){alert(t.message)}});

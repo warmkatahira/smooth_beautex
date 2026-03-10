@@ -1,1 +1,0 @@
-import{s as e}from"./loading-ChqFcCVw.js";$("#search_enter").on("click",function(){e(),$("#search_type").val("search"),$("#search_form").submit()});$("#search_clear").on("click",function(){e(),$("#search_type").prop("disabled",!0),$(".search_element").each(function(){$(this).val(null)}),$("#search_form").submit()});

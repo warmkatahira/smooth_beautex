@@ -36,7 +36,8 @@
             "Database\\Seeders\\": "database/seeders/"
         },
         "files": [
-            "app/Helpers/BooleanDisplayHelper.php"
+            "app/Helpers/BooleanDisplayHelper.php",
+            "app/Helpers/ExpFormatHelper.php"
         ]
     },
     "autoload-dev": {

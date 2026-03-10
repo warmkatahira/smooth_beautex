@@ -11,6 +11,8 @@
                     <th class="font-thin py-1 px-2 text-center">商品カテゴリ1</th>
                     <th class="font-thin py-1 px-2 text-center">商品ロケーション</th>
                     <th class="font-thin py-1 px-2 text-center">在庫管理</th>
+                    <th class="font-thin py-1 px-2 text-center">LOT</th>
+                    <th class="font-thin py-1 px-2 text-center">EXP</th>
                     <th class="font-thin py-1 px-2 text-center">全在庫数</th>
                     <th class="font-thin py-1 px-2 text-center">受注数</th>
                     <th class="font-thin py-1 px-2 text-center">有効在庫数</th>
@@ -29,6 +31,8 @@
                         <td class="py-1 px-2 border">{{ $stock->item_category_1 }}</td>
                         <td class="py-1 px-2 border">{{ $stock->item_location }}</td>
                         <td class="py-1 px-2 border text-center">{{ $stock->is_stock_managed_text }}</td>
+                        <td class="py-1 px-2 border text-center">{{ $stock->lot }}</td>
+                        <td class="py-1 px-2 border text-center">{{ formatExp($stock->exp) }}</td>
                         <td class="py-1 px-2 border text-right">{{ number_format($stock->total_stock) }}</td>
                         <td class="py-1 px-2 border text-right">{{ number_format($stock->total_shipping_quantity) }}</td>
                         <td class="py-1 px-2 border text-right">{{ number_format($stock->available_stock) }}</td>

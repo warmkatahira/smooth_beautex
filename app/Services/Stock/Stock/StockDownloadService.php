@@ -58,6 +58,8 @@ class StockDownloadService
                             $stock->item_category_1,
                             $stock->item_location,
                             $stock->is_stock_managed_text,
+                            $stock->lot,
+                            "'".formatExp($stock->exp),
                             $stock->total_stock,
                             $stock->total_shipping_quantity,
                             $stock->available_stock,

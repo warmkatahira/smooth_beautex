@@ -1,1 +1,0 @@
-import{s as t}from"./loading-ChqFcCVw.js";$("#base_create_enter").on("click",function(){window.confirm("追加を実行しますか？")===!0&&(t(),$("#base_create_form").submit())});$("#base_update_enter").on("click",function(){window.confirm("更新を実行しますか？")===!0&&(t(),$("#base_update_form").submit())});

@@ -1,1 +1,0 @@
-import{s as t}from"./loading-ChqFcCVw.js";$(".select_file input[type=file]").on("change",function(){window.confirm("受注取込を実行しますか？")==!0&&(t(),$("#order_import_form").submit()),$(".select_file").val(null)});

@@ -1,0 +1,1 @@
+function e(){document.getElementById("loading").classList.remove("hidden")}window.addEventListener("load",()=>{setTimeout(()=>{document.getElementById("loading").classList.add("hidden")},500)});export{e as s};
