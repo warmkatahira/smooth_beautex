@@ -19,6 +19,7 @@ class ItemSearchService
             'search_item_jan_code',
             'search_item_name',
             'search_item_category_1',
+            'search_item_category_2',
         ]);
         return;
     }
@@ -37,6 +38,7 @@ class ItemSearchService
             session(['search_item_jan_code' => $request->search_item_jan_code]);
             session(['search_item_name' => $request->search_item_name]);
             session(['search_item_category_1' => $request->search_item_category_1]);
+            session(['search_item_category_2' => $request->search_item_category_2]);
         }
         return;
     }
@@ -65,6 +67,11 @@ class ItemSearchService
         if(session('search_item_category_1') != null){
             // 条件を指定して取得
             $query = $query->where('item_category_1', 'LIKE', '%'.session('search_item_category_1').'%');
+        }
+        // 商品カテゴリ2の条件がある場合
+        if(session('search_item_category_2') != null){
+            // 条件を指定して取得
+            $query = $query->where('item_category_2', 'LIKE', '%'.session('search_item_category_2').'%');
         }
         // 並び替えを実施
         return $query->orderBy('items.sort_order', 'asc')->orderBy('items.item_code', 'asc');

@@ -9,6 +9,7 @@
                     <th class="font-thin py-1 px-2 text-center">商品JANコード</th>
                     <th class="font-thin py-1 px-2 text-center">商品名</th>
                     <th class="font-thin py-1 px-2 text-center">商品カテゴリ1</th>
+                    <th class="font-thin py-1 px-2 text-center">商品カテゴリ2</th>
                     <th class="font-thin py-1 px-2 text-center">商品ロケーション</th>
                     <th class="font-thin py-1 px-2 text-center">在庫管理</th>
                     <th class="font-thin py-1 px-2 text-center">LOT</th>
@@ -29,6 +30,7 @@
                         <td class="py-1 px-2 border">{{ $stock->item_jan_code }}</td>
                         <td class="py-1 px-2 border">{{ $stock->item_name }}</td>
                         <td class="py-1 px-2 border">{{ $stock->item_category_1 }}</td>
+                        <td class="py-1 px-2 border">{{ $stock->item_category_2 }}</td>
                         <td class="py-1 px-2 border">{{ $stock->item_location }}</td>
                         <td class="py-1 px-2 border text-center">{{ $stock->is_stock_managed_text }}</td>
                         <td class="py-1 px-2 border text-center">{{ $stock->lot }}</td>

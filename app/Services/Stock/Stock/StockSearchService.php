@@ -52,6 +52,7 @@ class StockSearchService
                         'items.item_jan_code',
                         'items.item_name',
                         'items.item_category_1',
+                        'items.item_category_2',
                         'items.item_image_file_name',
                         'items.is_stock_managed',
                         'items.sort_order as item_sort_order',
@@ -116,6 +117,7 @@ class StockSearchService
                 'item_base.item_jan_code',
                 'item_base.item_name',
                 'item_base.item_category_1',
+                'item_base.item_category_2',
                 'item_base.item_image_file_name',
                 'item_base.is_stock_managed',
                 DB::raw("CASE item_base.is_stock_managed WHEN 0 THEN '無効' WHEN 1 THEN '有効' END as is_stock_managed_text"),
@@ -135,6 +137,7 @@ class StockSearchService
                 'item_base.item_jan_code',
                 'item_base.item_name',
                 'item_base.item_category_1',
+                'item_base.item_category_2',
                 'item_base.item_image_file_name',
             )->orderBy('item_base.item_sort_order', 'asc');
         }
@@ -147,6 +150,7 @@ class StockSearchService
                 'item_base.item_jan_code',
                 'item_base.item_name',
                 'item_base.item_category_1',
+                'item_base.item_category_2',
                 'item_base.item_image_file_name',
                 'item_base.is_stock_managed',
                 DB::raw("CASE item_base.is_stock_managed WHEN 0 THEN '無効' WHEN 1 THEN '有効' END as is_stock_managed_text"),
