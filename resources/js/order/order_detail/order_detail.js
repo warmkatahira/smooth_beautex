@@ -46,6 +46,16 @@ $(document).on('click', function(e){
         $('#tracking_no_update_modal').removeClass('hidden');
     }
     // クリックされた要素にモーダルを閉じるクラス名が設定されていれば、モーダルを閉じる
+    if(e.target.classList.contains('order_mark_update_modal_close') === true){
+        $('#order_mark_update_modal').addClass('hidden');
+    }
+    // クリックした要素のIDがモーダルを開くものであれば、モーダルを開く
+    if(e.target.id === 'order_mark_update_modal_open'){
+        // テキストボックスを現在の値に変更
+        $('#order_mark').val($('#current_order_mark').val());
+        $('#order_mark_update_modal').removeClass('hidden');
+    }
+    // クリックされた要素にモーダルを閉じるクラス名が設定されていれば、モーダルを閉じる
     if(e.target.classList.contains('order_memo_update_modal_close') === true){
         $('#order_memo_update_modal').addClass('hidden');
     }
@@ -110,6 +120,17 @@ $('#tracking_no_update_enter').on("click",function(){
     }
 });
 
+// 受注マークの更新ボタンを押下した場合
+$('#order_mark_update_enter').on("click",function(){
+    // 処理を実行するか確認
+    const result = window.confirm("受注マークの更新を実行しますか？");
+    // 「はい」が押下されたらsubmit、「いいえ」が押下されたら処理キャンセル
+    if(result === true){
+        start_loading();
+        $("#order_mark_update_form").submit();
+    }
+});
+
 // 受注メモの更新ボタンを押下した場合
 $('#order_memo_update_enter').on("click",function(){
     // 処理を実行するか確認
@@ -170,6 +191,15 @@ tippy('.tippy_tracking_no_update', {
     theme: 'tippy_main_theme',
 });
 
+// 受注マーク更新モーダルのツールチップ
+tippy('.tippy_order_mark_update', {
+    content: "受注マークを更新する場合は、<br>こちらをクリックして下さい",
+    duration: 500,
+    allowHTML: true,
+    placement: 'right',
+    theme: 'tippy_main_theme',
+});
+
 // 受注メモ更新モーダルのツールチップ
 tippy('.tippy_order_memo_update', {
     content: "受注メモを更新する場合は、<br>こちらをクリックして下さい",
@@ -206,6 +236,15 @@ tippy('.tippy_tracking_no_url', {
     theme: 'tippy_main_theme',
 });
 
+// 受注マークのツールチップ
+tippy('.tippy_order_mark', {
+    content: "受注の簡易的な目印を意味します。<br>主に検索条件で使用します。",
+    duration: 500,
+    allowHTML: true,
+    placement: 'right',
+    theme: 'tippy_main_theme',
+});
+
 // 受注メモのツールチップ
 tippy('.tippy_order_memo', {
     content: "受注管理で使用するメモです。<br>このページ以外では表示されません。",
@@ -218,15 +257,6 @@ tippy('.tippy_order_memo', {
 // 出荷作業メモのツールチップ
 tippy('.tippy_shipping_work_memo', {
     content: "出荷作業者に対して使用するメモです。<br>個別ピッキングリストに印字されます。",
-    duration: 500,
-    allowHTML: true,
-    placement: 'right',
-    theme: 'tippy_main_theme',
-});
-
-// 領収書宛名のツールチップ
-tippy('.tippy_receipt_name', {
-    content: "領収書宛名として印字される内容です。",
     duration: 500,
     allowHTML: true,
     placement: 'right',

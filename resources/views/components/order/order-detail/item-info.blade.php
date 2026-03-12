@@ -13,7 +13,7 @@
                         <th class="font-thin py-1 px-2 text-center">商品名</th>
                         <th class="font-thin py-1 px-2 text-center">出荷数</th>
                         <th class="font-thin py-1 px-2 text-center">商品単価</th>
-                        <th class="font-thin py-1 px-2 text-center">未引当数</th>
+                        <th class="font-thin py-1 px-2 text-center">引当残</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white">

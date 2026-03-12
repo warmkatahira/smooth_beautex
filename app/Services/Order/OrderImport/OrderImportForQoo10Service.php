@@ -122,7 +122,7 @@ class OrderImportForQoo10Service
             'order_item_name'           => '商品名',
             'shipping_quantity'         => '出荷数',
             'order_item_unit_price'     => '商品単価',
-            'unallocated_quantity'      => '未引当数',
+            'unallocated_quantity'      => '引当残',
             'order_category_id'         => '受注区分',
         ];
         // バリデーション実施

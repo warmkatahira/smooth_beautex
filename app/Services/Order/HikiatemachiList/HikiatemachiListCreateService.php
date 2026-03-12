@@ -13,7 +13,7 @@ class HikiatemachiListCreateService
 {
     public function getCreateItem()
     {
-        // 未引当数を商品毎に集計して取得
+        // 引当残を商品毎に集計して取得
         $orders = Order::where('order_status_id', OrderStatusEnum::HIKIATE_MACHI)
                     ->with('order_items.item')
                     ->orderBy('order_import_date')

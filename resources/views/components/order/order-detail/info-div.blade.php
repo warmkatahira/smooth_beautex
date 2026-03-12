@@ -26,6 +26,10 @@
     if($openModalId === 'receipt_name_update_modal_open' && $order->order_status_id < OrderStatusEnum::SHUKKA_ZUMI){
         $is_modal_icon_disp = true;
     }
+    // 受注マーク
+    if($openModalId === 'order_mark_update_modal_open' && $order->order_status_id < OrderStatusEnum::SHUKKA_ZUMI){
+        $is_modal_icon_disp = true;
+    }
     // 受注メモ
     if($openModalId === 'order_memo_update_modal_open' && $order->order_status_id < OrderStatusEnum::SHUKKA_ZUMI){
         $is_modal_icon_disp = true;

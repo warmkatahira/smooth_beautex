@@ -11,6 +11,7 @@ use App\Services\Order\OrderAllocate\OrderAllocateService;
 use App\Http\Requests\Order\OrderDetail\ShippingBaseUpdateRequest;
 use App\Http\Requests\Order\OrderDetail\ShippingMethodUpdateRequest;
 use App\Http\Requests\Order\OrderDetail\TrackingNoUpdateRequest;
+use App\Http\Requests\Order\OrderDetail\OrderMarkUpdateRequest;
 use App\Http\Requests\Order\OrderDetail\OrderMemoUpdateRequest;
 use App\Http\Requests\Order\OrderDetail\ShippingWorkMemoUpdateRequest;
 use App\Http\Requests\Order\OrderDetail\DesiredDeliveryDateUpdateRequest;
@@ -97,6 +98,31 @@ class OrderDetailUpdateController extends Controller
         return redirect()->back()->with([
             'alert_type' => 'success',
             'alert_message' => '配送伝票番号を更新しました。',
+        ]);
+    }
+
+    public function order_mark(OrderMarkUpdateRequest $request)
+    {
+        try{
+            DB::transaction(function () use ($request){
+                // インスタンス化
+                $OrderDetailUpdateService = new OrderDetailUpdateService;
+                // 受注をロックして取得
+                $order = $OrderDetailUpdateService->getOrder($request);
+                // 受注マークを更新できるか確認
+                $OrderDetailUpdateService->checkUpdatableOrderMark($order);
+                // 受注マークを更新
+                $OrderDetailUpdateService->updateOrderMark($request, $order);
+            });
+        }catch (\Exception $e){
+            return redirect()->back()->with([
+                'alert_type' => 'error',
+                'alert_message' => $e->getMessage(),
+            ]);
+        }
+        return redirect()->back()->with([
+            'alert_type' => 'success',
+            'alert_message' => '受注メモを更新しました。',
         ]);
     }
 

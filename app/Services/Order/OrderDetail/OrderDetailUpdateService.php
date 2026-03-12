@@ -58,7 +58,6 @@ class OrderDetailUpdateService
                 'is_stock_allocated'    => 0,
             ]);
         }
-        return;
     }
 
     // 出荷倉庫を更新
@@ -69,7 +68,6 @@ class OrderDetailUpdateService
             'is_allocated'      => 0,
             'shipping_base_id'  => $request->shipping_base_id,
         ]);
-        return;
     }
 
     // 配送方法を更新できるか確認
@@ -89,7 +87,6 @@ class OrderDetailUpdateService
             'shipping_method_id'    => $request->shipping_method_id,
             'tracking_no'           => null,
         ]);
-        return;
     }
 
     // 配送伝票番号を更新できるか確認
@@ -108,7 +105,24 @@ class OrderDetailUpdateService
         $order->update([
             'tracking_no' => $request->tracking_no,
         ]);
-        return;
+    }
+
+    // 受注マークを更新できるか確認
+    public function checkUpdatableOrderMark($order)
+    {
+        // 注文ステータスが「作業中」よりも大きい場合
+        if($order->order_status_id > OrderStatusEnum::SAGYO_CHU){
+            throw new \RuntimeException('受注マークを更新できない注文ステータスです。');
+        }
+    }
+
+    // 受注マークを更新
+    public function updateOrderMark($request, $order)
+    {
+        // 受注マークを更新
+        $order->update([
+            'order_mark' => $request->order_mark,
+        ]);
     }
 
     // 受注メモを更新できるか確認
@@ -127,7 +141,6 @@ class OrderDetailUpdateService
         $order->update([
             'order_memo' => $request->order_memo,
         ]);
-        return;
     }
 
     // 出荷作業メモを更新できるか確認
@@ -146,7 +159,6 @@ class OrderDetailUpdateService
         $order->update([
             'shipping_work_memo' => $request->shipping_work_memo,
         ]);
-        return;
     }
 
     // 配送希望日を更新できるか確認
@@ -165,6 +177,5 @@ class OrderDetailUpdateService
         $order->update([
             'desired_delivery_date' => $request->desired_delivery_date,
         ]);
-        return;
     }
 }

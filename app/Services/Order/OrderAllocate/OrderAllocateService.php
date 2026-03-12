@@ -192,19 +192,19 @@ class OrderAllocateService
                 // 次のループ処理へ
                 continue;
             }
-            // 有効在庫数が未引当数と同じか多い場合
+            // 有効在庫数が引当残と同じか多い場合
             if($stock->available_stock >= $order_item->unallocated_quantity){
-                // 有効在庫数から未引当数を引く
+                // 有効在庫数から引当残を引く
                 $stock->decrement('available_stock', $order_item->unallocated_quantity);
-                // 在庫引当OK処理(未引当数も同時に0にする)
+                // 在庫引当OK処理(引当残も同時に0にする)
                 $order_item->update([
                     'is_stock_allocated'    => 1,
                     'unallocated_quantity'  => 0,
                 ]);
             }
-            // 有効在庫数が未引当数よりも少ない場合
+            // 有効在庫数が引当残よりも少ない場合
             if($stock->available_stock < $order_item->unallocated_quantity){
-                // 確保した在庫の分だけ未引当数を減らす
+                // 確保した在庫の分だけ引当残を減らす
                 $order_item->decrement('unallocated_quantity', $stock->available_stock);
                 // 有効在庫数を0にする
                 $stock->update(['available_stock' => 0]);

@@ -9,7 +9,7 @@
                 // 最初のページに余計なページがでないように、改ページをコントロールするためのカウント
                 // 受注をカウント
                 $order_count++;
-                // order_items を order_item_code でまとめて数量と未引当数を集計
+                // order_items を order_item_code でまとめて数量と引当残を集計
                 $aggregated_items = $order->order_items
                     ->groupBy('order_item_code')
                     ->map(function ($group, $code) {
@@ -49,7 +49,7 @@
                         <th class="item_jan_code font-thin py-1 px-2 border border-black text-center">商品コード</th>
                         <th class="item_name font-thin py-1 px-2 border border-black text-center">商品名</th>
                         <th class="shipping_quantity font-thin py-1 px-2 border border-black text-center">数量</th>
-                        <th class="unallocated_quantity font-thin py-1 px-2 border border-black text-center">未引当数</th>
+                        <th class="unallocated_quantity font-thin py-1 px-2 border border-black text-center">引当残</th>
                     </tr>
                 </thead>
                 <tbody class="">

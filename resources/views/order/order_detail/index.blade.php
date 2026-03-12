@@ -20,6 +20,7 @@
 <x-order.order-detail.modal.shipping-method-update-modal :order="$order" :deliveryCompanies="$delivery_companies" />
 <x-order.order-detail.modal.shipping-base-update-modal :order="$order" :bases="$bases" />
 <x-order.order-detail.modal.tracking-no-update-modal :order="$order" />
+<x-order.order-detail.modal.order-mark-update-modal :order="$order" />
 <x-order.order-detail.modal.order-memo-update-modal :order="$order" />
 <x-order.order-detail.modal.shipping-work-memo-update-modal :order="$order" />
 <x-order.order-detail.modal.desired-delivery-date-update-modal :order="$order" />

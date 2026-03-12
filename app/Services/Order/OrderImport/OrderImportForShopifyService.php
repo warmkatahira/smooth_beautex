@@ -127,7 +127,7 @@ class OrderImportForShopifyService
             'ship_name'                 => 'required|string|max:255',
             'ship_zip_code'             => 'required|string|max:8',
             'ship_country_code'         => 'required|string|max:5',
-            'ship_province_code'        => 'required|string|max:10',
+            'ship_province_code'        => 'nullable|string|max:10',
             'ship_province_name'        => 'nullable|string|max:5|exists:prefectures,prefecture_name',
             'ship_city'                 => 'required|string|max:255',
             'ship_address_1'            => 'required|string|max:255',
@@ -173,7 +173,7 @@ class OrderImportForShopifyService
             'order_item_name'           => '商品名',
             'shipping_quantity'         => '出荷数',
             'order_item_unit_price'     => '商品単価',
-            'unallocated_quantity'      => '未引当数',
+            'unallocated_quantity'      => '引当残',
             'order_category_id'         => '受注区分',
         ];
         // バリデーション実施
