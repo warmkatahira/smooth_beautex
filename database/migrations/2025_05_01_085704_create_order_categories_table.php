@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('order_categories', function (Blueprint $table) {
             $table->increments('order_category_id');
-            $table->string('order_category_name', 10);
+            $table->string('order_category_name', 20);
             $table->unsignedInteger('mall_id');
             $table->unsignedInteger('shipper_id');
             $table->unsignedInteger('sort_order');

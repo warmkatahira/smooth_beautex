@@ -15,11 +15,25 @@ class ShipperSeeder extends Seeder
     public function run(): void
     {
         Shipper::create([
-            'shipper_company_name' => '株式会社 BEAUTEX',
-            'shipper_name' => 'レンズショップmomo/モモ',
-            'shipper_zip_code' => '810-0001',
-            'shipper_address' => '福岡県福岡市中央区天神2丁目3-10 天神パインクレスト716',
-            'shipper_tel' => '092-577-0150',
+            'shipper_company_name'  => 'BEAUTEX株式会社',
+            'shipper_name'          => 'INSI BEAUTY（Qoo10）',
+            'shipper_zip_code'      => '340-0815',
+            'shipper_address'       => '埼玉県八潮市八潮5-5-2',
+            'shipper_tel'           => '03-6899-3994',
+        ]);
+        Shipper::create([
+            'shipper_company_name'  => 'BEAUTEX株式会社',
+            'shipper_name'          => 'Push!Color',
+            'shipper_zip_code'      => '340-0815',
+            'shipper_address'       => '埼玉県八潮市八潮5-5-2',
+            'shipper_tel'           => '03-6899-3994',
+        ]);
+        Shipper::create([
+            'shipper_company_name'  => 'BEAUTEX株式会社',
+            'shipper_name'          => 'INSI BEAUTY',
+            'shipper_zip_code'      => '340-0815',
+            'shipper_address'       => '埼玉県八潮市八潮5-5-2',
+            'shipper_tel'           => '03-6899-3994',
         ]);
     }
 }

@@ -15,21 +15,21 @@ class OrderCategorySeeder extends Seeder
     public function run(): void
     {
         OrderCategory::create([
-            'order_category_name'   => 'Qoo10',
+            'order_category_name'   => 'INSI BEAUTY',
             'mall_id'               => 1,
             'shipper_id'            => 1,
             'sort_order'            => 1,
         ]);
         OrderCategory::create([
-            'order_category_name'   => 'shopify_1',
+            'order_category_name'   => 'Push!Color',
             'mall_id'               => 2,
-            'shipper_id'            => 1,
+            'shipper_id'            => 2,
             'sort_order'            => 2,
         ]);
         OrderCategory::create([
-            'order_category_name'   => 'shopify_2',
+            'order_category_name'   => 'INSI BEAUTY',
             'mall_id'               => 2,
-            'shipper_id'            => 1,
+            'shipper_id'            => 3,
             'sort_order'            => 3,
         ]);
     }

@@ -30,4 +30,9 @@ class OrderCategory extends Model
     {
         return $this->belongsTo(Mall::class, 'mall_id', 'mall_id');
     }
+    // 受注区分名とモール名を返すアクセサ
+    public function getOrderCategoryNameAndMallNameAttribute()
+    {
+        return $this->order_category_name.'('.$this->mall->mall_name.')';
+    }
 }

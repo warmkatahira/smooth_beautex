@@ -4,7 +4,7 @@
         <x-search.input type="text" label="注文番号" id="search_order_no" />
         <x-search.input type="text" label="受注管理ID" id="search_order_control_id" />
         <x-search.datalist label="受注マーク" id="search_order_mark" listId="order_mark" :selectItems="$orderMarks" optionValue="order_mark" />
-        <x-search.select label="受注区分" id="search_order_category_id" :selectItems="$orderCategories" optionValue="order_category_id" optionText="order_category_name" />
+        <x-search.select label="受注区分" id="search_order_category_id" :selectItems="$orderCategories" optionValue="order_category_id" optionText="order_category_name_and_mall_name" />
         <x-search.select label="出荷倉庫" id="search_shipping_base_id" :selectItems="$bases" optionValue="base_id" optionText="base_name" />
         <x-search.input type="text" label="配送先名" id="search_ship_name" />
         <x-search.select label="配送先都道府県" id="search_ship_prefecture_name" :selectItems="$prefectures" optionValue="prefecture_name" optionText="prefecture_name" />

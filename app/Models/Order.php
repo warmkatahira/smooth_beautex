@@ -85,7 +85,7 @@ class Order extends Model
         return $this->shipping_method?->delivery_company->delivery_company . ' ' . $this->shipping_method?->shipping_method;
     }
     // 配送先が国内か海外かを返すアクセサ
-    public function getShipCountryTextAttribute()
+    public function getShipRegionTypeAttribute()
     {
         return $this->ship_country_code === 'JP' ? '国内' : '海外';
     }

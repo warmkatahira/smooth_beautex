@@ -41,7 +41,7 @@ class OrderMgtController extends Controller
         // 倉庫を取得
         $bases = Base::getAll()->get();
         // 受注区分を取得
-        $order_categories = OrderCategory::getAll()->get();
+        $order_categories = OrderCategory::getAll()->with('mall')->get();
         // 運送会社を取得
         $delivery_companies = DeliveryCompany::getAll()->with('shipping_methods')->get();
         // 受注マークを取得

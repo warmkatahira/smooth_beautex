@@ -11,8 +11,10 @@
                     <th class="font-thin py-1 px-2 text-center">注文日</th>
                     <th class="font-thin py-1 px-2 text-center">受注管理ID</th>
                     <th class="font-thin py-1 px-2 text-center">受注区分</th>
+                    <th class="font-thin py-1 px-2 text-center">モール</th>
                     <th class="font-thin py-1 px-2 text-center">出荷倉庫</th>
                     <th class="font-thin py-1 px-2 text-center">配送先名</th>
+                    <th class="font-thin py-1 px-2 text-center">出荷先</th>
                     <th class="font-thin py-1 px-2 text-center">配送先都道府県</th>
                     <th class="font-thin py-1 px-2 text-center">運送会社</th>
                     <th class="font-thin py-1 px-2 text-center">配送方法</th>
@@ -35,11 +37,13 @@
                         <td class="py-1 px-2 border text-center">{{ $order->order_no }}</td>
                         <td class="py-1 px-2 border text-center">{{ CarbonImmutable::parse($order->order_date)->isoFormat('Y年MM月DD日(ddd)') }}</td>
                         <td class="py-1 px-2 border text-center">{{ $order->order_control_id }}</td>
-                        <td class="py-1 px-2 border text-center">
-                            <img src="{{ asset('image/'.$order->order_category->order_category_image_file_name) }}" class="w-12 inline-block">
+                        <td class="py-1 px-2 border">{{ $order->order_category->order_category_name }}</td>
+                        <td class="py-1 px-2 border">
+                            <img src="{{ asset('image/'.$order->order_category->mall->mall_image_file_name) }}" class="w-12 inline-block">
                         </td>
                         <td class="py-1 px-2 border">{{ $order->base?->base_name }}</td>
                         <td class="py-1 px-2 border">{{ $order->ship_name }}</td>
+                        <td class="py-1 px-2 border text-center">{{ $order->ship_region_type }}</td>
                         <td class="py-1 px-2 border text-center">{{ $order->ship_prefecture_name }}</td>
                         <td class="py-1 px-2 border">
                             <img src="{{ asset('image/'.$order->shipping_method->delivery_company->company_image) }}" class="inline-block">
