@@ -42,7 +42,9 @@ class ItemUpdateService
         $item->update([
             'item_jan_code'                 => $request->item_jan_code,
             'item_name'                     => $request->item_name,
-            'item_category_1'                 => $request->item_category_1,
+            'item_category_1'               => $request->item_category_1,
+            'item_category_2'               => $request->item_category_2,
+            'is_inspection_lot_required'    => $request->is_inspection_lot_required,
             'model_jan_code'                => $request->model_jan_code,
             'exp_start_position'            => $request->exp_start_position,
             'lot_1_start_position'          => $request->lot_1_start_position,
@@ -52,7 +54,8 @@ class ItemUpdateService
             's_power_code'                  => $request->s_power_code,
             's_power_code_start_position'   => $request->s_power_code_start_position,
             'is_stock_managed'              => $request->is_stock_managed,
-            'shipping_method_id'            => $request->shipping_method_id,
+            'country_of_origin'             => $request->country_of_origin,
+            'hs_code'                       => $request->hs_code,
             'sort_order'                    => $request->sort_order,
         ]);
         return $item;

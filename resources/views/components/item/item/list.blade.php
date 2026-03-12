@@ -11,6 +11,8 @@
                     <th class="font-thin py-1 px-2 text-center">商品JANコード</th>
                     <th class="font-thin py-1 px-2 text-center">商品名</th>
                     <th class="font-thin py-1 px-2 text-center">商品カテゴリ1</th>
+                    <th class="font-thin py-1 px-2 text-center">商品カテゴリ2</th>
+                    <th class="font-thin py-1 px-2 text-center">検品ロット</th>
                     <th class="font-thin py-1 px-2 text-center">在庫管理</th>
                     <th class="font-thin py-1 px-2 text-center">並び順</th>
                     <th class="font-thin py-1 px-2 text-center">最終更新日時</th>
@@ -34,7 +36,13 @@
                         <td class="py-1 px-2 border">{{ $item->item_jan_code }}</td>
                         <td class="py-1 px-2 border">{{ $item->item_name }}</td>
                         <td class="py-1 px-2 border">{{ $item->item_category_1 }}</td>
-                        <td class="py-1 px-2 border text-center">{{ $item->is_stock_managed_text }}</td>
+                        <td class="py-1 px-2 border">{{ $item->item_category_2 }}</td>
+                        <td class="py-1 px-2 border text-center">
+                            <x-list.status :value="$item->is_inspection_lot_required" label1="必要" label0="不要" />
+                        </td>
+                        <td class="py-1 px-2 border text-center">
+                            <x-list.status :value="$item->is_stock_managed" label1="有効" label0="無効" />
+                        </td>
                         <td class="py-1 px-2 border text-right">{{ number_format($item->sort_order) }}</td>
                         <td class="py-1 px-2 border">{{ CarbonImmutable::parse($item->updated_at)->isoFormat('Y年MM月DD日(ddd) HH:mm:ss') }}</td>
                     </tr>

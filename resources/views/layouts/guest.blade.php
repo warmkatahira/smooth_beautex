@@ -45,6 +45,7 @@
         <script src="https://unpkg.com/tippy.js@6"></script>
     </head>
     <body>
+        <p class="text-xl text-center bg-theme-main py-3 cursor-default">{{ SystemEnum::getSystemTitle() }}</p>
         <div class="flex flex-col items-center my-5">
             <!-- アラート表示 -->
             <x-alert/>

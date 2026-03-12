@@ -9,6 +9,8 @@
                 <x-form.input type="text" label="商品JANコード" id="item_jan_code" name="item_jan_code" :value="$item->item_jan_code" required="true" />
                 <x-form.input type="text" label="商品名" id="item_name" name="item_name" :value="$item->item_name" required="true" />
                 <x-form.input type="text" label="商品カテゴリ1" id="item_category_1" name="item_category_1" :value="$item->item_category_1" />
+                <x-form.input type="text" label="商品カテゴリ2" id="item_category_2" name="item_category_2" :value="$item->item_category_2" />
+                <x-form.switch-boolean label="検品ロット" id="is_inspection_lot_required" name="is_inspection_lot_required" label0="不要" label1="必要" :value="$item->is_inspection_lot_required" required="true" />
                 <x-form.input type="text" label="代表JANコード" id="model_jan_code" name="model_jan_code" :value="$item->model_jan_code" />
                 <x-form.input type="tel" label="EXP開始位置" id="exp_start_position" name="exp_start_position" :value="$item->exp_start_position" />
                 <x-form.input type="tel" label="LOT1開始位置" id="lot_1_start_position" name="lot_1_start_position" :value="$item->lot_1_start_position" />
@@ -17,7 +19,9 @@
                 <x-form.input type="tel" label="LOT2桁数" id="lot_2_length" name="lot_2_length" :value="$item->lot_2_length" />
                 <x-form.input type="tel" label="S-POWERコード" id="s_power_code" name="s_power_code" :value="$item->s_power_code" />
                 <x-form.input type="tel" label="S-POWERコード開始位置" id="s_power_code_start_position" name="s_power_code_start_position" :value="$item->s_power_code_start_position" />
-                <x-form.select-boolean label="在庫管理" id="is_stock_managed" name="is_stock_managed" :value="$item->is_stock_managed" required="true" />
+               <x-form.switch-boolean label="在庫管理" id="is_stock_managed" name="is_stock_managed" label0="無効" label1="有効" :value="$item->is_stock_managed" required="true" />
+                <x-form.input type="text" label="原産国" id="country_of_origin" name="country_of_origin" :value="$item->country_of_origin" />
+                <x-form.input type="text" label="HSコード" id="hs_code" name="hs_code" :value="$item->hs_code" />
                 <x-form.input type="tel" label="並び順" id="sort_order" name="sort_order" :value="$item->sort_order" required="true" />
             </div>
             <input type="hidden" name="item_id" value="{{ $item->item_id }}">

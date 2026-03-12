@@ -30,6 +30,18 @@ export default {
                     'open'          : "#16a34a",
                     'close'         : "#ea580c",
                 },
+                status: {
+                    active: {
+                        text: "#15803d",   // green-700
+                        bg:   "#dcfce7",   // green-100
+                        dot:  "#22c55e",   // green-500
+                    },
+                    inactive: {
+                        text: "#4b5563",   // gray-600
+                        bg:   "#e5e7eb",   // gray-200
+                        dot:  "#9ca3af",   // gray-400
+                    },
+                },
                 common: {
                     'disabled'      : "#d1d5db",
                 },
