@@ -38,6 +38,7 @@ class StockDownloadService
                             $stock->item_jan_code,
                             $stock->item_name,
                             $stock->item_category_1,
+                            $stock->item_category_2,
                             $stock->is_stock_managed_text,
                         ];
                         // 倉庫の分だけループ処理
@@ -56,6 +57,7 @@ class StockDownloadService
                             $stock->item_jan_code,
                             $stock->item_name,
                             $stock->item_category_1,
+                            $stock->item_category_2,
                             $stock->item_location,
                             $stock->is_stock_managed_text,
                             $stock->lot,

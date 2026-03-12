@@ -8,6 +8,6 @@
             // 引数が '-' でない場合は、yyyymm形式の文字列をyyyy/mm形式に変換
             // 例: '202308' => '2023/08'
             // 引数が '-' の場合はそのまま '-' を返す
-            return $exp != '-' ? substr($exp, 0, 4) . '/' . substr($exp, 4, 2) : '-';
+            return $exp === null ? null : substr($exp, 0, 4) . '/' . substr($exp, 4, 2);
         }
     }
