@@ -13,6 +13,7 @@
                 <x-order.order-detail.info-div label="注文日" :value="CarbonImmutable::parse($order->order_date)->isoFormat('Y年MM月DD日(ddd)')" />
                 <x-order.order-detail.info-div label="受注管理ID" :value="$order->order_control_id" />
                 <x-order.order-detail.info-div label="受注区分" :value="$order->order_category->order_category_name" />
+                <x-order.order-detail.info-div label="モール" :value="$order->order_category->mall->mall_name" />
             </div>
         </div>
     </div>
