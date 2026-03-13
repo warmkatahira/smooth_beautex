@@ -17,7 +17,7 @@
                 <tr class="text-left cursor-default whitespace-nowrap">
                     <td class="py-1 px-2 border">
                         <div class="flex flex-row gap-5">
-                            <a href="{{ route('shipper_update.index', ['shipper_id' => $shipper->shipper_id]) }}" class="btn bg-btn-enter text-white py-1 px-2">更新</a>
+                            <a href="{{ route('shipper_update.index', ['shipper_id' => $shipper->shipper_id]) }}" class="btn rounded bg-btn-enter text-white py-1 px-2">更新</a>
                         </div>
                     </td>
                     <td class="py-1 px-2 border">{{ $shipper->shipper_company_name }}</td>

@@ -19,9 +19,9 @@
                     <tr class="text-left whitespace-nowrap hover:bg-theme-sub group @if(!$auto_process->is_active) bg-gray-300 @endif">
                         <td class="py-1 px-2 border">
                             <div class="flex flex-row gap-5">
-                                <a href="{{ route('auto_process_update.index', ['auto_process_id' => $auto_process->auto_process_id]) }}" class="btn bg-btn-enter text-white py-1 px-2">更新</a>
-                                <a href="{{ route('auto_process_condition_update.index', ['auto_process_id' => $auto_process->auto_process_id]) }}" class="btn bg-btn-enter text-white py-1 px-2">条件設定</a>
-                                <button type="button" class="btn auto_process_delete_enter bg-btn-cancel text-white py-1 px-2" data-auto-process-id="{{ $auto_process->auto_process_id }}">削除</button>
+                                <a href="{{ route('auto_process_update.index', ['auto_process_id' => $auto_process->auto_process_id]) }}" class="btn rounded bg-btn-enter text-white py-1 px-2">更新</a>
+                                <a href="{{ route('auto_process_condition_update.index', ['auto_process_id' => $auto_process->auto_process_id]) }}" class="btn rounded bg-btn-enter text-white py-1 px-2">条件設定</a>
+                                <button type="button" class="btn rounded auto_process_delete_enter bg-btn-cancel text-white py-1 px-2" data-auto-process-id="{{ $auto_process->auto_process_id }}">削除</button>
                             </div>
                         </td>
                         <td class="py-1 px-2 border auto_process_name">{{ $auto_process->auto_process_name }}</td>

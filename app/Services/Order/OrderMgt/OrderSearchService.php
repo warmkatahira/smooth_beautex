@@ -109,7 +109,7 @@ class OrderSearchService extends BaseFilterService
     }
 
     // 無視するキー
-    protected function ignoreKeys()
+    protected function ignoreKeys(): array
     {
         return [];
     }

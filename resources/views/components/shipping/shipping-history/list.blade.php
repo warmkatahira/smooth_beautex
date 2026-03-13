@@ -28,7 +28,7 @@
                     <tr class="text-left cursor-default whitespace-nowrap">
                         <td class="py-1 px-2 border">
                             <div class="flex flex-row gap-5">
-                                <a href="{{ route('order_detail.index', ['order_control_id' => $order->order_control_id]) }}" class="btn bg-btn-enter text-white py-1 px-2">詳細</a>
+                                <a href="{{ route('order_detail.index', ['order_control_id' => $order->order_control_id]) }}" class="btn rounded bg-btn-enter text-white py-1 px-2">詳細</a>
                             </div>
                         </td>
                         <td class="py-1 px-2 border text-center">{{ CarbonImmutable::parse($order->shipping_date)->isoFormat('Y年MM月DD日(ddd)') }}</td>
