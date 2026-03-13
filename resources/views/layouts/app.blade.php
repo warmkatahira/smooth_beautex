@@ -44,6 +44,7 @@
             'resources/js/image_fade_in.js',
             'resources/js/file_select.js',
             'resources/js/checkbox.js',
+            'resources/js/filter.js',
         ])
 
         <!-- Select2 -->

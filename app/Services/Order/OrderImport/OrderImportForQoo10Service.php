@@ -31,8 +31,10 @@ class OrderImportForQoo10Service
         $validation_error_export_header = array('エラー行数', 'エラー内容');
         // 取得したレコードの分だけループ
         foreach ($all_line as $key => $line){
+            // 郵便番号から「'」と「-」を取り除く
+            $ship_zip_code = str_replace(["'", "-"], "", $line['郵便番号']);
             // 郵便番号をハイフンつきにして変数に格納
-            $ship_zip_code = substr(str_replace("-", "", $line['郵便番号']), 0, 3).'-'.substr(str_replace("-", "", $line['郵便番号']), 3);
+            $ship_zip_code = substr($ship_zip_code, 0, 3).'-'.substr($ship_zip_code, 3);
             // 追加先テーブルのカラム名に合わせて配列を整理
             $param = [
                 'order_import_date'         => $nowDate->toDateString(),
@@ -44,13 +46,14 @@ class OrderImportForQoo10Service
                 'order_time'                => CarbonImmutable::parse($line['注文日'])->toTimeString(),
                 'ship_name'                 => $line['受取人名'],
                 'ship_zip_code'             => $ship_zip_code,
+                'ship_country_code'         => 'JP',
                 'ship_province_name'        => Prefecture::extractPrefecture($line['住所']),
                 'ship_address_1'            => $line['住所'],
                 'ship_tel'                  => $line['受取人携帯電話番号'] != '-' ? $line['受取人携帯電話番号'] : $line['受取人電話番号'], // 携帯電話番号がなければ、電話番号を適用
                 'order_item_code'           => $line['オプションコード'],
                 'order_item_name'           => $line['商品名'],
                 'shipping_quantity'         => $line['数量'],
-                'order_item_unit_price'     => $line['販売価格'],
+                'order_item_unit_price'     => str_replace([","], "", $line['販売価格']),   // 4桁以上だと「,」が付いてくるので、取り除く
                 'unallocated_quantity'      => $line['数量'],
                 'order_category_id'         => $order_category_id,
             ];

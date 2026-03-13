@@ -13,10 +13,6 @@ use App\Http\Controllers\Order\OrderDetail\OrderDetailUpdateController;
 use App\Http\Controllers\Order\OrderDelete\OrderDeleteController;
 // +-+-+-+-+-+-+-+- 出荷作業開始 +-+-+-+-+-+-+-+-
 use App\Http\Controllers\Order\ShippingWorkStart\ShippingWorkStartController;
-// +-+-+-+-+-+-+-+- 確認待ちリスト +-+-+-+-+-+-+-+-
-use App\Http\Controllers\Order\KakuninmachiList\KakuninmachiListController;
-// +-+-+-+-+-+-+-+- 引当待ちリスト +-+-+-+-+-+-+-+-
-use App\Http\Controllers\Order\HikiatemachiList\HikiatemachiListController;
 
 Route::middleware('common')->group(function (){
     Route::middleware(['warm_check'])->group(function () {
@@ -53,14 +49,6 @@ Route::middleware('common')->group(function (){
         // +-+-+-+-+-+-+-+- 出荷作業開始 +-+-+-+-+-+-+-+-
         Route::controller(ShippingWorkStartController::class)->prefix('shipping_work_start')->name('shipping_work_start.')->group(function(){
             Route::post('enter', 'enter')->name('enter');
-        });
-        // +-+-+-+-+-+-+-+- 確認待ちリスト +-+-+-+-+-+-+-+-
-        Route::controller(KakuninmachiListController::class)->prefix('kakuninmachi_list')->name('kakuninmachi_list.')->group(function(){
-            Route::get('create', 'create')->name('create');
-        });
-        // +-+-+-+-+-+-+-+- 引当待ちリスト +-+-+-+-+-+-+-+-
-        Route::controller(HikiatemachiListController::class)->prefix('hikiatemachi_list')->name('hikiatemachi_list.')->group(function(){
-            Route::get('create', 'create')->name('create');
         });
     });
 });

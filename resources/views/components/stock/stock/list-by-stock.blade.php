@@ -1,6 +1,6 @@
 <div class="disable_scrollbar flex flex-grow overflow-scroll">
     <div class="stock_list bg-white overflow-x-auto overflow-y-auto border border-gray-600">
-        <table class="text-xs">
+        <table id="filter_table" class="text-xs" data-search-url="/stock/index_by_stock" data-scroll-target=".stock_list">
             <thead class="sticky top-0">
                 <tr class="text-left text-white bg-black whitespace-nowrap">
                     <th class="font-thin py-1 px-2 text-center">商品画像</th>
@@ -18,6 +18,19 @@
                     <th class="font-thin py-1 px-2 text-center">受注数</th>
                     <th class="font-thin py-1 px-2 text-center">有効在庫数</th>
                 </tr>
+                <tr class="filter-row sticky top-0 bg-white z-10 h-8">
+                    <th></th>
+                    <x-filter.select id="filter_base_id" name="filter_base_id" :selectItems="$bases" optionValue="base_id" optionText="base_name" />
+                    <x-filter.input type="tel" id="filter_item_code" name="filter_item_code" />
+                    <x-filter.input type="tel" id="filter_item_jan_code" name="filter_item_jan_code" />
+                    <x-filter.input type="text" id="filter_item_name" name="filter_item_name" />
+                    <x-filter.input type="text" id="filter_item_category_1" name="filter_item_category_1" />
+                    <x-filter.input type="text" id="filter_item_category_2" name="filter_item_category_2" />
+                    <x-filter.input type="text" id="filter_item_location" name="filter_item_location" />
+                    <x-filter.select-boolean id="filter_is_stock_managed" name="filter_is_stock_managed" label1="有効" label0="無効" />
+                    <x-filter.input type="tel" id="filter_lot" name="filter_lot" />
+                    <x-filter.input type="tel" id="filter_exp" name="filter_exp" placeholder="YYYYMM形式" />
+                </tr>
             </thead>
             <tbody class="bg-white">
                 @foreach($stocks as $stock)
@@ -32,7 +45,9 @@
                         <td class="py-1 px-2 border">{{ $stock->item_category_1 }}</td>
                         <td class="py-1 px-2 border">{{ $stock->item_category_2 }}</td>
                         <td class="py-1 px-2 border">{{ $stock->item_location }}</td>
-                        <td class="py-1 px-2 border text-center">{{ $stock->is_stock_managed_text }}</td>
+                        <td class="py-1 px-2 border text-center">
+                            <x-list.status :value="$stock->is_stock_managed" label1="有効" label0="無効" />
+                        </td>
                         <td class="py-1 px-2 border text-center">{{ $stock->lot }}</td>
                         <td class="py-1 px-2 border text-center">{{ formatExp($stock->exp) }}</td>
                         <td class="py-1 px-2 border text-right">{{ number_format($stock->total_stock) }}</td>

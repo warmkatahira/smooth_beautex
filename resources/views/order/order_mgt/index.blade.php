@@ -9,8 +9,7 @@
         <x-pagination :pages="$orders" />
     </div>
     <div class="flex flex-row gap-x-5 items-start">
-        <x-order.order-mgt.search route="order_mgt.index" :bases="$bases" :orderCategories="$order_categories" :deliveryCompanies="$delivery_companies" :orderMarks="$order_marks" :prefectures="$prefectures" />
-        <x-order.order-mgt.list :orders="$orders" />
+        <x-order.order-mgt.list :orders="$orders" :malls="$malls" :bases="$bases" :deliveryCompanies="$delivery_companies" :orderMarks="$order_marks" :prefectures="$prefectures" :shipRegionTypes="$ship_region_types" />
     </div>
 </x-app-layout>
 <x-order.order-mgt.shipping-work-start-modal />

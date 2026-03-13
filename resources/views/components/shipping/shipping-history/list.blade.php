@@ -37,7 +37,7 @@
                         <td class="py-1 px-2 border text-center">{{ $order->order_no }}</td>
                         <td class="py-1 px-2 border text-center">{{ CarbonImmutable::parse($order->order_date)->isoFormat('Y年MM月DD日(ddd)') }}</td>
                         <td class="py-1 px-2 border text-center">{{ $order->order_control_id }}</td>
-                        <td class="py-1 px-2 border">{{ $order->order_category->order_category_name }}</td>
+                        <td class="py-1 px-2 border">{{ $order->order_category->order_category_name_and_mall_name }}</td>
                         <td class="py-1 px-2 border">
                             <img src="{{ asset('image/'.$order->order_category->mall->mall_image_file_name) }}" class="w-12 inline-block">
                         </td>

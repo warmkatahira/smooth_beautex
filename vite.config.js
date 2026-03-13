@@ -19,6 +19,7 @@ export default defineConfig({
                 'resources/js/image_fade_in.js',
                 'resources/js/chart_color.js',
                 'resources/js/checkbox.js',
+                'resources/js/filter.js',
                 'resources/sass/dropdown.scss',
                 'resources/sass/height_adjustment.scss',
                 'resources/sass/welcome.scss',
@@ -38,7 +39,6 @@ export default defineConfig({
                 'resources/js/shipping/shipping_work_end/shipping_work_end.js',
                 // 帳票
                 'resources/sass/shipping/document/document_common.scss',
-                'resources/sass/order/document/hikiatemachi_list.scss',
                 'resources/sass/shipping/document/total_picking_list.scss',
                 'resources/sass/shipping/document/delivery_note.scss',
                 // 商品

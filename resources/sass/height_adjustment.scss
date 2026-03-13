@@ -12,7 +12,7 @@
 // 受注管理のリスト用
 .order_mgt_list {
     width: 100%;
-    height: calc(100vh - 195px);
+    height: calc(100vh - 200px);
 }
 
 // 受注詳細のリスト用
@@ -53,19 +53,13 @@
 // 商品のリスト用
 .item_list {
     width: 100%;
-    height: calc(100vh - 120px);
-}
-
-// 商品QR解析リスト用
-.item_qr_analysis_history_list {
-    width: 100%;
-    height: calc(100vh - 350px);
+    height: calc(100vh - 125px);
 }
 
 // 在庫のリスト用
 .stock_list {
     width: 100%;
-    height: calc(100vh - 120px);
+    height: calc(100vh - 130px);
 }
 
 // 入庫検品のリスト用

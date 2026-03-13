@@ -19,4 +19,9 @@ class Mall extends Model
     {
         return self::orderBy('sort_order', 'asc');
     }
+    // order_categoriesテーブルとのリレーション
+    public function order_categories()
+    {
+        return $this->hasMany(OrderCategory::class, 'mall_id', 'mall_id');
+    }
 }

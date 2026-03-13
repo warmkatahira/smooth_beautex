@@ -82,7 +82,10 @@ class Order extends Model
     // 運送会社と配送方法を返すアクセサ
     public function getDeliveryCompanyAndShippingMethodAttribute(): string
     {
-        return $this->shipping_method?->delivery_company->delivery_company . ' ' . $this->shipping_method?->shipping_method;
+        if(!$this->shipping_method || !$this->shipping_method->delivery_company){
+            return '';
+        }
+        return $this->shipping_method->delivery_company->delivery_company . ' ' . $this->shipping_method->shipping_method;
     }
     // 配送先が国内か海外かを返すアクセサ
     public function getShipRegionTypeAttribute()
@@ -199,7 +202,7 @@ class Order extends Model
     {
         // 空配列を除外
         $filtered = array_filter($array->toArray(), fn($item) => !empty($item));
-        // 重複を除く（連想配列の重複除去はちょっと工夫が必要）
+        // 重複を除く
         $unique = [];
         foreach($filtered as $item){
             // 連想配列を文字列に変換してユニーク判定

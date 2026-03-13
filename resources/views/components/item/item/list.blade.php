@@ -1,8 +1,8 @@
 <div class="disable_scrollbar flex flex-grow overflow-scroll">
     <div class="item_list bg-white overflow-x-auto overflow-y-auto border border-gray-600">
-        <table class="text-xs">
+        <table id="filter_table" class="text-xs" data-search-url="/item" data-scroll-target=".item_list">
             <thead>
-                <tr class="text-left text-white bg-black whitespace-nowrap sticky top-0">
+                <tr class="text-left text-white bg-black whitespace-nowrap sticky top-0 h-7 z-10">
                     @can('warm_check')
                         <th class="font-thin py-1 px-2 text-center">操作</th>
                     @endcan
@@ -16,6 +16,19 @@
                     <th class="font-thin py-1 px-2 text-center">在庫管理</th>
                     <th class="font-thin py-1 px-2 text-center">並び順</th>
                     <th class="font-thin py-1 px-2 text-center">最終更新日時</th>
+                </tr>
+                <tr class="filter-row sticky top-[28px] bg-white z-10">
+                    <th></th>
+                    <th></th>
+                    <x-filter.input type="tel" id="filter_item_code" name="filter_item_code" />
+                    <x-filter.input type="tel" id="filter_item_jan_code" name="filter_item_jan_code" />
+                    <x-filter.input type="text" id="filter_item_name" name="filter_item_name" />
+                    <x-filter.input type="text" id="filter_item_category_1" name="filter_item_category_1" />
+                    <x-filter.input type="text" id="filter_item_category_2" name="filter_item_category_2" />
+                    <x-filter.select-boolean id="filter_is_inspection_lot_required" name="filter_is_inspection_lot_required" label1="必要" label0="不要" />
+                    <x-filter.select-boolean id="filter_is_stock_managed" name="filter_is_stock_managed" label1="有効" label0="無効" />
+                    <x-filter.input type="tel" id="filter_sort_order" name="filter_sort_order" />
+                    <th></th>
                 </tr>
             </thead>
             <tbody class="bg-white">

@@ -5,9 +5,7 @@ namespace App\Services\Stock\Stock;
 // モデル
 use App\Models\Base;
 use App\Models\Order;
-use App\Models\Stock;
 // 列挙
-use App\Enums\SystemEnum;
 use App\Enums\OrderStatusEnum;
 use App\Enums\RouteNameEnum;
 // その他
@@ -15,32 +13,8 @@ use Illuminate\Support\Facades\DB;
 
 class StockSearchService
 {
-    // セッションを削除
-    public function deleteSession()
-    {
-        session()->forget([
-            'search_base_id',
-            'search_available_stock_status',
-            'search_is_stock_managed',
-        ]);
-    }
-
-    // セッションに検索条件を格納
-    public function setSearchCondition($request)
-    {
-        // 変数が存在しない場合は検索が実行されていないので、初期条件をセット
-        if(!isset($request->search_type)){
-        }
-        // 「search」なら検索が実行されているので、検索条件をセット
-        if($request->search_type === 'search'){
-            session(['search_base_id' => $request->search_base_id]);
-            session(['search_available_stock_status' => $request->search_available_stock_status]);
-            session(['search_is_stock_managed' => $request->search_is_stock_managed]);
-        }
-    }
-
-    // 検索結果を取得
-    public function getSearchResult($query, $route_name)
+    // 検索結果を取得して集計
+    public function getSearchResultAndAggregateData($query, $route_name)
     {
         // 倉庫を取得
         $bases = Base::getAll()->get();
@@ -62,14 +36,9 @@ class StockSearchService
                         'bases.sort_order as base_sort_order',
                     );
         // 倉庫の条件がある場合
-        if(session('search_base_id') != null){
+        if(session('filter_base_id') != null){
             // 条件を指定して取得
-            $query = $query->where('base_id', session('search_base_id'));
-        }
-        // 在庫管理の条件がある場合
-        if(session('search_is_stock_managed') != null){
-            // 条件を指定して取得
-            $query = $query->where('is_stock_managed', session('search_is_stock_managed'));
+            $query = $query->where('base_id', session('filter_base_id'));
         }
         // クエリをサブクエリ化して「item_base」という別名をつける
         $query = DB::query()->fromSub($query, 'item_base');
@@ -78,20 +47,15 @@ class StockSearchService
             $join->on('stocks.item_id', '=', 'item_base.item_id')
                 ->on('stocks.base_id', '=', 'item_base.base_id');
         });
-        // 有効在庫数状態の条件がある場合
-        if(session('search_available_stock_status') != null){
+        // LOTの条件がある場合
+        if(session('filter_lot') != null){
             // 条件を指定して取得
-            // 在庫なしの場合
-            if(session('search_available_stock_status') == 0){
-                $query = $query->where(function ($q) {
-                    $q->where('available_stock', 0)
-                    ->orWhereNull('available_stock');
-                });
-            }
-            // 在庫ありの場合
-            if(session('search_available_stock_status') == 1){
-                $query = $query->where('available_stock', '>', 0);
-            }
+            $query = $query->where('stocks.lot', 'LIKE', '%'.session('filter_lot').'%');
+        }
+        // EXPの条件がある場合
+        if(session('filter_exp') != null){
+            // 条件を指定して取得
+            $query = $query->where('stocks.exp', 'LIKE', '%'.session('filter_exp').'%');
         }
         // 受注数を商品×出荷倉庫毎で取得
         $shipping_quantity_sub_query = Order::join('order_items', 'order_items.order_control_id', 'orders.order_control_id')

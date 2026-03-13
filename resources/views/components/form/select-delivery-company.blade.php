@@ -17,7 +17,7 @@
             @foreach($delivery_company->shipping_methods as $shipping_method)
                 <option value="{{ $shipping_method->shipping_method_id }}"
                     {{ old($name, $value ?? '') == $shipping_method->shipping_method_id ? 'selected' : '' }}>
-                    {{ $shipping_method->Delivery_Company_And_Shipping_Method }}
+                    {{ $shipping_method->delivery_company_and_shipping_method }}
                 </option>
             @endforeach
         @endforeach

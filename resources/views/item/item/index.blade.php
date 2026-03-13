@@ -4,7 +4,6 @@
         <x-pagination :pages="$items" />
     </div>
     <div class="flex flex-row gap-x-5 items-start">
-        <x-item.item.search route="item.index" />
         <x-item.item.list :items="$items" />
     </div>
 </x-app-layout>

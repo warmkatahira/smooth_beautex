@@ -27,13 +27,12 @@ class StockController extends Controller
         $StockSearchService = new StockSearchService;
         // セッションを削除
         $ItemSearchService->deleteSession();
-        $StockSearchService->deleteSession();
         // セッションに検索条件を格納
         $ItemSearchService->setSearchCondition($request);
-        $StockSearchService->setSearchCondition($request);
         // 検索結果を取得
         $result = $ItemSearchService->getSearchResult();
-        $result = $StockSearchService->getSearchResult($result, Route::currentRouteName());
+        // 検索結果を取得して集計
+        $result = $StockSearchService->getSearchResultAndAggregateData($result, Route::currentRouteName());
         // ページネーションを実施
         $stocks = $this->setPagination($result['stocks']);
         return view('stock.stock.index_by_item')->with([
@@ -51,13 +50,12 @@ class StockController extends Controller
         $StockSearchService = new StockSearchService;
         // セッションを削除
         $ItemSearchService->deleteSession();
-        $StockSearchService->deleteSession();
         // セッションに検索条件を格納
         $ItemSearchService->setSearchCondition($request);
-        $StockSearchService->setSearchCondition($request);
         // 検索結果を取得
         $result = $ItemSearchService->getSearchResult();
-        $result = $StockSearchService->getSearchResult($result, Route::currentRouteName());
+        // 検索結果を取得して集計
+        $result = $StockSearchService->getSearchResultAndAggregateData($result, Route::currentRouteName());
         // ページネーションを実施
         $stocks = $this->setPagination($result['stocks']);
         return view('stock.stock.index_by_stock')->with([

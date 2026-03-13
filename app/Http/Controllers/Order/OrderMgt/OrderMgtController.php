@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 // モデル
 use App\Models\Order;
 use App\Models\Base;
+use App\Models\Mall;
 use App\Models\OrderCategory;
 use App\Models\DeliveryCompany;
 use App\Models\Prefecture;
@@ -14,6 +15,8 @@ use App\Models\Prefecture;
 use App\Services\Order\OrderMgt\OrderMgtService;
 use App\Services\Order\OrderMgt\OrderSearchService;
 use App\Services\Order\OrderAllocate\OrderAllocateService;
+// 列挙
+use App\Enums\ShipRegionTypeEnum;
 // トレイト
 use App\Traits\PaginatesResultsTrait;
 
@@ -38,24 +41,27 @@ class OrderMgtController extends Controller
         $orders = $this->setPagination($result);
         // 表示する注文ステータス毎の情報を取得
         $disp_statuses = $OrderMgtService->getDispStatusInfo();
+        // モールを取得
+        $malls = Mall::getAll()->with('order_categories')->get();
         // 倉庫を取得
         $bases = Base::getAll()->get();
-        // 受注区分を取得
-        $order_categories = OrderCategory::getAll()->with('mall')->get();
         // 運送会社を取得
         $delivery_companies = DeliveryCompany::getAll()->with('shipping_methods')->get();
         // 受注マークを取得
         $order_marks = Order::getOrderMarkFilter($result->get()->select('order_mark'));
         // 都道府県を取得
         $prefectures = Prefecture::getAll()->get();
+        // 出荷先(国内/海外)を取得
+        $ship_region_types = ShipRegionTypeEnum::SHIP_REGION_TYPE_LIST;
         return view('order.order_mgt.index')->with([
             'orders' => $orders,
             'disp_statuses' => $disp_statuses,
+            'malls' => $malls,
             'bases' => $bases,
-            'order_categories' => $order_categories,
             'delivery_companies' => $delivery_companies,
             'order_marks' => $order_marks,
             'prefectures' => $prefectures,
+            'ship_region_types' => $ship_region_types,
         ]);
     }
 

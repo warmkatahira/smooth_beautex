@@ -18,7 +18,7 @@
                 <select id="base_id" name="base_id" class="text-sm" form="receiving_inspection_enter_form">
                     <option value=""></option>
                     @foreach($bases as $base)
-                        <option value="{{ $base->base_id }}">{{ $base->base_name }}</value>
+                        <option value="{{ $base->base_id }}">{{ $base->base_name }}</option>
                     @endforeach
                 </select>
             </div>
