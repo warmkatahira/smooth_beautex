@@ -63,7 +63,6 @@ class StockDownloadService
                             $stock->lot,
                             "'".formatExp($stock->exp),
                             $stock->total_stock,
-                            $stock->total_shipping_quantity,
                             $stock->available_stock,
                         ];
                     }

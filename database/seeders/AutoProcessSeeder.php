@@ -4,9 +4,9 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-// モデル
-use App\Models\AutoProcess;
-use App\Models\AutoProcessCondition;
+// その他
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 
 class AutoProcessSeeder extends Seeder
 {
@@ -15,18 +15,10 @@ class AutoProcessSeeder extends Seeder
      */
     public function run(): void
     {
-        AutoProcess::create([
-            'auto_process_name'     => '☆マーク付与',
-            'action_type'           => 'order_mark_update',
-            'action_column_name'    => 'order_mark',
-            'action_value'          => '☆',
-            'is_active'             => 1,
-        ]);
-        AutoProcessCondition::create([
-            'auto_process_id'   => 1,
-            'column_name'       => 'order_item_code',
-            'operator'          => '=',
-            'value'             => 'a-1,050',
-        ]);
+        $path = database_path('seeders/sql/auto_process.sql');
+        // SQLファイルの読み込み
+        $sql = File::get($path);
+        // SQL実行
+        DB::unprepared($sql);
     }
 }

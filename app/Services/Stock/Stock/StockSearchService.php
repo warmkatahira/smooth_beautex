@@ -42,11 +42,27 @@ class StockSearchService
         }
         // クエリをサブクエリ化して「item_base」という別名をつける
         $query = DB::query()->fromSub($query, 'item_base');
-        // queryとstocksを結合
-        $query = $query->leftJoin('stocks', function($join){
-            $join->on('stocks.item_id', '=', 'item_base.item_id')
-                ->on('stocks.base_id', '=', 'item_base.base_id');
-        });
+        if($route_name === RouteNameEnum::STOCK_BY_ITEM){
+            // item × base 単位で集計してJOIN（重複防止）
+            $stocks_sub_query = DB::table('stocks')
+                ->select(
+                    'item_id',
+                    'base_id',
+                    DB::raw('SUM(total_stock) as total_stock'),
+                    DB::raw('SUM(available_stock) as available_stock'),
+                )
+                ->groupBy('item_id', 'base_id');
+            $query = $query->leftJoinSub($stocks_sub_query, 'stocks', function($join){
+                $join->on('stocks.item_id', '=', 'item_base.item_id')
+                    ->on('stocks.base_id', '=', 'item_base.base_id');
+            });
+        } else {
+            // LOT・EXP別にそのままJOIN
+            $query = $query->leftJoin('stocks', function($join){
+                $join->on('stocks.item_id', '=', 'item_base.item_id')
+                    ->on('stocks.base_id', '=', 'item_base.base_id');
+            });
+        }
         // LOTの条件がある場合
         if(session('filter_lot') != null){
             // 条件を指定して取得
@@ -57,21 +73,24 @@ class StockSearchService
             // 条件を指定して取得
             $query = $query->where('stocks.exp', 'LIKE', '%'.session('filter_exp').'%');
         }
-        // 受注数を商品×出荷倉庫毎で取得
-        $shipping_quantity_sub_query = Order::join('order_items', 'order_items.order_control_id', 'orders.order_control_id')
-                                        ->join('items', 'items.item_code', 'order_items.order_item_code')
-                                        ->where('order_status_id', '<', OrderStatusEnum::SHUKKA_ZUMI)
-                                        ->select(
-                                            'items.item_id',
-                                            'orders.shipping_base_id',
-                                            DB::raw('SUM(order_items.shipping_quantity) as total_shipping_quantity')
-                                        )
-                                        ->groupBy('items.item_id', 'orders.shipping_base_id');
-        // queryとshipping_quantity_sub_queryを結合
-        $query = $query->leftJoinSub($shipping_quantity_sub_query, 'shipping_quantity_sub_query', function($join){
-            $join->on('shipping_quantity_sub_query.item_id', '=', 'item_base.item_id')
-                ->on('shipping_quantity_sub_query.shipping_base_id', '=', 'item_base.base_id');
-        });
+        // STOCK_BY_ITEMの場合のみJOIN
+        if($route_name === RouteNameEnum::STOCK_BY_ITEM){
+            // 受注数を商品×出荷倉庫毎で取得
+            $shipping_quantity_sub_query = Order::join('order_items', 'order_items.order_control_id', 'orders.order_control_id')
+                                            ->join('items', 'items.item_code', 'order_items.order_item_code')
+                                            ->where('order_status_id', '<', OrderStatusEnum::SHUKKA_ZUMI)
+                                            ->select(
+                                                'items.item_id',
+                                                'orders.shipping_base_id',
+                                                DB::raw('SUM(order_items.shipping_quantity) as total_shipping_quantity')
+                                            )
+                                            ->groupBy('items.item_id', 'orders.shipping_base_id');
+            // queryとshipping_quantity_sub_queryを結合
+            $query = $query->leftJoinSub($shipping_quantity_sub_query, 'shipping_quantity_sub_query', function($join){
+                $join->on('shipping_quantity_sub_query.item_id', '=', 'item_base.item_id')
+                    ->on('shipping_quantity_sub_query.shipping_base_id', '=', 'item_base.base_id');
+            });
+        }
         // 商品単位表示の場合
         if($route_name === RouteNameEnum::STOCK_BY_ITEM){
             // 結果にカラムを追加
@@ -122,7 +141,6 @@ class StockSearchService
                 'item_base.base_name',
                 'item_base.base_color_code',
                 DB::raw('IFNULL(stocks.total_stock, 0) as total_stock'),
-                DB::raw('IFNULL(shipping_quantity_sub_query.total_shipping_quantity, 0) as total_shipping_quantity'),
                 DB::raw('IFNULL(stocks.available_stock, 0) as available_stock'),
                 'stocks.item_location',
                 'stocks.lot',

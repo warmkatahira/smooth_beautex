@@ -150,6 +150,9 @@ class OrderImportService
             JOIN prefectures ON prefectures.prefecture_name = order_imports.ship_province_name
             SET order_imports.shipping_base_id = prefectures.shipping_base_id
         ");
+        // 海外出荷は固定で「1st」とする
+        OrderImport::where('ship_country_code', '!=', 'JP')
+                ->update(['shipping_base_id' => '1st']);
     }
 
     // 受注管理IDを採番

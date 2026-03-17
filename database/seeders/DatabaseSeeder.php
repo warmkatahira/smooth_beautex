@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
             StockHistoryCategorySeeder::class,
             MallSeeder::class,
             OrderCategorySeeder::class,
-            //AutoProcessSeeder::class,
+            AutoProcessSeeder::class,
         ]);
     }
 }

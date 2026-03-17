@@ -1,8 +1,8 @@
 <div class="disable_scrollbar flex flex-grow overflow-scroll">
     <div class="auto_process_list bg-white overflow-x-auto overflow-y-auto border border-gray-600">
-        <table class="text-xs">
+        <table id="filter_table" class="text-xs" data-search-url="/auto_process" data-scroll-target=".auto_process_list">
             <thead>
-                <tr class="text-left text-white bg-black whitespace-nowrap sticky top-0">
+                <tr class="text-left text-white bg-black whitespace-nowrap sticky top-0 h-7 z-10">
                     <th class="font-thin py-1 px-2 text-center">操作</th>
                     <th class="font-thin py-1 px-2 text-center">自動処理名</th>
                     <th class="font-thin py-1 px-2 text-center">アクション区分</th>
@@ -12,6 +12,17 @@
                     <th class="font-thin py-1 px-2 text-center">有効/無効</th>
                     <th class="font-thin py-1 px-2 text-center">実行順</th>
                     <th class="font-thin py-1 px-2 text-center">更新日時</th>
+                </tr>
+                <tr class="filter-row sticky top-[28px] bg-white z-10">
+                    <th></th>
+                    <x-filter.input type="tel" id="filter_auto_process_name" name="filter_auto_process_name" />
+                    <x-filter.select-array id="filter_action_type" name="filter_action_type" :items="$actionTypes" />
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <x-filter.select-boolean id="filter_is_active" name="filter_is_active" label1="有効" label0="無効" />
+                    <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody class="bg-white">
@@ -34,7 +45,9 @@
                         </td>
                         <td class="py-1 px-2 border">{{ AutoProcessEnum::getConditionMatchTypeJP($auto_process->condition_match_type) }}</td>
                         <td class="py-1 px-2 border text-right">{{ number_format($auto_process->auto_process_conditions->count()) }}</td>
-                        <td class="py-1 px-2 border text-center">{{ $auto_process->is_active_text }}</td>
+                        <td class="py-1 px-2 border text-center">
+                            <x-list.status :value="$auto_process->is_active" label1="有効" label0="無効" />
+                        </td>
                         <td class="py-1 px-2 border text-right">{{ number_format($auto_process->sort_order) }}</td>
                         <td class="py-1 px-2 border">{{ CarbonImmutable::parse($auto_process->updated_at)->isoFormat('Y年MM月DD日(ddd) HH:mm:ss') }}</td>
                     </tr>

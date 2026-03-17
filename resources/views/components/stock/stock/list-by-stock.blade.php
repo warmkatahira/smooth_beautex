@@ -15,7 +15,6 @@
                     <th class="font-thin py-1 px-2 text-center">LOT</th>
                     <th class="font-thin py-1 px-2 text-center">EXP</th>
                     <th class="font-thin py-1 px-2 text-center">全在庫数</th>
-                    <th class="font-thin py-1 px-2 text-center">受注数</th>
                     <th class="font-thin py-1 px-2 text-center">有効在庫数</th>
                 </tr>
                 <tr class="filter-row sticky top-0 bg-white z-10 h-8">
@@ -51,7 +50,6 @@
                         <td class="py-1 px-2 border text-center">{{ $stock->lot }}</td>
                         <td class="py-1 px-2 border text-center">{{ formatExp($stock->exp) }}</td>
                         <td class="py-1 px-2 border text-right">{{ number_format($stock->total_stock) }}</td>
-                        <td class="py-1 px-2 border text-right">{{ number_format($stock->total_shipping_quantity) }}</td>
                         <td class="py-1 px-2 border text-right">{{ number_format($stock->available_stock) }}</td>
                     </tr>
                 @endforeach

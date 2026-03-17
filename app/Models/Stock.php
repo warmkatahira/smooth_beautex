@@ -84,7 +84,6 @@ class Stock extends Model
                 'LOT',
                 'EXP',
                 '全在庫数',
-                '受注数',
                 '有効在庫数',
             ];
         }
