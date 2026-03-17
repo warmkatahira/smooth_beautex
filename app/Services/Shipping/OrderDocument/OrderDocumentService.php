@@ -10,12 +10,9 @@ class OrderDocumentService
     public function getIssueOrder($shipping_method_id, $start, $end)
     {
         // 指定された出荷グループ × 配送方法の受注を取得
-        $orders = Order::where('shipping_group_id', session('search_shipping_group_id'))
+        $orders = Order::where('shipping_group_id', session('filter_shipping_group_id'))
                         ->where('orders.shipping_method_id', $shipping_method_id)
-                        ->with('shipping_method')
-                        ->with('shipping_group')
-                        ->with('shipper')
-                        ->with('order_items.item')
+                        ->with(['shipping_method', 'shipping_group', 'order_items.item', 'order_category.mall'])
                         ->select('orders.*')
                         ->orderBy('order_control_id', 'asc');
         // $startがnullでなければ、skipで飛ばして、takeで指定した数を取得

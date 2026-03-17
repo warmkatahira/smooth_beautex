@@ -59,7 +59,7 @@ class ShippingMgtController extends Controller
         $delivery_companies = DeliveryCompany::getAll()->with('shipping_methods')->get();
         // 都道府県を取得
         $prefectures = Prefecture::getAll()->get();
-        // 出荷先(国内/海外)を取得
+        // 配送地域(国内/海外)を取得
         $ship_region_types = ShipRegionTypeEnum::SHIP_REGION_TYPE_LIST;
         return view('shipping.shipping_mgt.index')->with([
             'orders' => $orders,

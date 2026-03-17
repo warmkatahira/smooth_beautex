@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Shipping\DeliveryNote;
+namespace App\Http\Controllers\Shipping\KobetsuPickingList;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 // サービス
 use App\Services\Shipping\OrderDocument\OrderDocumentService;
 
-class DeliveryNoteCreateController extends Controller
+class KobetsuPickingListCreateController extends Controller
 {
     public function create(Request $request)
     {
@@ -22,7 +22,7 @@ class DeliveryNoteCreateController extends Controller
                 'alert_message' => $e->getMessage(),
             ]);
         }
-        return view('shipping.document.delivery_note')->with([
+        return view('shipping.document.kobetsu_picking_list')->with([
             'orders' => $orders,
         ]);
     }
@@ -40,7 +40,7 @@ class DeliveryNoteCreateController extends Controller
                 'alert_message' => $e->getMessage(),
             ]);
         }
-        return view('shipping.document.delivery_note')->with([
+        return view('shipping.document.kobetsu_picking_list')->with([
             'orders' => $orders,
         ]);
     }

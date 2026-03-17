@@ -3,7 +3,7 @@
     <div class="flex flex-row gap-5">
         <div class="w-1/2">
             <div class="flex flex-col">
-                <x-order.order-detail.info-div label="出荷先" :value="$order->ship_region_type" />
+                <x-order.order-detail.info-div label="配送地域" :value="$order->ship_region_type" />
                 <x-order.order-detail.info-div label="配送先郵便番号" :value="$order->ship_zip_code" />
                 <x-order.order-detail.info-div label="配送先住所" :value="$order->full_ship_address" />
             </div>

@@ -16,8 +16,8 @@ use App\Http\Controllers\Shipping\ShippingInspectionActualDelete\ShippingInspect
 use App\Http\Controllers\Shipping\TotalPickingList\TotalPickingListController;
 // +-+-+-+-+-+-+-+- 受注単位帳票 +-+-+-+-+-+-+-+-
 use App\Http\Controllers\Shipping\OrderDocument\OrderDocumentController;
-// +-+-+-+-+-+-+-+- 納品書 +-+-+-+-+-+-+-+-
-use App\Http\Controllers\Shipping\DeliveryNote\DeliveryNoteCreateController;
+// +-+-+-+-+-+-+-+- 個別ピッキングリスト +-+-+-+-+-+-+-+-
+use App\Http\Controllers\Shipping\KobetsuPickingList\KobetsuPickingListCreateController;
 // +-+-+-+-+-+-+-+- 荷札データ +-+-+-+-+-+-+-+-
 use App\Http\Controllers\Shipping\Nifuda\NifudaCreateController;
 use App\Http\Controllers\Shipping\Nifuda\NifudaDownloadController;
@@ -62,8 +62,8 @@ Route::middleware('common')->group(function (){
         Route::controller(OrderDocumentController::class)->prefix('order_document')->name('order_document.')->group(function(){
             Route::get('', 'index')->name('index');
         });
-        // +-+-+-+-+-+-+-+- 納品書 +-+-+-+-+-+-+-+-
-        Route::controller(DeliveryNoteCreateController::class)->prefix('delivery_note_create')->name('delivery_note_create.')->group(function(){
+        // +-+-+-+-+-+-+-+- 個別ピッキングリスト +-+-+-+-+-+-+-+-
+        Route::controller(KobetsuPickingListCreateController::class)->prefix('kobetsu_picking_list_create')->name('kobetsu_picking_list_create.')->group(function(){
             Route::get('create', 'create')->name('create');
             Route::get('create_specify_order', 'create_specify_order')->name('create_specify_order');
         });

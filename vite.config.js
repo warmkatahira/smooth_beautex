@@ -40,7 +40,7 @@ export default defineConfig({
                 // 帳票
                 'resources/sass/shipping/document/document_common.scss',
                 'resources/sass/shipping/document/total_picking_list.scss',
-                'resources/sass/shipping/document/delivery_note.scss',
+                'resources/sass/shipping/document/kobetsu_picking_list.scss',
                 // 商品
                 'resources/js/item/item/item.js',
                 'resources/js/item/item_upload/item_upload.js',

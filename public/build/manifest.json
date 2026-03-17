@@ -4,7 +4,7 @@
     "name": "audio"
   },
   "resources/css/app.css": {
-    "file": "assets/app-C-MAEmrl.css",
+    "file": "assets/app-84vqFTcB.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -319,14 +319,14 @@
     "src": "resources/sass/profile/profile_image.scss",
     "isEntry": true
   },
-  "resources/sass/shipping/document/delivery_note.scss": {
-    "file": "assets/delivery_note-DDkFhT4_.css",
-    "src": "resources/sass/shipping/document/delivery_note.scss",
-    "isEntry": true
-  },
   "resources/sass/shipping/document/document_common.scss": {
     "file": "assets/document_common-Bw8twMqI.css",
     "src": "resources/sass/shipping/document/document_common.scss",
+    "isEntry": true
+  },
+  "resources/sass/shipping/document/kobetsu_picking_list.scss": {
+    "file": "assets/kobetsu_picking_list-DDkFhT4_.css",
+    "src": "resources/sass/shipping/document/kobetsu_picking_list.scss",
     "isEntry": true
   },
   "resources/sass/shipping/document/total_picking_list.scss": {

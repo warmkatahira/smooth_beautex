@@ -92,7 +92,7 @@ class OrderSearchService extends BaseFilterService
                     $q->where('mall_id', $value);
                 });
             },
-            // 出荷先
+            // 配送地域
             'filter_ship_region_type' => function ($query, $value) {
                 if($value === '国内'){
                     $query->where('ship_country_code', 'JP');

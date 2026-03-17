@@ -15,7 +15,7 @@
                     <th class="font-thin py-1 px-2 text-center">モール</th>
                     <th class="font-thin py-1 px-2 text-center">出荷倉庫</th>
                     <th class="font-thin py-1 px-2 text-center">配送先名</th>
-                    <th class="font-thin py-1 px-2 text-center">出荷先</th>
+                    <th class="font-thin py-1 px-2 text-center">配送地域</th>
                     <th class="font-thin py-1 px-2 text-center">配送先都道府県</th>
                     <th class="font-thin py-1 px-2 text-center">運送会社</th>
                     <th class="font-thin py-1 px-2 text-center">配送方法</th>
