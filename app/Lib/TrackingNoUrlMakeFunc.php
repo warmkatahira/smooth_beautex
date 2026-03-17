@@ -14,7 +14,7 @@ class TrackingNoUrlMakeFunc
         // 配送伝票番号の分だけループ処理
         foreach($tracking_no_explode as $tracking_no){
             // 追跡URLを配列にセット
-            $tracking_no_url_arr[$tracking_no] = str_replace('#tracking_no#', $tracking_no, $order->shipping_method->delivery_company->tracking_no_url);
+            $tracking_no_url_arr[$tracking_no] = str_replace('#tracking_no#', $tracking_no, $order->shipping_method?->delivery_company->tracking_no_url);
         }
         return $tracking_no_url_arr;
     }

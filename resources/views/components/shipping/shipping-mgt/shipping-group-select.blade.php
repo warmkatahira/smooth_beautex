@@ -1,16 +1,16 @@
 <div id="shipping_group_select_div" class="flex flex-col border border-green-500 bg-green-100 text-gray-600 text-sm px-10 py-5 my-3">
     <div class="flex">
         <form method="GET" action="{{ route('shipping_mgt.index') }}" id="shipping_group_select_form" class="m-0">
-            <select id="search_shipping_group_id" name="search_shipping_group_id" class="text-sm py-0">
-                <option value="" @if(session('search_shipping_group_id') == 0) selected @endif>全て</option>
+            <select id="filter_shipping_group_id" name="filter_shipping_group_id" class="text-sm py-0">
+                <option value="" @if(session('filter_shipping_group_id') == 0) selected @endif>全て</option>
                 @foreach($shippingGroups as $shipping_group)
-                    <option value="{{ $shipping_group->shipping_group_id }}" @if(session('search_shipping_group_id') == $shipping_group->shipping_group_id) selected @endif>{{ $shipping_group->shipping_group_name.'[出荷倉庫：'.$shipping_group->base->base_name.'][出荷予定日：'.CarbonImmutable::parse($shipping_group->estimated_shipping_date)->isoFormat('MM月DD日').']' }}</option>
+                    <option value="{{ $shipping_group->shipping_group_id }}" @if(session('filter_shipping_group_id') == $shipping_group->shipping_group_id) selected @endif>{{ $shipping_group->shipping_group_name.'[出荷倉庫：'.$shipping_group->base->base_name.'][出荷予定日：'.CarbonImmutable::parse($shipping_group->estimated_shipping_date)->isoFormat('MM月DD日').']' }}</option>
                 @endforeach
             </select>
         </form>
         <p class="text-sm ml-1 pt-0.5">の出荷グループを表示中</p>
         @can('warm_check')
-            @if(!is_null(session('search_shipping_group_id')))
+            @if(!is_null(session('filter_shipping_group_id')))
                 <div class="ml-auto">
                     <button id="shipping_group_update_modal_open" class="text-sm text-blue-500"><i class="las la-pen la-lg mr-1"></i>出荷グループ更新</a>
                 </div>
@@ -18,7 +18,7 @@
         @endcan
     </div>
     @can('warm_check')
-        @if(!is_null(session('search_shipping_group_id')))
+        @if(!is_null(session('filter_shipping_group_id')))
             <div class="mt-5">
                 <a href="{{ route('total_picking_list_create.create') }}" class="text-sm text-blue-500 mr-10" target="_blank"><i class="las la-clipboard-list mr-1 la-lg"></i>トータルピッキングリスト</a>
                 <a href="{{ route('nifuda_download.index') }}" class="text-sm text-blue-500"><i class="las la-download mr-1 la-lg"></i>荷札データダウンロード</a>

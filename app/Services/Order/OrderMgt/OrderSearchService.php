@@ -78,6 +78,7 @@ class OrderSearchService extends BaseFilterService
             'filter_ship_name',
             'filter_ship_region_type',
             'filter_desired_delivery_time',
+            'filter_tracking_no',
         ];
     }
 

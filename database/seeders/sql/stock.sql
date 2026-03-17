@@ -15,5 +15,5 @@ INSERT INTO `stocks` (`base_id`, `item_id`, `total_stock`, `available_stock`) VA
 
 INSERT INTO `stocks` (`base_id`, `item_id`, `lot`, `exp`, `total_stock`, `available_stock`) VALUES ('1st', 12, 'wwwwwwwwww', '203012', 100, 100);
 INSERT INTO `stocks` (`base_id`, `item_id`, `lot`, `exp`, `total_stock`, `available_stock`) VALUES ('1st', 13, 'ababababab', '203012', 100, 100);
-INSERT INTO `stocks` (`base_id`, `item_id`, `lot`, `exp`, `total_stock`, `available_stock`) VALUES ('1st', 14, 'uuuuuuuuuu', '203012', 1, 1);
-INSERT INTO `stocks` (`base_id`, `item_id`, `lot`, `exp`, `total_stock`, `available_stock`) VALUES ('1st', 14, 'cvcvcvcvcv', '203408', 3, 3);
+INSERT INTO `stocks` (`base_id`, `item_id`, `lot`, `exp`, `total_stock`, `available_stock`) VALUES ('1st', 14, 'uuuuuuuuuu', '203012', 10, 10);
+INSERT INTO `stocks` (`base_id`, `item_id`, `lot`, `exp`, `total_stock`, `available_stock`) VALUES ('1st', 14, 'cvcvcvcvcv', '203408', 30, 30);

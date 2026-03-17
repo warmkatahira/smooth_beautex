@@ -2,7 +2,7 @@ import start_loading from '../../loading';
 import get_checkbox from '../../checkbox';
 
 // 出荷グループのプルダウンを変更したら
-$('#search_shipping_group_id').on("change",function(){
+$('#filter_shipping_group_id').on("change",function(){
     start_loading();
     $("#shipping_group_select_form").submit();
 });
@@ -65,7 +65,7 @@ function adjustmentShippingListHeight() {
     // 高さを取得
     const headerHeight = $header.outerHeight();
     // その他の固定の余白やパディングなどのオフセット
-    const offset = 135;
+    const offset = 140;
     // ウィンドウの高さからヘッダーの高さとオフセットを差し引いた値をリストの高さに設定
     $list.css('height', `calc(100vh - ${headerHeight + offset}px)`);
 }

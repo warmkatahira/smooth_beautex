@@ -7,8 +7,7 @@
         <x-pagination :pages="$orders" />
     </div>
     <div class="flex flex-row gap-x-5 items-start">
-        <x-shipping.shipping-mgt.search route="shipping_mgt.index" :bases="$bases" :orderCategories="$order_categories" :deliveryCompanies="$delivery_companies" :prefectures="$prefectures" />
-        <x-shipping.shipping-mgt.list :orders="$orders" />
+        <x-shipping.shipping-mgt.list :orders="$orders" :malls="$malls" :bases="$bases" :deliveryCompanies="$delivery_companies" :prefectures="$prefectures" :shipRegionTypes="$ship_region_types" />
     </div>
 </x-app-layout>
 @if(!is_null($shipping_group))

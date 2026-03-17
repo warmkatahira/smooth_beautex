@@ -10,11 +10,13 @@ use App\Models\ShippingGroup;
 use App\Models\Base;
 use App\Models\OrderCategory;
 use App\Models\Prefecture;
+use App\Models\Mall;
 // サービス
 use App\Services\Shipping\ShippingMgt\ShippingMgtService;
 use App\Services\Order\OrderMgt\OrderSearchService;
 // 列挙
 use App\Enums\OrderStatusEnum;
+use App\Enums\ShipRegionTypeEnum;
 // トレイト
 use App\Traits\PaginatesResultsTrait;
 
@@ -31,10 +33,10 @@ class ShippingMgtController extends Controller
         $OrderSearchService = new OrderSearchService;
         // 注文ステータスのパラメータを追加
         $request->merge([
-            'order_status_id' => OrderStatusEnum::SAGYO_CHU,
+            'filter_order_status_id' => OrderStatusEnum::SAGYO_CHU,
         ]);
         // 出荷グループを取得
-        $shipping_group = $ShippingMgtService->getShippingGroup($request->search_shipping_group_id);
+        $shipping_group = $ShippingMgtService->getShippingGroup($request->filter_shipping_group_id);
         // 出荷グループに存在する配送方法を取得
         $shipping_methods = $ShippingMgtService->getShippingMethod();
         // セッションを削除
@@ -47,6 +49,8 @@ class ShippingMgtController extends Controller
         $orders = $this->setPagination($result);
         // 出荷グループを取得
         $shipping_groups = ShippingGroup::getAll()->get();
+        // モールを取得
+        $malls = Mall::getAll()->with('order_categories')->get();
         // 倉庫を取得
         $bases = Base::getAll()->get();
         // 受注区分を取得
@@ -55,15 +59,19 @@ class ShippingMgtController extends Controller
         $delivery_companies = DeliveryCompany::getAll()->with('shipping_methods')->get();
         // 都道府県を取得
         $prefectures = Prefecture::getAll()->get();
+        // 出荷先(国内/海外)を取得
+        $ship_region_types = ShipRegionTypeEnum::SHIP_REGION_TYPE_LIST;
         return view('shipping.shipping_mgt.index')->with([
             'orders' => $orders,
             'shipping_groups' => $shipping_groups,
+            'malls' => $malls,
             'shipping_methods' => $shipping_methods,
             'shipping_group' => $shipping_group,
             'bases' => $bases,
             'order_categories' => $order_categories,
             'delivery_companies' => $delivery_companies,
             'prefectures' => $prefectures,
+            'ship_region_types' => $ship_region_types,
         ]);
     }
 }
