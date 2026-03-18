@@ -9,11 +9,13 @@ use App\Models\DeliveryCompany;
 use App\Models\Base;
 use App\Models\OrderCategory;
 use App\Models\Prefecture;
+use App\Models\Mall;
 // サービス
 use App\Services\Order\OrderMgt\OrderSearchService;
 use App\Services\Shipping\ShippingHistory\ShippingHistoryService;
 // 列挙
 use App\Enums\OrderStatusEnum;
+use App\Enums\ShipRegionTypeEnum;
 // トレイト
 use App\Traits\PaginatesResultsTrait;
 
@@ -30,7 +32,7 @@ class ShippingHistoryController extends Controller
         $ShippingHistoryService = new ShippingHistoryService;
         // 注文ステータスのパラメータを追加
         $request->merge([
-            'order_status_id' => OrderStatusEnum::SHUKKA_ZUMI,
+            'filter_order_status_id' => OrderStatusEnum::SHUKKA_ZUMI,
         ]);
         // セッションを削除
         $OrderSearchService->deleteSession();
@@ -41,6 +43,8 @@ class ShippingHistoryController extends Controller
         $result = $OrderSearchService->getSearchResult();
         // ページネーションを実施
         $orders = $this->setPagination($result);
+        // モールを取得
+        $malls = Mall::getAll()->with('order_categories')->get();
         // 倉庫を取得
         $bases = Base::getAll()->get();
         // 受注区分を取得
@@ -49,12 +53,16 @@ class ShippingHistoryController extends Controller
         $delivery_companies = DeliveryCompany::getAll()->with('shipping_methods')->get();
         // 都道府県を取得
         $prefectures = Prefecture::getAll()->get();
+        // 配送地域(国内/海外)を取得
+        $ship_region_types = ShipRegionTypeEnum::SHIP_REGION_TYPE_LIST;
         return view('shipping.shipping_history.index')->with([
             'orders' => $orders,
+            'malls' => $malls,
             'bases' => $bases,
             'order_categories' => $order_categories,
             'delivery_companies' => $delivery_companies,
             'prefectures' => $prefectures,
+            'ship_region_types' => $ship_region_types,
         ]);
     }
 }

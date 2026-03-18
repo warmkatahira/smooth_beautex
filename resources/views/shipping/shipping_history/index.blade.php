@@ -6,7 +6,6 @@
         <x-pagination :pages="$orders" />
     </div>
     <div class="flex flex-row gap-x-5 items-start">
-        <x-shipping.shipping-history.search route="shipping_history.index" :bases="$bases" :orderCategories="$order_categories" :deliveryCompanies="$delivery_companies" :prefectures="$prefectures" />
-        <x-shipping.shipping-history.list :orders="$orders" />
+        <x-shipping.shipping-history.list :orders="$orders" :malls="$malls" :bases="$bases" :deliveryCompanies="$delivery_companies" :prefectures="$prefectures" :shipRegionTypes="$ship_region_types" />
     </div>
 </x-app-layout>

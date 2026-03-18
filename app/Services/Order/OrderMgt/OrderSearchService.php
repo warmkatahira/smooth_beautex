@@ -56,14 +56,8 @@ class OrderSearchService extends BaseFilterService
     // ベースクエリ
     protected function baseQuery()
     {
-        $query = Order::where('order_status_id', session('filter_order_status_id'))
+        return Order::where('order_status_id', session('filter_order_status_id'))
                     ->with(['order_items.item', 'order_category.mall', 'shipping_method.delivery_company']);
-        // 出荷日の条件がある場合
-        if(!empty(session('filter_shipping_date_from')) && !empty(session('filter_shipping_date_to'))){
-            $query->whereDate('shipping_date', '>=', session('filter_shipping_date_from'))
-                ->whereDate('shipping_date', '<=', session('filter_shipping_date_to'));
-        }
-        return $query;
     }
 
     // LIKEキー
@@ -106,13 +100,20 @@ class OrderSearchService extends BaseFilterService
                     $q->where('delivery_company_id', $value);
                 });
             },
+            // 出荷日
+            'filter_shipping_date_from' => function ($query, $value) {
+                $query->whereDate('shipping_date', '>=', session('filter_shipping_date_from'))
+                    ->whereDate('shipping_date', '<=', session('filter_shipping_date_to'));
+            },
         ];
     }
 
     // 無視するキー
     protected function ignoreKeys(): array
     {
-        return [];
+        return [
+            'filter_shipping_date_to',
+        ];
     }
 
     // 並び替え

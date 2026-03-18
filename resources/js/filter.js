@@ -56,9 +56,14 @@ $(document).ready(function () {
     $('.filter-row th input, .filter-row th select, .filter-row th input[list]').each(function () {
         // 値がある場合(フィルター条件がある場合)
         if($(this).val() !== ''){
-            // フィルタークリアボタンを表示して、背景色を設定
-            $(this).siblings('.filter_clear').removeClass('hidden');
-            $(this).addClass('bg-theme-sub');
+            // 親のdivを遡ってthを取得し、その中のfilter_clearを探す
+            $(this).closest('th').find('.filter_clear').removeClass('hidden');
+            const $wrap = $(this).closest('.date_range_wrap');
+            if($wrap.length){
+                $wrap.addClass('bg-theme-sub');
+            } else {
+                $(this).addClass('bg-theme-sub');
+            }
         }
     });
     // URLパラメータからスクロール位置(X軸)を取得
@@ -73,7 +78,15 @@ $(document).ready(function () {
 
 // フィルタークリアが押された場合
 $(document).on('click', '.filter_clear', function () {
-    // 押された要素のdata--targetの値を取得
+    // 範囲指定の要素のdata-targetの値を取得
+    const fromId = $(this).data('target-from');
+    const toId = $(this).data('target-to');
+    // 今日の日付を取得
+    const today = new Date().toISOString().split('T')[0];
+    // 取得できていれば空にする
+    if (fromId) $('#' + fromId).val(today);
+    if (toId) $('#' + toId).val(today);
+    // 押された要素のdata-targetの値を取得
     const id = $(this).data('target');
     // 対象inputを空にする
     $('#' + id).val('');
