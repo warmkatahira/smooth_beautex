@@ -12,7 +12,7 @@ use App\Models\NifudaCreateHistory;
 // 列挙
 use App\Enums\OrderStatusEnum;
 use App\Enums\DeliveryCompanyEnum;
-use App\Enums\DeliveryTimeZoneChangeEnum;
+use App\Enums\DeliveryTimeZoneEnum;
 use App\Enums\SystemEnum;
 use App\Enums\ShippingMethodEnum;
 use App\Enums\SagawaSealCodeEnum;
@@ -33,11 +33,9 @@ class NifudaCreateService
     public function getCreateOrder($shipping_method_id)
     {
         // 指定された出荷グループ×配送方法の受注を取得
-        $orders = Order::with('shipper')
-                    ->with('order_items')
-                    ->where('shipping_group_id', session('search_shipping_group_id'))
+        $orders = Order::with(['order_items.item', 'order_category.shipper'])
+                    ->where('shipping_group_id', session('filter_shipping_group_id'))
                     ->where('shipping_method_id', $shipping_method_id)
-                    ->select('orders.*')
                     ->orderBy('order_control_id');
         // 作成できる荷札データがない場合
         if(!$orders->exists()){
@@ -52,7 +50,7 @@ class NifudaCreateService
         // 現在の日時を取得
         $nowDate = CarbonImmutable::now();
         // 出荷グループを取得
-        $shipping_group = ShippingGroup::getSpecify(session('search_shipping_group_id'))->first();
+        $shipping_group = ShippingGroup::getSpecify(session('filter_shipping_group_id'))->first();
         // 配送方法を取得
         $shipping_method = ShippingMethod::getSpecify($shipping_method_id)->first();
         // 倉庫別配送方法を取得
@@ -67,10 +65,18 @@ class NifudaCreateService
         // 運送会社によって処理を可変
         // 佐川急便
         if($shipping_method->delivery_company_id === DeliveryCompanyEnum::SAGAWA){
+            // 国内は「xlsx」、海外は「csv」
+            $file_extension = ShippingMethodEnum::SAGAWA_EMS_ID === $shipping_method->shipping_method_id ? 'csv' : 'xlsx';
             // ファイル名を取得
-            $download_filename = '【'.$shipping_method->delivery_company_and_shipping_method.'】荷札データ_'.$nowDate->isoFormat('Y年MM月DD日HH時mm分ss秒').'.'.$base_shipping_method->e_hiden_version->file_extension;
-            // 国内用
-            $this->createSagawaForJp($base_shipping_method, $orders, $shipping_group, $download_filename, $directory_name);
+            $download_filename = '【'.$shipping_method->delivery_company_and_shipping_method.'】荷札データ_'.$nowDate->isoFormat('Y年MM月DD日HH時mm分ss秒').'.'.$file_extension;
+            // 配送方法が佐川EMSの場合
+            if(ShippingMethodEnum::SAGAWA_EMS_ID === $shipping_method->shipping_method_id){
+                // 海外用
+                $this->createSagawaForGlobal($orders, $shipping_group, $download_filename, $directory_name);
+            }else{
+                // 国内用
+                $this->createSagawaForJp($base_shipping_method, $orders, $shipping_group, $download_filename, $directory_name);
+            }
         }
         // ヤマト運輸
         if($shipping_method->delivery_company_id === DeliveryCompanyEnum::YAMATO){
@@ -78,6 +84,73 @@ class NifudaCreateService
             $this->createYamato($base_shipping_method, $orders, $shipping_group, $download_filename, $directory_name);
         }
         return $directory_name;
+    }
+
+    // 佐川急便(海外用)
+    public function createSagawaForGlobal($orders, $shipping_group, $download_filename, $directory_name)
+    {
+        // 作成ファイル数をカウントする変数を初期化
+        $make_file_count = 0;
+        // チャンクサイズを指定
+        $chunk_size = 1000;
+        // レコードをチャンクごとに書き込む
+        $orders->chunk($chunk_size, function ($orders) use ($shipping_group, $download_filename, $directory_name, &$make_file_count) {
+            // 作成ファイル数をカウントアップ
+            $make_file_count++;
+            // テンプレートを読み込む
+            $templatePath = public_path('template/sagawa_global.csv');
+            $spreadsheet = IOFactory::load($templatePath);
+            $worksheet = $spreadsheet->getActiveSheet();
+            // データを書き込む位置を初期化
+            $row = 2;
+            // 受注の分だけループ処理
+            foreach($orders as $order){
+                // 内容品のオフセット用の変数を初期化
+                $column_offset = 0;
+                // 各情報を出力
+                $worksheet->setCellValue('A'.$row, 'BEAUTEX');                                      // 出荷人会社名
+                $worksheet->setCellValue('B'.$row, $order->ship_name);                              // 受取人お名前
+                $worksheet->setCellValue('C'.$row, "");                                             // 受取人会社名
+                $worksheet->setCellValue('E'.$row, $order->ship_country_code);                      // 受取人国名
+                $worksheet->setCellValue('G'.$row, $order->ship_address_1);                         // 受取人住所2
+                $worksheet->setCellValue('H'.$row, $order->ship_address_2.','.$order->ship_city);   // 受取人住所3
+                $worksheet->setCellValue('I'.$row, $order->ship_province_code);                     // 受取人州名など
+                $worksheet->setCellValue('J'.$row, $order->ship_zip_code);                          // 受取人郵便番号
+                $worksheet->setCellValue('K'.$row, $order->ship_tel);                               // 受取人ご連絡先電話番号
+                $worksheet->setCellValue('N'.$row, 3);                                              // 内容品種別
+                $worksheet->setCellValue('P'.$row, 1000);                                           // 総重量
+                $worksheet->setCellValue('W'.$row, $order->order_control_id);                       // メモ
+                $worksheet->setCellValue('X'.$row, "");                                             // 総商品金額(JPY)
+                // order_itemsの分だけループ処理
+                foreach($order->order_items as $order_item){
+                    // 基準列（Y = 25列目）からのオフセットを加味して列を計算
+                    $colY  = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(25 + $column_offset);
+                    $colZ  = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(26 + $column_offset);
+                    $colAA = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(27 + $column_offset);
+                    $colAB = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(28 + $column_offset);
+                    $colAC = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(29 + $column_offset);
+                    $colAE = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(31 + $column_offset);
+                    // 各情報を出力
+                    $worksheet->setCellValue($colY . $row, 'ColoredContactLens');                   // 内容品名
+                    $worksheet->setCellValue($colZ . $row, $order_item->item->hs_code);             // HSコード
+                    $worksheet->setCellValue($colAA . $row, $order_item->shipping_quantity);        // 個数
+                    $worksheet->setCellValue($colAB . $row, $order_item->order_item_unit_price);    // 単価
+                    $worksheet->setCellValue($colAC . $row, 'JPY');                                 // 通貨単位
+                    $worksheet->setCellValue($colAE . $row, $order_item->item->country_of_origin);  // 単価
+                    // オフセットに+7する（右に7列分ずらすため）
+                    $column_offset += 7;
+                }
+                // データを書き込む位置をカウントアップ
+                $row++;
+            }
+            // ファイルの保存先パスを取得
+            $file_path = Storage::disk('public')->path('nifuda/'.$directory_name.'/【'.sprintf('%02d', $make_file_count).'】'.$download_filename);
+            // CSVファイルを保存する
+            $writer = IOFactory::createWriter($spreadsheet, 'Csv');
+            $writer->setUseBOM(true);
+            $writer->save($file_path);
+        });
+        return;
     }
 
     // 佐川急便(国内用)
@@ -92,7 +165,7 @@ class NifudaCreateService
             // 作成ファイル数をカウントアップ
             $make_file_count++;
             // テンプレートを読み込む
-            $templatePath = public_path('template/'.$base_shipping_method->e_hiden_version->file_name);
+            $templatePath = public_path('template/sagawa.xlsx');
             $spreadsheet = IOFactory::load($templatePath);
             $worksheet = $spreadsheet->getActiveSheet();
             // データを書き込む位置を初期化
@@ -101,7 +174,7 @@ class NifudaCreateService
             foreach($orders as $order){
                 // 配送先住所と荷送人住所からスペースを取り除く
                 $ship_address = str_replace(array(" ", "　"), "", $order->ship_address);
-                $shipper_address = str_replace(array(" ", "　"), "", $order->shipper->shipper_address);
+                $shipper_address = str_replace(array(" ", "　"), "", $order->order_category->shipper->shipper_address);
                 // 各情報を出力
                 $worksheet->setCellValue('C'.$row, $order->ship_tel);   // 配送先電話番号
                 $worksheet->setCellValue('D'.$row, $order->ship_zip_code);  // 配送先郵便番号
@@ -110,14 +183,14 @@ class NifudaCreateService
                 $worksheet->setCellValue('J'.$row, $order->order_control_id);   // 受注管理ID
                 $worksheet->setCellValue('K'.$row, $base_shipping_method->setting_1); // お客様コード
                 $worksheet->setCellValue('Q'.$row, $base_shipping_method->setting_1); // ご依頼主コード
-                $worksheet->setCellValue('R'.$row, $order->shipper->shipper_tel); // ご依頼主電話番号
-                $worksheet->setCellValue('S'.$row, $order->shipper->shipper_zip_code); // ご依頼主郵便番号
+                $worksheet->setCellValue('R'.$row, $order->order_category->shipper->shipper_tel); // ご依頼主電話番号
+                $worksheet->setCellValue('S'.$row, $order->order_category->shipper->shipper_zip_code); // ご依頼主郵便番号
                 $worksheet->setCellValue('T'.$row, $shipper_address); // ご依頼主住所
-                $worksheet->setCellValue('V'.$row, $order->shipper->shipper_name); // ご依頼主名
+                $worksheet->setCellValue('V'.$row, $order->order_category->shipper->shipper_name); // ご依頼主名
                 $worksheet->setCellValue('Y'.$row, $order->order_no); // 品名1
                 $worksheet->setCellValue('Z'.$row, 'コンタクトレンズ'); // 品名2
                 $worksheet->setCellValue('AS'.$row, is_null($order->desired_delivery_date) ? '' : CarbonImmutable::parse($order->desired_delivery_date)->format('Y/m/d')); // 配送希望日
-                $worksheet->setCellValue('AT'.$row, DeliveryTimeZoneChangeEnum::sagawa_time_zone_get($order->desired_delivery_time));   // 配送希望時間
+                $worksheet->setCellValue('AT'.$row, DeliveryTimeZoneEnum::sagawa_time_zone_get($order->desired_delivery_time));   // 配送希望時間
                 $worksheet->setCellValue('AZ'.$row, '011'); // 指定シール1(取注)
                 $worksheet->setCellValue('BA'.$row, SagawaSealCodeEnum::sagawa_seal_code_get($base_shipping_method->e_hiden_version, $order->desired_delivery_date, $order->desired_delivery_time)); // 指定シール2(日時指定)
                 $worksheet->setCellValue('BB'.$row, ''); // 指定シール3
@@ -176,23 +249,23 @@ class NifudaCreateService
             foreach($orders as $order){
                 // 配送先住所と荷送人住所からスペースを取り除く
                 $ship_address = str_replace(array(" ", "　"), "", $order->ship_address);
-                $shipper_address = str_replace(array(" ", "　"), "", $order->shipper->shipper_address);
+                $shipper_address = str_replace(array(" ", "　"), "", $order->order_category->shipper->shipper_address);
                 // 各情報を出力
                 $worksheet->setCellValue('A'.$row, $order->order_control_id);   // 受注管理ID
                 $worksheet->setCellValue('B'.$row, $base_shipping_method->setting_3);  // 送り状種類
                 $worksheet->setCellValue('E'.$row, CarbonImmutable::parse($shipping_group->estimated_shipping_date)->format('Y/m/d'));  // 出荷予定日
                 $worksheet->setCellValue('F'.$row, is_null($order->desired_delivery_date) ? '' : CarbonImmutable::parse($order->desired_delivery_date)->format('Y/m/d')); // 配送希望日
-                $worksheet->setCellValue('G'.$row, DeliveryTimeZoneChangeEnum::yamato_time_zone_get($order->desired_delivery_time));   // 配送希望時間
+                $worksheet->setCellValue('G'.$row, DeliveryTimeZoneEnum::yamato_time_zone_get($order->desired_delivery_time));   // 配送希望時間
                 $worksheet->setCellValue('I'.$row, $order->ship_tel);   // 配送先電話番号
                 $worksheet->setCellValue('K'.$row, $order->ship_zip_code);  // 配送先郵便番号
                 $worksheet->setCellValue('L'.$row, mb_substr($ship_address, 0, 21));    // 配送先住所1
                 $worksheet->setCellValue('M'.$row, mb_substr($ship_address, 21, null));    // 配送先住所2
                 $worksheet->setCellValue('P'.$row, $order->ship_name);  // 配送先名
-                $worksheet->setCellValue('T'.$row, $order->shipper->shipper_tel); // 荷送人電話番号
-                $worksheet->setCellValue('V'.$row, $order->shipper->shipper_zip_code); // 荷送人郵便番号
+                $worksheet->setCellValue('T'.$row, $order->order_category->shipper->shipper_tel); // 荷送人電話番号
+                $worksheet->setCellValue('V'.$row, $order->order_category->shipper->shipper_zip_code); // 荷送人郵便番号
                 $worksheet->setCellValue('W'.$row, mb_substr($shipper_address, 0, 16)); // 荷送人住所1
                 $worksheet->setCellValue('X'.$row, mb_substr($shipper_address, 16, null));    // 配送先住所2
-                $worksheet->setCellValue('Y'.$row, $order->shipper->shipper_name); // 荷送人名
+                $worksheet->setCellValue('Y'.$row, $order->order_category->shipper->shipper_name); // 荷送人名
                 $worksheet->setCellValue('AB'.$row, 'コンタクトレンズ'); // 品名1
                 $worksheet->setCellValue('AD'.$row, $order->order_no); // 品名2
                 $worksheet->setCellValue('AG'.$row, $order->order_control_id); // 記事
@@ -220,7 +293,7 @@ class NifudaCreateService
     public function createNifudaCreateHistory($shipping_method_id, $directory_name)
     {
         NifudaCreateHistory::create([
-            'shipping_group_id'     => session('search_shipping_group_id'),
+            'shipping_group_id'     => session('filter_shipping_group_id'),
             'shipping_method_id'    => $shipping_method_id,
             'directory_name'        => $directory_name,
             'created_by'            => Auth::user()->user_no,

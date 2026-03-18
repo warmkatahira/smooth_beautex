@@ -30,6 +30,11 @@ class OrderCategory extends Model
     {
         return $this->belongsTo(Mall::class, 'mall_id', 'mall_id');
     }
+    // shippersテーブルとのリレーション
+    public function shipper()
+    {
+        return $this->belongsTo(Shipper::class, 'shipper_id', 'shipper_id');
+    }
     // 受注区分名とモール名を返すアクセサ
     public function getOrderCategoryNameAndMallNameAttribute()
     {
