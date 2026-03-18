@@ -102,10 +102,10 @@ class OrderAllocateService
                     ]);
         // 商品引当NG対象を取得
         $item_allocate_ng_orders = OrderItem::whereIn('order_control_id', $allocate_orders)
-                                    ->where('is_item_allocated', 0)
-                                    ->select('order_control_id')
-                                    ->distinct()
-                                    ->pluck('order_control_id');
+                                        ->where('is_item_allocated', 0)
+                                        ->select('order_control_id')
+                                        ->distinct()
+                                        ->pluck('order_control_id');
         // 商品引当がNGの受注はここで注文ステータスを「確認待ち」に更新する
         Order::whereIn('order_control_id', $item_allocate_ng_orders)->update([
             'order_status_id' => OrderStatusEnum::KAKUNIN_MACHI,
@@ -117,14 +117,15 @@ class OrderAllocateService
     {
         // 在庫引当対象の商品IDと出荷倉庫IDを重複を除いて取得
         $stock_allocate_items = Order::join('order_items', 'order_items.order_control_id', 'orders.order_control_id')
-                                ->join('items', 'items.item_code', 'order_items.order_item_code')
-                                ->whereIn('orders.order_control_id', $allocate_orders)
-                                ->where('order_items.is_stock_allocated', 0)
-                                ->select('shipping_base_id', 'item_id')
-                                ->groupBy('shipping_base_id', 'item_id')
-                                ->get();
-        // レコードが取得できていなければ処理を抜ける
+                                    ->join('items', 'items.item_code', 'order_items.order_item_code')
+                                    ->whereIn('orders.order_control_id', $allocate_orders)
+                                    ->where('order_items.is_stock_allocated', 0)
+                                    ->select('shipping_base_id', 'item_id')
+                                    ->groupBy('shipping_base_id', 'item_id')
+                                    ->get();
+        // レコードが取得できていない場合
         if($stock_allocate_items->isEmpty()){
+            // 処理を抜ける
             return false;
         }
         // 一時テーブルを作成
@@ -183,31 +184,31 @@ class OrderAllocateService
             // 引当対象のレコードを取得
             $order_item = OrderItem::getSpecify($stock_allocate_order->order_item_id)->first();
             // 出荷倉庫IDと商品IDを条件に有効在庫数が1以上の在庫を取得
-            $stock = Stock::where('base_id', $stock_allocate_order->shipping_base_id)
+            $stocks = Stock::where('base_id', $stock_allocate_order->shipping_base_id)
                         ->where('item_id', $stock_allocate_order->item_id)
                         ->where('available_stock', '>', 0)
-                        ->first();
-            // 引き当てられる在庫がない場合
-            if(is_null($stock)){
-                // 次のループ処理へ
-                continue;
-            }
-            // 有効在庫数が引当残と同じか多い場合
-            if($stock->available_stock >= $order_item->unallocated_quantity){
-                // 有効在庫数から引当残を引く
-                $stock->decrement('available_stock', $order_item->unallocated_quantity);
-                // 在庫引当OK処理(引当残も同時に0にする)
-                $order_item->update([
-                    'is_stock_allocated'    => 1,
-                    'unallocated_quantity'  => 0,
-                ]);
-            }
-            // 有効在庫数が引当残よりも少ない場合
-            if($stock->available_stock < $order_item->unallocated_quantity){
-                // 確保した在庫の分だけ引当残を減らす
-                $order_item->decrement('unallocated_quantity', $stock->available_stock);
-                // 有効在庫数を0にする
-                $stock->update(['available_stock' => 0]);
+                        ->orderBy('exp', 'asc')
+                        ->get();
+            // 在庫の分だけループ処理
+            foreach($stocks as $stock){
+                // 引当残がなければ、ループを抜ける
+                if($order_item->unallocated_quantity <= 0) break;
+                // 有効在庫数が引当残以上の場合
+                if($stock->available_stock >= $order_item->unallocated_quantity){
+                    // 有効在庫数を減算
+                    $stock->decrement('available_stock', $order_item->unallocated_quantity);
+                    // 受注詳細を更新
+                    $order_item->update([
+                        'is_stock_allocated'   => 1,
+                        'unallocated_quantity' => 0,
+                    ]);
+                    break;
+                }else{
+                    // 引当残を有効在庫数の分だけ減算
+                    $order_item->decrement('unallocated_quantity', $stock->available_stock);
+                    // 有効在庫数を0に更新
+                    $stock->update(['available_stock' => 0]);
+                }
             }
         }
     }
