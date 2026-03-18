@@ -120,7 +120,7 @@ class NifudaCreateService
                 $worksheet->setCellValue('N'.$row, 3);                                              // 内容品種別
                 $worksheet->setCellValue('P'.$row, 1000);                                           // 総重量
                 $worksheet->setCellValue('W'.$row, $order->order_control_id);                       // メモ
-                $worksheet->setCellValue('X'.$row, "");                                             // 総商品金額(JPY)
+                $worksheet->setCellValue('X'.$row, $order->subtotal);                               // 総商品金額(JPY)
                 // order_itemsの分だけループ処理
                 foreach($order->order_items as $order_item){
                     // 基準列（Y = 25列目）からのオフセットを加味して列を計算

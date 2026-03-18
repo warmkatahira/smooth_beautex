@@ -32,6 +32,8 @@ class OrderImport extends Model
         'ship_address_1',
         'ship_address_2',
         'ship_tel',
+        'subtotal',
+        'total_payment',
         'order_item_code',
         'order_item_name',
         'shipping_quantity',
@@ -67,6 +69,8 @@ class OrderImport extends Model
         if($order_category_id === OrderCategoryEnum::SHOPIFY_ID){
             return [
                 'Name',
+                'Subtotal',
+                'Total',
                 'Shipping Method',
                 'Lineitem quantity',
                 'Lineitem name',
@@ -86,6 +90,8 @@ class OrderImport extends Model
     public static function CommonColumns()
     {
         return [
+            'Subtotal',
+            'Total',
             'Shipping Method',
             'Shipping Name',
             'Shipping Address1',
@@ -123,6 +129,8 @@ class OrderImport extends Model
             'ship_address_1',
             'ship_address_2',
             'ship_tel',
+            'subtotal',
+            'total_payment',
             'order_category_id',
         ]);
     }

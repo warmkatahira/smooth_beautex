@@ -34,7 +34,7 @@ class BaseShippingMethodSeeder extends Seeder
             'setting_1'             => '048997010003',
             'setting_2'             => '01',
             'setting_3'             => '0',
-            'e_hiden_version_id'    => 1,
+            'e_hiden_version_id'    => null,
         ]);
         BaseShippingMethod::create([
             'shipping_method_id'    => 4,

@@ -34,6 +34,8 @@ return new class extends Migration
             $table->string('ship_address_1', 255);
             $table->string('ship_address_2', 255)->nullable();
             $table->string('ship_tel', 30);
+            $table->unsignedInteger('subtotal')->nullable();
+            $table->unsignedInteger('total_payment')->nullable();
             $table->string('order_item_code', 255);
             $table->string('order_item_name', 255);
             $table->unsignedInteger('shipping_quantity');

@@ -43,6 +43,8 @@ class Order extends Model
         'ship_address_1',
         'ship_address_2',
         'ship_tel',
+        'subtotal',
+        'total_payment',
         'order_memo',
         'shipping_work_memo',
         'order_category_id',
