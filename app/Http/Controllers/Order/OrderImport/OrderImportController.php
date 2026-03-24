@@ -103,7 +103,7 @@ class OrderImportController extends Controller
                 // 受注管理IDを採番
                 $OrderImportService->updateOrderControlId();
                 // Qoo10の場合
-                if($order_category_id === MallEnum::QOO10_ID){
+                if($mall_id === MallEnum::QOO10_ID){
                     // 「配送会社」を注文番号毎で1つになるように更新
                     $OrderImportForQoo10Service->updateMallShippingMethod();
                 }
