@@ -63,15 +63,15 @@ class OrderImportController extends Controller
                 // インポートした受注区分を取得
                 $order_category_id = $OrderImportService->getOrderCategoryId($mall_id, $import_info['save_file_path']);
                 // インポートしたデータのヘッダーを確認
-                $OrderImportService->checkHeader($import_info['save_file_path'], $nowDate, $import_info, $order_category_id);
+                $OrderImportService->checkHeader($import_info['save_file_path'], $nowDate, $import_info, $mall_id);
                 // モールで処理を分岐
                 // Qoo10の場合
-                if($order_category_id === MallEnum::QOO10_ID){
+                if($mall_id === MallEnum::QOO10_ID){
                     // 追加する受注データを配列に格納（同時にバリデーションも実施）
                     $order = $OrderImportForQoo10Service->setArrayImport($import_info['save_file_path'], $nowDate, $order_category_id);
                 }
                 // shopifyの場合
-                if($order_category_id === MallEnum::SHOPIFY_ID){
+                if($mall_id === MallEnum::SHOPIFY_ID){
                     // 注文番号ごとに共通するデータを取得
                     $common_order_values = $OrderImportForShopifyService->getCommonOrderValue($import_info['save_file_path']);
                     // 追加する受注データを配列に格納（同時にバリデーションも実施）

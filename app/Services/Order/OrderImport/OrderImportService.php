@@ -100,14 +100,14 @@ class OrderImportService
     }
 
     // インポートしたデータのヘッダーを確認
-    public function checkHeader($save_file_path, $nowDate, $import_info, $order_category_id)
+    public function checkHeader($save_file_path, $nowDate, $import_info, $mall_id)
     {
         // 全データを取得
         $all_line = (new FastExcel)->import($save_file_path);
         // インポートしたデータのヘッダーを取得
         $import_data_header = array_keys((array) $all_line[0]);
         // システムに定義している必須ヘッダーを取得
-        $require_header = OrderImport::requireHeaderForOrderImport($order_category_id);
+        $require_header = OrderImport::requireHeaderForOrderImport($mall_id);
         // ヘッダーの分だけループ処理
         foreach($require_header as $header){
             // ヘッダーが存在するか確認

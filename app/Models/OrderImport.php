@@ -48,10 +48,10 @@ class OrderImport extends Model
         return self::where('order_no', $order_no);
     }
     // 受注インポートに必要なヘッダーを定義
-    public static function requireHeaderForOrderImport($order_category_id)
+    public static function requireHeaderForOrderImport($mall_id)
     {
         // Qoo10の場合
-        if($order_category_id === MallEnum::QOO10_ID){
+        if($mall_id === MallEnum::QOO10_ID){
             return [
                 'カート番号',
                 '配送会社',
@@ -67,7 +67,7 @@ class OrderImport extends Model
             ];
         }
         // shopifyの場合
-        if($order_category_id === MallEnum::SHOPIFY_ID){
+        if($mall_id === MallEnum::SHOPIFY_ID){
             return [
                 'Name',
                 'Subtotal',

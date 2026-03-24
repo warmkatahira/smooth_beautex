@@ -107,8 +107,11 @@ class NifudaCreateService
             foreach($orders as $order){
                 // 内容品のオフセット用の変数を初期化
                 $column_offset = 0;
+                // 出荷人会社名を変数に格納
+                // ship_country_codeが「US」の場合は「NAOKI IWASE」、それ以外は「BEAUTEX Corp. / Push!Color」
+                $shipper_company_name = $order->ship_country_code == 'US' ? 'NAOKI IWASE' : 'BEAUTEX Corp. / Push!Color';
                 // 各情報を出力
-                $worksheet->setCellValue('A'.$row, 'BEAUTEX');                                      // 出荷人会社名
+                $worksheet->setCellValue('A'.$row, $shipper_company_name);                          // 出荷人会社名
                 $worksheet->setCellValue('B'.$row, $order->ship_name);                              // 受取人お名前
                 $worksheet->setCellValue('C'.$row, "");                                             // 受取人会社名
                 $worksheet->setCellValue('E'.$row, $order->ship_country_code);                      // 受取人国名
