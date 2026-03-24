@@ -32,14 +32,25 @@ class TrackingNoImportService
         // インポートしたデータのヘッダーを取得
         $import_data_header = array_keys(mb_convert_encoding($all_line[0], 'UTF-8', 'ASCII, JIS, UTF-8, SJIS-win'));
         // システムに定義している必須ヘッダーを取得
-        $require_header = TrackingNoImportEnum::SAGAWA_REQUIRE_HEADER;
+        $require_header = TrackingNoImportEnum::SAGAWA_JP_REQUIRE_HEADER;
         // ヘッダーが存在するか確認
         $sagawa_header_ng_count = $this->checkRequireHeader($import_data_header, $require_header);
         // 0の場合は、ヘッダーが全て存在するので、ここで処理を終了
         if($sagawa_header_ng_count == 0){
             return with([
-                'order_control_id_column' => TrackingNoImportEnum::SAGAWA_ORDER_CONTROL_ID,
-                'tracking_no_column' => TrackingNoImportEnum::SAGAWA_TRACKING_NO,
+                'order_control_id_column' => TrackingNoImportEnum::SAGAWA_JP_ORDER_CONTROL_ID,
+                'tracking_no_column' => TrackingNoImportEnum::SAGAWA_JP_TRACKING_NO,
+            ]);
+        }
+        // システムに定義している必須ヘッダーを取得
+        $require_header = TrackingNoImportEnum::SAGAWA_GLOBAL_REQUIRE_HEADER;
+        // ヘッダーが存在するか確認
+        $sagawa_header_ng_count = $this->checkRequireHeader($import_data_header, $require_header);
+        // 0の場合は、ヘッダーが全て存在するので、ここで処理を終了
+        if($sagawa_header_ng_count == 0){
+            return with([
+                'order_control_id_column' => TrackingNoImportEnum::SAGAWA_GLOBAL_ORDER_CONTROL_ID,
+                'tracking_no_column' => TrackingNoImportEnum::SAGAWA_GLOBAL_TRACKING_NO,
             ]);
         }
         // システムに定義している必須ヘッダーを取得
@@ -122,18 +133,18 @@ class TrackingNoImportService
     {
         // バリデーションルールを定義
         $rules = [
-            'order_control_id' => 'required',
-            'tracking_no' => 'required|max:14',
+            'order_control_id'  => 'required',
+            'tracking_no'       => 'required|max:14',
         ];
         // バリデーションエラーメッセージを定義
         $messages = [
-            'required' => ":attributeは必須です。",
-            'max' => ":attributeは:max文字以内で入力して下さい。",
+            'required'  => ":attributeは必須です。",
+            'max'       => ":attributeは:max文字以内で入力して下さい。",
         ];
         // バリデーションエラー項目を定義
         $attributes = [
-            'order_control_id' => '受注管理ID',
-            'tracking_no' => '配送伝票番号',
+            'order_control_id'  => '受注管理ID',
+            'tracking_no'       => '配送伝票番号',
         ];
         // バリデーション実施
         $validator = Validator::make($param, $rules, $messages, $attributes);
@@ -159,19 +170,35 @@ class TrackingNoImportService
         Order::whereIn('order_control_id', $orders)->update([
             'tracking_no' => null,
         ]);
+        // 同じorder_control_idのtracking_noを,で結合して格納する配列を初期化
+        $grouped_data = [];
         // アップロードデータの分だけループ処理
         foreach($upload_data as $data){
+            // order_control_idを取得
+            $id = $data['order_control_id'];
+            // 配送伝票番号がある場合
+            if(!empty($data['tracking_no'])){
+                // 配列にorder_control_idがある場合
+                if(isset($grouped_data[$id])){
+                    $grouped_data[$id] .= ',' . $data['tracking_no'];
+                } else {
+                    $grouped_data[$id] = $data['tracking_no'];
+                }
+            }
+        }
+        // アップロードデータの分だけループ処理
+        foreach($grouped_data as $order_control_id => $tracking_no){
             // 反映対象の受注を取得
-            $order = Order::where('order_control_id', $data['order_control_id'])
+            $order = Order::where('order_control_id', $order_control_id)
                         ->where('order_status_id', OrderStatusEnum::SAGYO_CHU)
                         ->first();
             // レコードが取得できている場合
             if(!is_null($order)){
-                // 反映処理
-                Order::where('order_control_id', $data['order_control_id'])
-                    ->where('order_status_id', OrderStatusEnum::SAGYO_CHU)->update([
-                    'tracking_no' => $data['tracking_no'],
-                ]);
+                Order::where('order_control_id', $order_control_id)
+                    ->where('order_status_id', OrderStatusEnum::SAGYO_CHU)
+                    ->update([
+                        'tracking_no' => $tracking_no,
+                    ]);
             }
         }
     }

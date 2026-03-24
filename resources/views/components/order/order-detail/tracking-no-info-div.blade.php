@@ -11,8 +11,10 @@
         <p class="w-7/12 py-1 bg-theme-sub"></p>
     @endif
     @if(!is_null($order->tracking_no))
-        @foreach(TrackingNoUrlMakeFunc::make($order) as $key => $value)
-            <a href="{{ $value }}" class="w-7/12 py-1 pl-3 bg-theme-sub underline tippy_tracking_no_url" target="_blank" rel="noopener noreferrer">{{ $key }}</a>
-        @endforeach
+        <div class="w-7/12 bg-theme-sub flex flex-col">
+            @foreach(TrackingNoUrlMakeFunc::make($order) as $key => $value)
+                <a href="{{ $value }}" class="py-1 pl-3 underline tippy_tracking_no_url" target="_blank" rel="noopener noreferrer">{{ $key }}</a>
+            @endforeach
+        </div>
     @endif
 </div>

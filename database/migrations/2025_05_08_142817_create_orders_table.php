@@ -25,7 +25,7 @@ return new class extends Migration
             $table->boolean('is_allocated')->default(0);
             $table->boolean('is_shipping_inspection_complete')->default(0);
             $table->timestamp('shipping_inspection_date')->nullable();
-            $table->string('tracking_no', 140)->nullable();
+            $table->string('tracking_no', 150)->nullable();
             $table->date('shipping_date')->nullable();
             $table->unsignedInteger('shipping_group_id')->nullable();
             // ここから受注データの内容
