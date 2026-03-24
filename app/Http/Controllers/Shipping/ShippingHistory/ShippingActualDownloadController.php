@@ -16,16 +16,20 @@ class ShippingActualDownloadController extends Controller
 {
     public function download()
     {
-         // インスタンス化
+        // インスタンス化
         $OrderSearchService = new OrderSearchService;
         $ShippingActualDownloadService = new ShippingActualDownloadService;
+        // 現在の日時を取得
+        $nowDate = CarbonImmutable::now();
+        // ファイルを出力するディレクトリを作成
+        $directory = $ShippingActualDownloadService->makeDirectory($nowDate);
         // 検索結果を取得
         $result = $OrderSearchService->getSearchResult();
-        // ダウンロードするデータを取得
-        $response = $ShippingActualDownloadService->getDownloadData($result);
-        // ダウンロード処理
-        $response->headers->set('Content-Type', 'text/csv');
-        $response->headers->set('Content-Disposition', 'attachment; filename=【'.SystemEnum::CUSTOMER_NAME_JP.'】出荷実績データ_' . CarbonImmutable::now()->isoFormat('Y年MM月DD日HH時mm分ss秒') . '.csv');
-        return $response;
+        // ファイルを作成
+        $ShippingActualDownloadService->createFile($nowDate, $result, $directory['directory_path']);
+        // Zipファイルを作成
+        $zip_file_path = $ShippingActualDownloadService->createZip($directory['directory_name'], $directory['directory_path']);
+        // 作成したZIPファイルをダウンロード(ダウンロード後に削除している)
+        return response()->download($zip_file_path)->deleteFileAfterSend(true);
     }
 }

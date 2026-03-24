@@ -152,31 +152,6 @@ class Order extends Model
             '出荷数',
         ];
     }
-    // ダウンロード時のヘッダーを定義
-    public static function downloadHeaderAtShippingActual()
-    {
-        return [
-            'カート番号',
-            '配送会社',
-            '送り状番号',
-            '発送日',
-            '決済サイト',
-        ];
-    }
-    // ダウンロード時のヘッダーを定義
-    public static function downloadHeaderAtBilling()
-    {
-        return [
-            '出荷日',
-            '配送先名',
-            '運送会社',
-            '配送方法',
-            '配送伝票番号',
-            '個口数',
-            'PCS数',
-            '運賃',
-        ];
-    }
     // 指定した注文ステータスの件数を取得
     public static function getOrderSpecifyOrderStatus($order_status_id)
     {

@@ -4,7 +4,7 @@ namespace App\Enums;
 
 enum OrderCategoryEnum
 {
-    
-    const QOO10_ID      = 1;    // Qoo10
-    const SHOPIFY_ID    = 2;    // shopify
+    const INSI_BEAUTY_QOO10     = 1;
+    const PUSH_COLOR_SHOPIFY    = 2;
+    const INSI_BEAUTY_SHOPIFY   = 3;
 }

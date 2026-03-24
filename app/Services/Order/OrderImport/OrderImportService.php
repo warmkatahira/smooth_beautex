@@ -11,6 +11,7 @@ use App\Models\OrderItem;
 use App\Services\Common\ImportErrorCreateService;
 // 列挙
 use App\Enums\SystemEnum;
+use App\Enums\MallEnum;
 use App\Enums\OrderCategoryEnum;
 // 例外
 use App\Exceptions\OrderImportException;
@@ -47,8 +48,8 @@ class OrderImportService
         ]);
     }
 
-    // インポートした受注区分を取得
-    public function getOrderCategoryId($save_file_path)
+    // インポートしたモールを取得
+    public function getMallId($save_file_path)
     {
         // 全データを取得
         $all_line = (new FastExcel)->import($save_file_path);
@@ -59,11 +60,39 @@ class OrderImportService
         // インポートしたデータのヘッダーを取得
         $import_data_header = array_keys((array) $all_line[0]);
         if(in_array('カート番号', $import_data_header)) {
-            // Qoo10のidを返す
-            return OrderCategoryEnum::QOO10_ID;
+            // QOO10のidを返す
+            return MallEnum::QOO10_ID;
         }elseif(in_array('Lineitem sku', $import_data_header)) {
             // shopifyのidを返す
-            return OrderCategoryEnum::SHOPIFY_ID;
+            return MallEnum::SHOPIFY_ID;
+        }else{
+            // どちらでもない場合
+            throw new OrderImportException('モールが判別できませんでした。', null, null, null);
+        }
+    }
+
+    // インポートした受注区分を取得
+    public function getOrderCategoryId($mall_id, $save_file_path)
+    {
+        // 全データを取得
+        $all_line = (new FastExcel)->import($save_file_path);
+        // データが空の場合
+        if($all_line->isEmpty()){
+            throw new OrderImportException('データがありませんでした。', null, null, null);
+        }
+        // インポートしたデータのヘッダーを取得
+        $import_data_header = array_keys((array) $all_line[0]);
+        if($mall_id === MallEnum::QOO10_ID){
+            // INSI_BEAUTY_QOO10のidを返す
+            return OrderCategoryEnum::INSI_BEAUTY_QOO10;
+        }elseif($mall_id === MallEnum::SHOPIFY_ID) {
+            if(str_contains($all_line[1]['Name'], 'PCGL')){
+                return OrderCategoryEnum::PUSH_COLOR_SHOPIFY;
+            }elseif(str_contains($all_line[1]['Name'], 'INSI')){
+                return OrderCategoryEnum::INSI_BEAUTY_SHOPIFY;
+            }else{
+                throw new OrderImportException('受注区分が判別できませんでした。', null, null, null);
+            }
         }else{
             // どちらでもない場合
             throw new OrderImportException('受注区分が判別できませんでした。', null, null, null);

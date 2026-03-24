@@ -5,7 +5,7 @@ namespace App\Enums;
 enum SystemEnum
 {
     // 顧客名
-    const CUSTOMER_NAME_JP  = 'BEAUTEX様';
+    const CUSTOMER_NAME_JP  = 'BEAUTEX';
     const CUSTOMER_NAME_EN  = 'beautex';
     // システム名
     const SYSTEM_NAME_JP            = '出荷システム';
@@ -21,6 +21,6 @@ enum SystemEnum
     // 顧客名とシステム名を結合して返す
     public static function getSystemTitle()
     {
-        return self::CUSTOMER_NAME_JP . ' ' . self::SYSTEM_NAME_JP;
+        return self::CUSTOMER_NAME_JP . '様 ' . self::SYSTEM_NAME_JP;
     }
 }

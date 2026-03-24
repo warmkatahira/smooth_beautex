@@ -16,6 +16,7 @@ use App\Services\Common\ImportErrorCreateService;
 use App\Services\Order\OrderAllocate\OrderAllocateService;
 use App\Services\Order\OrderImport\AutoProcessApplyService;
 // 列挙
+use App\Enums\MallEnum;
 use App\Enums\OrderCategoryEnum;
 // 例外
 use App\Exceptions\OrderImportException;
@@ -57,18 +58,20 @@ class OrderImportController extends Controller
                 $nowDate = CarbonImmutable::now();
                 // 選択したデータをストレージにインポート
                 $import_info = $OrderImportService->importData($request->file('select_file'));
+                // インポートしたモールを取得
+                $mall_id = $OrderImportService->getMallId($import_info['save_file_path']);
                 // インポートした受注区分を取得
-                $order_category_id = $OrderImportService->getOrderCategoryId($import_info['save_file_path']);
+                $order_category_id = $OrderImportService->getOrderCategoryId($mall_id, $import_info['save_file_path']);
                 // インポートしたデータのヘッダーを確認
                 $OrderImportService->checkHeader($import_info['save_file_path'], $nowDate, $import_info, $order_category_id);
-                // 受注区分で処理を分岐
+                // モールで処理を分岐
                 // Qoo10の場合
-                if($order_category_id === OrderCategoryEnum::QOO10_ID){
+                if($order_category_id === MallEnum::QOO10_ID){
                     // 追加する受注データを配列に格納（同時にバリデーションも実施）
                     $order = $OrderImportForQoo10Service->setArrayImport($import_info['save_file_path'], $nowDate, $order_category_id);
                 }
                 // shopifyの場合
-                if($order_category_id === OrderCategoryEnum::SHOPIFY_ID){
+                if($order_category_id === MallEnum::SHOPIFY_ID){
                     // 注文番号ごとに共通するデータを取得
                     $common_order_values = $OrderImportForShopifyService->getCommonOrderValue($import_info['save_file_path']);
                     // 追加する受注データを配列に格納（同時にバリデーションも実施）
@@ -100,7 +103,7 @@ class OrderImportController extends Controller
                 // 受注管理IDを採番
                 $OrderImportService->updateOrderControlId();
                 // Qoo10の場合
-                if($order_category_id === OrderCategoryEnum::QOO10_ID){
+                if($order_category_id === MallEnum::QOO10_ID){
                     // 「配送会社」を注文番号毎で1つになるように更新
                     $OrderImportForQoo10Service->updateMallShippingMethod();
                 }

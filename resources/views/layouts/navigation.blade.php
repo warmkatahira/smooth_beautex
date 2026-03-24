@@ -3,7 +3,7 @@
         <!-- ロゴ -->
         <img id="logo" src="{{ asset('image/smooth_logo.svg') }}">
         <!-- 顧客名 -->
-        <p class="text-center pt-2 cursor-default">{{ SystemEnum::CUSTOMER_NAME_JP }}</p>
+        <p class="text-center pt-2 cursor-default">{{ SystemEnum::CUSTOMER_NAME_JP.'様' }}</p>
         <!-- システム名 -->
         <p class="text-center cursor-default">{{ SystemEnum::SYSTEM_NAME_JP }}</p>
     </div>

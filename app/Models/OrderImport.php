@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 // 列挙
+use App\Enums\MallEnum;
 use App\Enums\OrderCategoryEnum;
 
 class OrderImport extends Model
@@ -50,7 +51,7 @@ class OrderImport extends Model
     public static function requireHeaderForOrderImport($order_category_id)
     {
         // Qoo10の場合
-        if($order_category_id === OrderCategoryEnum::QOO10_ID){
+        if($order_category_id === MallEnum::QOO10_ID){
             return [
                 'カート番号',
                 '配送会社',
@@ -66,7 +67,7 @@ class OrderImport extends Model
             ];
         }
         // shopifyの場合
-        if($order_category_id === OrderCategoryEnum::SHOPIFY_ID){
+        if($order_category_id === MallEnum::SHOPIFY_ID){
             return [
                 'Name',
                 'Subtotal',

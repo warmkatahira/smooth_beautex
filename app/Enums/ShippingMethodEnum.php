@@ -4,11 +4,11 @@ namespace App\Enums;
 
 enum ShippingMethodEnum
 {
-    const YAMATO_NEKOPOS_ID = 1;
-    const YAMATO_COMPACT_ID = 2;
-    const YAMATO_NORMAL_ID  = 3;
-    const SAGAWA_NORMAL_ID  = 4;
-    const SAGAWA_EMS_ID     = 5;
+    const YAMATO_NEKOPOS_ID = 1;    // ネコポス
+    const YAMATO_COMPACT_ID = 2;    // コンパクト
+    const YAMATO_NORMAL_ID  = 3;    // 宅急便
+    const SAGAWA_NORMAL_ID  = 4;    // 宅配便
+    const SAGAWA_EMS_ID     = 5;    // EMS
 
     // Qoo10の配送会社に入ってくる値を定義
     const QOO10_SHIPPING_METHOD_YAMATO_NEKOPOS  = 'ゆうパケット';
