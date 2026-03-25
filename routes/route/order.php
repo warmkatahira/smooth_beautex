@@ -13,6 +13,8 @@ use App\Http\Controllers\Order\OrderDetail\OrderDetailUpdateController;
 use App\Http\Controllers\Order\OrderDelete\OrderDeleteController;
 // +-+-+-+-+-+-+-+- 出荷作業開始 +-+-+-+-+-+-+-+-
 use App\Http\Controllers\Order\ShippingWorkStart\ShippingWorkStartController;
+// +-+-+-+-+-+-+-+- 引当残データダウンロード +-+-+-+-+-+-+-+-
+use App\Http\Controllers\Order\HikiatezanDownload\HikiatezanDownloadController;
 
 Route::middleware('common')->group(function (){
     Route::middleware(['warm_check'])->group(function () {
@@ -50,5 +52,9 @@ Route::middleware('common')->group(function (){
         Route::controller(ShippingWorkStartController::class)->prefix('shipping_work_start')->name('shipping_work_start.')->group(function(){
             Route::post('enter', 'enter')->name('enter');
         });
+    });
+    // +-+-+-+-+-+-+-+- 引当残ダウンロード +-+-+-+-+-+-+-+-
+    Route::controller(HikiatezanDownloadController::class)->prefix('hikiatezan_download')->name('hikiatezan_download.')->group(function(){
+        Route::post('download', 'download')->name('download');
     });
 });

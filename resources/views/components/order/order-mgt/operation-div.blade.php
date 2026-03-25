@@ -6,12 +6,15 @@
                 <button type="button" id="allocate_enter" class="dropdown-content-element"><i class="las la-sync-alt la-lg mr-1"></i>引当処理</button>
             </form>
             <button type="button" id="order_delete" class="dropdown-content-element"><i class="las la-trash-alt la-lg mr-1"></i>受注削除</button>
+            @if(session('filter_order_status_id') == OrderStatusEnum::HIKIATE_MACHI)
+                <button type="button" id="hikiatezan_download_enter" class="dropdown-content-element"><i class="las la-download la-lg mr-1"></i>引当残ダウンロード</button>
+            @endif
             @if(session('filter_order_status_id') == OrderStatusEnum::SHUKKA_MACHI)
                 <button type="button" id="shipping_work_start_modal_open" class="dropdown-content-element"><i class="las la-flag-checkered la-lg mr-1"></i>出荷作業開始</button>
             @endif
         </div>
     </div>
 </div>
-<form method="POST" action="" id="operation_div_form" class="m-0">
+<form method="" action="" id="operation_div_form" class="m-0">
     @csrf
 </form>

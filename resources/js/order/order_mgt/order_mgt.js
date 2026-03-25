@@ -27,7 +27,8 @@ $('#order_delete').on("click",function(){
         const input = prompt(count + "件の受注を削除しますか？\n続行するには「delete」と入力してください。");
         // インプットボックスに「delete」と入力された場合のみ処理を実行
         if (input === 'delete') {
-            // formタグのactionを変更
+            // formタグのmethodとaction変更
+            $('#operation_div_form').attr('method', 'POST');
             $('#operation_div_form').attr('action', '/order_delete/delete');
             $("#operation_div_form").submit();
         } else {
@@ -92,10 +93,29 @@ $('#shipping_work_start_enter').on("click",function(){
         // 「はい」が押下されたらsubmit、「いいえ」が押下されたら処理キャンセル
         if(result == true) {
             start_loading();
-            // formタグのactionを変更
+            // formタグのmethodとaction変更
+            $('#operation_div_form').attr('method', 'POST');
             $('#operation_div_form').attr('action', '/shipping_work_start/enter');
             $("#operation_div_form").submit();
         }
+    } catch (e) {
+        alert(e.message);
+    }
+});
+
+// 引当残データダウンロードを押下したら
+$('#hikiatezan_download_enter').on("click",function(){
+    try {
+        // チェックボックス要素関連の情報を取得
+        const [chk, count, all] = get_checkbox();
+        // 対象が1つ以上選択されているか
+        if(count == 0){
+            throw new Error('ダウンロード対象が選択されていません。');
+        }
+        // formタグのmethodとaction変更
+        $('#operation_div_form').attr('method', 'POST');
+        $('#operation_div_form').attr('action', '/hikiatezan_download/download');
+        $("#operation_div_form").submit();
     } catch (e) {
         alert(e.message);
     }
