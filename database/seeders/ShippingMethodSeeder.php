@@ -34,5 +34,9 @@ class ShippingMethodSeeder extends Seeder
             'shipping_method' => 'EMS',
             'delivery_company_id' => 2,
         ]);
+        ShippingMethod::create([
+            'shipping_method' => 'UPS',
+            'delivery_company_id' => 3,
+        ]);
     }
 }

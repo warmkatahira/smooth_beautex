@@ -83,6 +83,11 @@ class NifudaCreateService
             $download_filename = '【'.$shipping_method->delivery_company_and_shipping_method.'】荷札データ_'.$nowDate->isoFormat('Y年MM月DD日HH時mm分ss秒').'.xlsx';
             $this->createYamato($base_shipping_method, $orders, $shipping_group, $download_filename, $directory_name);
         }
+        // UPS
+        if($shipping_method->delivery_company_id === DeliveryCompanyEnum::UPS){
+            $download_filename = '【'.$shipping_method->delivery_company_and_shipping_method.'】荷札データ_'.$nowDate->isoFormat('Y年MM月DD日HH時mm分ss秒').'.xlsx';
+            $this->createYamato($base_shipping_method, $orders, $shipping_group, $download_filename, $directory_name);
+        }
         return $directory_name;
     }
 

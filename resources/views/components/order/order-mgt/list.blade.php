@@ -76,7 +76,7 @@
                         <td class="py-1 px-2 border text-center">{{ $order->ship_province_name }}</td>
                         <td class="py-1 px-2 border text-center">
                             @if($image = $order->shipping_method?->delivery_company?->company_image)
-                                <img src="{{ asset('image/'.$image) }}" class="inline-block">
+                                <img src="{{ asset('image/'.$image) }}" class="h-8 w-auto inline-block">
                             @endif
                         </td>
                         <td class="py-1 px-2 border text-center">{{ $order->shipping_method?->shipping_method }}</td>
