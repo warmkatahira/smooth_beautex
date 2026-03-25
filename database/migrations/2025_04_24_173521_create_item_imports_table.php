@@ -30,6 +30,7 @@ return new class extends Migration
             $table->boolean('is_stock_managed')->nullable();
             $table->string('country_of_origin', 10)->nullable();
             $table->string('hs_code', 10)->nullable();
+            $table->unsignedInteger('item_weight_g')->nullable();
             $table->unsignedInteger('sort_order')->nullable();
             $table->timestamps();
         });

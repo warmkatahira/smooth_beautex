@@ -22,6 +22,7 @@
                <x-form.switch-boolean label="在庫管理" id="is_stock_managed" name="is_stock_managed" label0="無効" label1="有効" :value="$item->is_stock_managed" required="true" />
                 <x-form.input type="text" label="原産国" id="country_of_origin" name="country_of_origin" :value="$item->country_of_origin" />
                 <x-form.input type="text" label="HSコード" id="hs_code" name="hs_code" :value="$item->hs_code" />
+                    <x-form.input type="tel" label="商品重量" id="item_weight_g" name="item_weight_g" :value="$item->item_weight_g" />
                 <x-form.input type="tel" label="並び順" id="sort_order" name="sort_order" :value="$item->sort_order" required="true" />
             </div>
             <input type="hidden" name="item_id" value="{{ $item->item_id }}">

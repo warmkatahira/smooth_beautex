@@ -31,6 +31,7 @@ return new class extends Migration
             $table->string('item_image_file_name', 50)->default('no_image.png');
             $table->string('country_of_origin', 10)->nullable();
             $table->string('hs_code', 10)->nullable();
+            $table->unsignedInteger('item_weight_g')->nullable();
             $table->unsignedInteger('sort_order')->default(99999);
             $table->timestamps();
         });

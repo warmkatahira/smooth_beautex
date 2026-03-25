@@ -25,6 +25,9 @@ class ItemImport extends Model
         's_power_code',
         's_power_code_start_position',
         'is_stock_managed',
+        'country_of_origin',
+        'hs_code',
+        'item_weight_g',
         'sort_order',
     ];
     // itemsテーブルとのリレーション

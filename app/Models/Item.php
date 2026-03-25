@@ -26,6 +26,9 @@ class Item extends Model
         's_power_code_start_position',
         'is_stock_managed',
         'item_image_file_name',
+        'country_of_origin',
+        'hs_code',
+        'item_weight_g',
         'sort_order',
     ];
     // 全てのレコードを取得
@@ -79,6 +82,7 @@ class Item extends Model
             '在庫管理',
             '原産国',
             'HSコード',
+            '商品重量',
             '並び順',
             '商品画像',
             '最終更新日時',
