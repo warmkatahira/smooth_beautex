@@ -41,7 +41,7 @@ class ShippingWorkStartController extends Controller
         // ミエルの進捗を更新する対象を取得
         $MieruService->getUpdateProgressTarget(null);
         // Chatworkに通知する処理
-        $ChatworkService->postMessageAtSihppingWorkStart(count($request->chk), $result['shipping_group']->shipping_group_name);
+        //$ChatworkService->postMessageAtSihppingWorkStart(count($request->chk), $result['shipping_group']->shipping_group_name);
         return redirect()->back()->with([
             'alert_type' => 'success',
             'alert_message' => $result['count'] . '件の出荷作業を開始しました。',
