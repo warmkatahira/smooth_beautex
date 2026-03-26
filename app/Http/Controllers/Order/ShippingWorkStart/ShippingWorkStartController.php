@@ -22,11 +22,13 @@ class ShippingWorkStartController extends Controller
                 // インスタンス化
                 $ShippingWorkStartService = new ShippingWorkStartService;
                 // 選択している対象が出荷開始できるか確認
-                $ShippingWorkStartService->checkShippingWorkStartable($request->chk);
+                $orders = $ShippingWorkStartService->checkShippingWorkStartable($request->chk);
                 // 出荷グループを作成
                 $shipping_group = $ShippingWorkStartService->createShippingGroup($request);
                 // 出荷グループと注文ステータスを更新
                 $count = $ShippingWorkStartService->updateShippingWorkStart($request->chk, $shipping_group->shipping_group_id);
+                // 配送方法がEMSでUS宛ての場合、出荷個口Noを条件に応じて更新
+                $ShippingWorkStartService->updatePackageNo($orders);
                 return compact('shipping_group', 'count');
             });
         }catch (\Exception $e){
@@ -41,7 +43,7 @@ class ShippingWorkStartController extends Controller
         // ミエルの進捗を更新する対象を取得
         $MieruService->getUpdateProgressTarget(null);
         // Chatworkに通知する処理
-        //$ChatworkService->postMessageAtSihppingWorkStart(count($request->chk), $result['shipping_group']->shipping_group_name);
+        //$ChatworkService->postMessageAtSihppingWorkStart($result['count'], $result['shipping_group']->shipping_group_name);
         return redirect()->back()->with([
             'alert_type' => 'success',
             'alert_message' => $result['count'] . '件の出荷作業を開始しました。',
