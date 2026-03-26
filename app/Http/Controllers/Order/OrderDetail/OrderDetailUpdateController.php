@@ -58,7 +58,7 @@ class OrderDetailUpdateController extends Controller
                 // 受注をロックして取得
                 $order = $OrderDetailUpdateService->getOrder($request);
                 // 配送方法を更新できるか確認
-                $OrderDetailUpdateService->checkUpdatableShippingMethod($order);
+                $OrderDetailUpdateService->checkUpdatableShippingMethod($request, $order);
                 // 配送方法を更新
                 $OrderDetailUpdateService->updateShippingMethod($request, $order);
             });

@@ -8,6 +8,7 @@ use App\Models\OrderItem;
 use App\Models\Stock;
 // 列挙
 use App\Enums\OrderStatusEnum;
+use App\Enums\ShippingMethodEnum;
 // その他
 use Illuminate\Support\Facades\DB;
 
@@ -42,11 +43,15 @@ class OrderDetailUpdateService
     }
 
     // 配送方法を更新できるか確認
-    public function checkUpdatableShippingMethod($order)
+    public function checkUpdatableShippingMethod($request, $order)
     {
         // 注文ステータスが「作業中」よりも大きい場合
         if($order->order_status_id > OrderStatusEnum::SAGYO_CHU){
             throw new \RuntimeException('配送方法を更新できない注文ステータスです。');
+        }
+        // 配送方法をEMSに変更しようとしている場合、注文ステータスが「作業中」以上である場合
+        if($request->shipping_method_id == ShippingMethodEnum::SAGAWA_EMS_ID && $order->order_status_id >= OrderStatusEnum::SAGYO_CHU){
+            throw new \RuntimeException('配送方法をEMSに更新する場合は、出荷待ちに注文ステータスを戻して下さい。');
         }
     }
 
