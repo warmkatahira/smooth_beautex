@@ -29,6 +29,9 @@ class NavigationRouteCheckMiddleware
             if(strpos(url()->previous(), 'shipping_mgt') !== false){
                 $route_prefix = 'shipping_mgt.index';
             }
+        // 現在のルート名が「stock.index_by_stock」の場合
+        }elseif($route_name === 'stock.index_by_stock'){
+            $route_prefix = 'stock.index_by_item';
         }else{
             // ロート名に「update」か「create」が含まれている場合
             if(strpos($route_name, 'update') !== false || strpos($route_name, 'create') !== false){
