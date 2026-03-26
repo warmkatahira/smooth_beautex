@@ -14,7 +14,7 @@ class TotalPickingListCreateService
     public function getCreateItem()
     {
         // 出荷グループを取得
-        $shipping_group = ShippingGroup::getSpecify(session('search_shipping_group_id'))->first();
+        $shipping_group = ShippingGroup::getSpecify(session('filter_shipping_group_id'))->first();
         // 残数計算で使用する全在庫数から引く出荷数を取得
         $shipping_group_shipping_quantity = ShippingGroup::join('orders', 'orders.shipping_group_id', 'shipping_groups.shipping_group_id')
                                             ->join('order_items', 'order_items.order_control_id', 'orders.order_control_id')
@@ -30,7 +30,7 @@ class TotalPickingListCreateService
         // トータルピックする出荷数を取得
         $order_quantities = Order::join('order_items', 'order_items.order_control_id', 'orders.order_control_id')
                                 ->join('items', 'items.item_code', 'order_items.order_item_code')
-                                ->where('shipping_group_id', session('search_shipping_group_id'))
+                                ->where('shipping_group_id', session('filter_shipping_group_id'))
                                 ->select(
                                     'shipping_base_id',
                                     'item_id',

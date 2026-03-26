@@ -33,7 +33,11 @@ class NifudaCreateService
     public function getCreateOrder($shipping_method_id)
     {
         // 指定された出荷グループ×配送方法の受注を取得
-        $orders = Order::with(['order_items.item', 'order_category.shipper'])
+        $orders = Order::with([
+                        'order_items' => fn($q) => $q->orderBy('package_no', 'asc'),
+                        'order_items.item',
+                        'order_category.shipper'
+                    ])
                     ->where('shipping_group_id', session('filter_shipping_group_id'))
                     ->where('shipping_method_id', $shipping_method_id)
                     ->orderBy('order_control_id');
@@ -110,50 +114,58 @@ class NifudaCreateService
             $row = 2;
             // 受注の分だけループ処理
             foreach($orders as $order){
-                // 内容品のオフセット用の変数を初期化
-                $column_offset = 0;
-                // 出荷人会社名を変数に格納
-                // ship_country_codeが「US」の場合は「NAOKI IWASE」、それ以外は「BEAUTEX Corp. / Push!Color」
-                $shipper_company_name = $order->ship_country_code == 'US' ? 'NAOKI IWASE' : 'BEAUTEX Corp. / Push!Color';
-                // ship_country_codeが「US」の場合は「1」(ギフト)、それ以外は「3」(販売品)
-                $content_type = $order->ship_country_code == 'US' ? 0 : 3;
-                // 各情報を出力
-                $worksheet->setCellValue('A'.$row, $shipper_company_name);                                                  // 出荷人会社名
-                $worksheet->setCellValue('B'.$row, $order->ship_name);                                                      // 受取人お名前
-                $worksheet->setCellValue('C'.$row, "");                                                                     // 受取人会社名
-                $worksheet->setCellValue('E'.$row, $order->ship_country_code);                                              // 受取人国名
-                $worksheet->setCellValue('G'.$row, $order->ship_address_1);                                                 // 受取人住所2
-                $worksheet->setCellValue('H'.$row, $order->ship_address_2.','.$order->ship_city);                           // 受取人住所3
-                $worksheet->setCellValue('I'.$row, $order->ship_province_code);                                             // 受取人州名など
-                $worksheet->setCellValue('J'.$row, $order->ship_zip_code);                                                  // 受取人郵便番号
-                $worksheet->setCellValue('K'.$row, $order->ship_tel);                                                       // 受取人ご連絡先電話番号
-                $worksheet->setCellValue('N'.$row, $content_type);                                                          // 内容品種別
-                $worksheet->setCellValue('P'.$row, $order->order_items->sum(
-                                                fn($item) => ($item->item->item_weight_g ?? 0) * $item->shipping_quantity
-                                            ));                                                                             // 総重量
-                $worksheet->setCellValue('W'.$row, $order->order_control_id);                                               // メモ
-                $worksheet->setCellValue('X'.$row, $order->subtotal);                                                       // 総商品金額(JPY)
-                // order_itemsの分だけループ処理
-                foreach($order->order_items as $order_item){
-                    // 基準列（Y = 25列目）からのオフセットを加味して列を計算
-                    $colY  = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(25 + $column_offset);
-                    $colZ  = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(26 + $column_offset);
-                    $colAA = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(27 + $column_offset);
-                    $colAB = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(28 + $column_offset);
-                    $colAC = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(29 + $column_offset);
-                    $colAE = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(31 + $column_offset);
+                // package_noを昇順でソートしてグループ化
+                $packages = $order->order_items->sortBy('package_no')->groupBy('package_no');
+                // package_noの分だけループ処理
+                foreach($packages as $package_no => $package_items){
+                    // 内容品のオフセット用の変数を初期化
+                    $column_offset = 0;
+                    // 出荷人会社名を変数に格納
+                    // ship_country_codeが「US」の場合は「NAOKI IWASE」、それ以外は「BEAUTEX Corp. / Push!Color」
+                    $shipper_company_name = $order->ship_country_code == 'US' ? 'NAOKI IWASE' : 'BEAUTEX Corp. / Push!Color';
+                    // ship_country_codeが「US」の場合は「1」(ギフト)、それ以外は「3」(販売品)
+                    $content_type = $order->ship_country_code == 'US' ? 0 : 3;
                     // 各情報を出力
-                    $worksheet->setCellValue($colY . $row, 'ColoredContactLens');                   // 内容品名
-                    $worksheet->setCellValue($colZ . $row, $order_item->item->hs_code);             // HSコード
-                    $worksheet->setCellValue($colAA . $row, $order_item->shipping_quantity);        // 個数
-                    $worksheet->setCellValue($colAB . $row, $order_item->order_item_unit_price);    // 単価
-                    $worksheet->setCellValue($colAC . $row, 'JPY');                                 // 通貨単位
-                    $worksheet->setCellValue($colAE . $row, $order_item->item->country_of_origin);  // 単価
-                    // オフセットに+7する（右に7列分ずらすため）
-                    $column_offset += 7;
+                    $worksheet->setCellValue('A'.$row, $shipper_company_name);                                                  // 出荷人会社名
+                    $worksheet->setCellValue('B'.$row, $order->ship_name);                                                      // 受取人お名前
+                    $worksheet->setCellValue('C'.$row, "");                                                                     // 受取人会社名
+                    $worksheet->setCellValue('E'.$row, $order->ship_country_code);                                              // 受取人国名
+                    $worksheet->setCellValue('G'.$row, $order->ship_address_1);                                                 // 受取人住所2
+                    $worksheet->setCellValue('H'.$row, $order->ship_address_2.','.$order->ship_city);                           // 受取人住所3
+                    $worksheet->setCellValue('I'.$row, $order->ship_province_code);                                             // 受取人州名など
+                    $worksheet->setCellValue('J'.$row, $order->ship_zip_code);                                                  // 受取人郵便番号
+                    $worksheet->setCellValue('K'.$row, $order->ship_tel);                                                       // 受取人ご連絡先電話番号
+                    $worksheet->setCellValue('N'.$row, $content_type);                                                          // 内容品種別
+                    $worksheet->setCellValue('P'.$row, $package_items->sum(
+                                                fn($item) => ($item->item->item_weight_g ?? 0) * $item->shipping_quantity
+                                            ));                                                                                 // 総重量
+                    $worksheet->setCellValue('W'.$row, $order->order_control_id);                                               // メモ
+                    $worksheet->setCellValue('X'.$row, $order->subtotal);                                                       // 総商品金額(JPY)
+                    // package_itemsの分だけループ処理
+                    foreach($package_items as $order_item){
+                        // 基準列（Y = 25列目）からのオフセットを加味して列を計算
+                        $colY  = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(25 + $column_offset);
+                        $colZ  = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(26 + $column_offset);
+                        $colAA = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(27 + $column_offset);
+                        $colAB = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(28 + $column_offset);
+                        $colAC = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(29 + $column_offset);
+                        $colAE = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(31 + $column_offset);
+                        // 各情報を出力
+                        $worksheet->setCellValue($colY . $row, 'ColoredContactLens');                   // 内容品名
+                        $worksheet->setCellValue($colZ . $row, $order_item->item->hs_code);             // HSコード
+                        $worksheet->setCellValue($colAA . $row, $order_item->shipping_quantity);        // 個数
+                        $worksheet->setCellValue($colAB . $row, $order->ship_country_code == 'US' 
+                            ? $order_item->order_item_unit_price / 1.6 
+                            : $order_item->order_item_unit_price
+                        );                                                                              // 単価(USの場合だけ/1.6している)
+                        $worksheet->setCellValue($colAC . $row, 'JPY');                                 // 通貨単位
+                        $worksheet->setCellValue($colAE . $row, $order_item->item->country_of_origin);  // 原産国
+                        // オフセットに+7する（右に7列分ずらすため）
+                        $column_offset += 7;
+                    }
+                    // データを書き込む位置をカウントアップ
+                    $row++;
                 }
-                // データを書き込む位置をカウントアップ
-                $row++;
             }
             // ファイルの保存先パスを取得
             $file_path = Storage::disk('public')->path('nifuda/'.$directory_name.'/【'.sprintf('%02d', $make_file_count).'】'.$download_filename);

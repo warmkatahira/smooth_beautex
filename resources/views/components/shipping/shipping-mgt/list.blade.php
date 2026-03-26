@@ -21,6 +21,7 @@
                     <th class="font-thin py-1 px-2 text-center">配送方法</th>
                     <th class="font-thin py-1 px-2 text-center">配送希望日</th>
                     <th class="font-thin py-1 px-2 text-center">配送希望時間</th>
+                    <th class="font-thin py-1 px-2 text-center">出荷個口No</th>
                     <th class="font-thin py-1 px-2 text-center">配送伝票番号</th>
                     @can('warm_check')
                         <th class="font-thin py-1 px-2 text-center">出荷検品完了日時</th>
@@ -45,6 +46,7 @@
                     <x-filter.select-delivery-company id="filter_shipping_method_id" name="filter_shipping_method_id" :deliveryCompanies="$deliveryCompanies" />
                     <x-filter.input type="date" id="filter_desired_delivery_date" name="filter_desired_delivery_date" />
                     <x-filter.input type="tel" id="filter_desired_delivery_time" name="filter_desired_delivery_time" />
+                    <x-filter.input type="tel" id="filter_package_count" name="filter_package_count" />
                     <x-filter.input type="tel" id="filter_tracking_no" name="filter_tracking_no" />
                 </tr>
             </thead>
@@ -85,6 +87,7 @@
                             @endif
                         </td>
                         <td class="py-1 px-2 border">{{ $order->desired_delivery_time }}</td>
+                        <td class="py-1 px-2 border text-right">{{ $order->package_count }}</td>
                         <td class="py-1 px-2 border text-center">
                             @foreach(TrackingNoUrlMakeFunc::make($order) as $key => $value)
                                 <a href="{{ $value }}" class="underline text-blue-500" target="_blank" rel="noopener noreferrer">{{ $key }}</a>

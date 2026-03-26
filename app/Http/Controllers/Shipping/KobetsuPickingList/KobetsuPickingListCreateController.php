@@ -26,22 +26,4 @@ class KobetsuPickingListCreateController extends Controller
             'orders' => $orders,
         ]);
     }
-
-    public function create_specify_order(Request $request)
-    {
-        try{
-            // インスタンス化
-            $OrderDocumentService = new OrderDocumentService;
-            // 出力内容を取得
-            $orders = $OrderDocumentService->getIssueOrderByOrderControlId($request->order_control_id);
-        }catch (\Exception $e){
-            return redirect()->back()->with([
-                'alert_type' => 'error',
-                'alert_message' => $e->getMessage(),
-            ]);
-        }
-        return view('shipping.document.kobetsu_picking_list')->with([
-            'orders' => $orders,
-        ]);
-    }
 }

@@ -57,7 +57,13 @@ class OrderSearchService extends BaseFilterService
     protected function baseQuery()
     {
         return Order::where('order_status_id', session('filter_order_status_id'))
-                    ->with(['order_items.item', 'order_category.mall', 'shipping_method.delivery_company']);
+                    ->with(['order_items.item', 'order_category.mall', 'shipping_method.delivery_company'])
+                    ->leftJoin('order_items', 'order_items.order_control_id', '=', 'orders.order_control_id')
+                    ->groupBy('orders.order_control_id')
+                    ->select([
+                        'orders.*',
+                        DB::raw('COUNT(DISTINCT order_items.package_no) as package_count'),
+                    ]);
     }
 
     // LIKEキー
@@ -104,6 +110,10 @@ class OrderSearchService extends BaseFilterService
             'filter_shipping_date_from' => function ($query, $value) {
                 $query->whereDate('shipping_date', '>=', session('filter_shipping_date_from'))
                     ->whereDate('shipping_date', '<=', session('filter_shipping_date_to'));
+            },
+            // 出荷個口No
+            'filter_package_count' => function ($query, $value) {
+                $query->having(DB::raw('COUNT(DISTINCT order_items.package_no)'), '=', $value);
             },
         ];
     }

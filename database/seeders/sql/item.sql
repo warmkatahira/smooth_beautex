@@ -14,4 +14,7 @@ INSERT INTO `items` (`item_code`, `item_jan_code`, `item_name`, `item_category_1
 
 ('4582540545228', '4582540545228', 'パープル [Trompe-l‘oeil] | 1day - ±0.00', 'カラーコンタクトレンズ', 'Trompe-l‘oeil', true, NULL, 16, 20, 10, NULL, NULL, NULL, NULL, 1, 'no_image.png', 'TW', '900130', 40, 12),
 ('4573679521252', '4573679521252', '1dayイエロー [Trompe-l‘oeil] |  - ±0.00', 'カラーコンタクトレンズ', 'Trompe-l‘oeil', true, NULL, 16, 20, 10, NULL, NULL, NULL, NULL, 1, 'no_image.png', 'TW', '900130', 40, 13),
-('4560487688802', '4560487688802', 'クリームベージュ [LILMOON] | 1day - 10枚入 / -7.50', 'カラーコンタクトレンズ', 'LILMOON', true, NULL, 16, 20, 10, NULL, NULL, NULL, NULL, 1, 'no_image.png', 'TW', '900130', 40, 14);
+('4560487688802', '4560487688802', 'クリームベージュ [LILMOON] | 1day - 10枚入 / -7.50', 'カラーコンタクトレンズ', 'LILMOON', true, NULL, 16, 20, 10, NULL, NULL, NULL, NULL, 1, 'no_image.png', 'TW', '900130', 40, 14),
+
+('4573636320614', '4573636320614', 'パンデイアムルビット [YOUS] | 1month - -3.00', 'カラーコンタクトレンズ', 'YOUS', true, NULL, 16, 20, 10, NULL, NULL, NULL, NULL, 1, 'no_image.png', 'TW', '900130', 40, 15),
+('4573636320645', '4573636320645', 'パンデイアムルビット [YOUS] | 1month - -3.75', 'カラーコンタクトレンズ', 'YOUS', true, NULL, 16, 20, 10, NULL, NULL, NULL, NULL, 1, 'no_image.png', 'TW', '900130', 40, 16);

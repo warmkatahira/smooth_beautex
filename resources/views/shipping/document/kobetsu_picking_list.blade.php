@@ -11,7 +11,8 @@
                 $order_count++;
             @endphp
             <div style="{{ $order_count != 1 ? 'page-break-before: always; padding-top: 0mm;' : '' }}">
-                <div class="flex justify-end">
+                <div class="flex justify-between items-start">
+                    <span>発行日時：{{ CarbonImmutable::now()->isoFormat('Y/MM/DD HH:mm:ss') }}</span>
                     <span>{!! DNS2D::getBarcodeSVG($order->order_control_id, "QRCODE", 1.5, 1.5, 'black') !!}</span>
                 </div>
                 <div class="text-center">
@@ -28,7 +29,7 @@
                             $desired_delivery_date = CarbonImmutable::parse($order->desired_delivery_date)->isoFormat('Y年MM月DD日(ddd)');
                         }
                     @endphp
-                    <x-shipping.kobetsu-picking-list.info-div label="発行日時" :value="CarbonImmutable::now()->isoFormat('Y/MM/DD HH:mm:ss')" />
+                    <x-shipping.kobetsu-picking-list.info-div label="出荷個口No" :value="$order->package_no" />
                     <x-shipping.kobetsu-picking-list.info-div label="出荷グループ名" :value="$order->shipping_group?->shipping_group_name" />
                     <x-shipping.kobetsu-picking-list.info-div label="注文番号" :value="$order->order_no" />
                     <x-shipping.kobetsu-picking-list.info-div label="受注管理ID" :value="$order->order_control_id" />
