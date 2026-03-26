@@ -46,7 +46,6 @@ class StockDownloadService
                             // 各在庫数をセット
                             $row[] = $stock->{'total_stock_'.$base->base_id} ?? 0;
                             $row[] = $stock->{'total_shipping_quantity_'.$base->base_id} ?? 0;
-                            $row[] = $stock->{'available_stock_'.$base->base_id} ?? 0;
                         }
                     }
                     // 在庫単位表示の場合
@@ -63,7 +62,6 @@ class StockDownloadService
                             $stock->lot,
                             "'".formatExp($stock->exp),
                             $stock->total_stock,
-                            $stock->available_stock,
                         ];
                     }
                     fputcsv($handle, $row);

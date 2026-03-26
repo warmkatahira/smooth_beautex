@@ -17,9 +17,8 @@
                     <th class="font-thin py-1 px-2 text-center">商品カテゴリ2</th>
                     <th class="font-thin py-1 px-2 text-center">在庫管理</th>
                     @foreach($bases as $base)
-                        <th class="font-thin py-1 px-2 text-center">全在庫数</th>
+                        <th class="font-thin py-1 px-2 text-center">在庫数</th>
                         <th class="font-thin py-1 px-2 text-center">受注数</th>
-                        <th class="font-thin py-1 px-2 text-center">有効在庫数</th>
                     @endforeach
                 </tr>
                 <tr class="filter-row sticky top-0 bg-white z-10 h-8">
@@ -49,7 +48,6 @@
                         @foreach ($bases as $base)
                             <td style="--base-color: {{ $base->base_color_code }};" class="py-1 px-2 border text-right bg-[var(--base-color)] group-hover:bg-theme-sub">{{ number_format($stock->{'total_stock_'.$base->base_id}) }}</td>
                             <td style="--base-color: {{ $base->base_color_code }};" class="py-1 px-2 border text-right bg-[var(--base-color)] group-hover:bg-theme-sub">{{ number_format($stock->{'total_shipping_quantity_'.$base->base_id}) }}</td>
-                            <td style="--base-color: {{ $base->base_color_code }};" class="py-1 px-2 border text-right bg-[var(--base-color)] group-hover:bg-theme-sub">{{ number_format($stock->{'available_stock_'.$base->base_id}) }}</td>
                         @endforeach
                     </tr>
                 @endforeach

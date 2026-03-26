@@ -25,10 +25,8 @@ class InputStockOperationEnterController extends Controller
                 $StockHistoryCreateService = new StockHistoryCreateService;
                 // 在庫操作するデータを取得
                 $stock_update_arr = $InputStockOperationEnterService->getOperationData($request->quantity);
-                // stocksにレコードがない在庫を追加
-                $InputStockOperationEnterService->createNoStockRecord($stock_update_arr);
-                // 在庫操作するデータを整理
-                $stock_update_arr = $InputStockOperationEnterService->updateStockUpdateArr($stock_update_arr);
+                // 操作対象の在庫をロック
+                $InputStockOperationEnterService->lockStock($stock_update_arr);
                 // 在庫操作できる内容か確認
                 $InputStockOperationEnterService->check($stock_update_arr);
                 // 在庫数を更新

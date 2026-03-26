@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('lot', 20)->nullable();
             $table->string('exp', 6)->nullable();
             $table->unsignedInteger('total_stock')->default(0);
-            $table->unsignedInteger('available_stock')->default(0);
             $table->string('item_location', 20)->nullable();
             $table->timestamps();
             // 外部キー

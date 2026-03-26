@@ -19,8 +19,6 @@ class OrderDeleteController extends Controller
                 $OrderDeleteService = new OrderDeleteService;
                 // 削除できる受注であるか確認
                 $OrderDeleteService->checkDeletable($request->chk);
-                // 引当済みの在庫数を戻す
-                $OrderDeleteService->incrementAllocatedStockBackToAvailableStock($request->chk);
                 // 受注を削除
                 $OrderDeleteService->deleteOrder($request->chk);
             });

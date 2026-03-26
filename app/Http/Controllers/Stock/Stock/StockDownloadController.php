@@ -24,7 +24,8 @@ class StockDownloadController extends Controller
         $StockDownloadService = new StockDownloadService;
         // 検索結果を取得
         $result = $ItemSearchService->getSearchResult();
-        $result = $StockSearchService->getSearchResult($result, $request->route_name);
+        // 検索結果を取得して集計
+        $result = $StockSearchService->getSearchResultAndAggregateData($result, $request->route_name);
         // ダウンロードするデータを取得
         $response = $StockDownloadService->getDownloadData($result['stocks'], $result['bases'], $request->route_name);
         // ダウンロード処理

@@ -130,8 +130,8 @@ class AutoProcessApplyService
         if($item->is_stock_managed){
             // 追加する商品の在庫を取得
             $stock = Stock::getSpecifyByBaseIdItemId($order->shipping_base_id, $item->item_id)->lockForUpdate()->first();
-            // 在庫レコードが存在しないまたは、有効在庫数が注文数よりも小さい場合
-            if(empty($stock) || $stock->available_stock < $auto_process->auto_process_order_item->order_quantity){
+            // 在庫レコードが存在しない場合
+            if(empty($stock)){
                 // 処理を抜ける
                 return;
             }
@@ -147,10 +147,5 @@ class AutoProcessApplyService
             'order_quantity'        => $auto_process->auto_process_order_item->order_quantity,
             'is_auto_process_add'   => 1,
         ]);
-        // 在庫管理を行っている場合
-        if($item->is_stock_managed){
-            // 有効在庫数から注文数を引く
-            $stock->decrement('available_stock', $auto_process->auto_process_order_item->order_quantity);
-        }
     }
 }

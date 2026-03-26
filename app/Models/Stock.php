@@ -15,7 +15,6 @@ class Stock extends Model
         'base_id',
         'item_id',
         'total_stock',
-        'available_stock',
         'item_location',
     ];
     // 全てのレコードを取得
@@ -64,9 +63,8 @@ class Stock extends Model
             // 倉庫の分だけループ処理
             foreach($bases as $base){
                 // ヘッダーをセット
-                $header[] = $base->base_name.'(全在庫数)';
+                $header[] = $base->base_name.'(在庫数)';
                 $header[] = $base->base_name.'(受注数)';
-                $header[] = $base->base_name.'(有効在庫数)';
             }
             return $header;
         }
@@ -83,8 +81,7 @@ class Stock extends Model
                 '在庫管理',
                 'LOT',
                 'EXP',
-                '全在庫数',
-                '有効在庫数',
+                '在庫数',
             ];
         }
     }

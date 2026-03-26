@@ -2,82 +2,40 @@
 
 namespace App\Services\Stock\InputStockOperation;
 
+// モデル
 use App\Models\Stock;
+use App\Models\OrderItem;
+// 列挙
+use App\Enums\OrderStatusEnum;
 
 class InputStockOperationEnterService
 {
     // 在庫操作するデータを取得
     public function getOperationData($quantity)
     {
-        // 倉庫の分だけループ処理
-        foreach($quantity as $base_id => $arr){
-            // 値がnull又は0の要素を取り除く
-            $quantity[$base_id] = array_filter($arr);
-        }
-        // 配列からnullの要素を取り除く
+        // 値がnull又は0の要素を取り除く
         $quantity = array_filter($quantity);
         // 在庫操作する内容を格納する配列を初期化
         $stock_update_arr = [];
-        // 倉庫の分だけループ処理
-        foreach($quantity as $base_id => $arr){
-            // 商品の分だけループ処理
-            foreach($arr as $item_id => $quantity){
-                // 配列に情報を格納
-                $stock_update_arr[] = [
-                    'base_id' => $base_id,
-                    'item_id' => $item_id,
-                    'quantity' => $quantity,
-                ];
-            }
+        // stock_idの分だけループ処理
+        foreach($quantity as $stock_id => $qty){
+            $stock_update_arr[] = [
+                'stock_id' => $stock_id,
+                'quantity' => $qty,
+            ];
         }
         return $stock_update_arr;
     }
 
-    // stocksにレコードがない在庫を追加
-    public function createNoStockRecord($stock_update_arr)
+    // 操作対象の在庫をロック
+    public function lockStock($stock_update_arr)
     {
-        // 在庫操作する分だけループ処理
-        foreach($stock_update_arr as $stock_update){
-            // 倉庫IDと商品IDを指定して在庫を取得
-            $stock = Stock::getSpecifyByBaseIdItemId($stock_update['base_id'], $stock_update['item_id'])->first();
-            // レコードが取得できていない場合
-            if(is_null($stock)){
-                // レコードを追加
-                Stock::create([
-                    'base_id' => $stock_update['base_id'],
-                    'item_id' => $stock_update['item_id'],
-                ]);
-            }
-        }
-        // 操作対象の在庫をロック
-        Stock::where(function ($query) use ($stock_update_arr) {
-            foreach ($stock_update_arr as $condition) {
-                $query->orWhere(function ($q) use ($condition) {
-                    $q->where('base_id', $condition['base_id'])
-                    ->where('item_id', $condition['item_id']);
-                });
-            }
-        })
-        ->lockForUpdate()
-        ->get();
-    }
-
-    // 在庫操作するデータを整理
-    public function updateStockUpdateArr($stock_update_arr)
-    {
-        // 整理後に情報を格納する配列を初期化
-        $arr = [];
-        // 在庫操作する分だけループ処理
-        foreach($stock_update_arr as $stock_update){
-            // 倉庫IDと商品IDを指定して在庫を取得
-            $stock = Stock::getSpecifyByBaseIdItemId($stock_update['base_id'], $stock_update['item_id'])->first();
-            // 配列に情報を格納
-            $arr[] = [
-                'stock_id' => $stock->stock_id,
-                'quantity' => $stock_update['quantity'],
-            ];
-        }
-        return $arr;
+        // stock_idを取得
+        $stock_ids = array_column($stock_update_arr, 'stock_id');
+        // 操作する在庫をロック
+        Stock::whereIn('stock_id', $stock_ids)
+                    ->lockForUpdate()
+                    ->get();
     }
 
     // 在庫操作できる内容か確認
@@ -89,20 +47,39 @@ class InputStockOperationEnterService
             $stock = Stock::getSpecify($stock_update['stock_id'])->with('base')->with('item')->first();
             // 数量がマイナスの場合
             if($stock_update['quantity'] < 0){
-                // 全在庫数がマイナスになる数量ではないか(絶対値で比較している)
-                if($stock->total_stock < abs($stock_update['quantity'])){
-                    throw new \RuntimeException("全在庫数がマイナスになる数量が入力されている箇所があります。\n".
+                // 商品×倉庫単位の合計在庫数を取得
+                $total_stock = Stock::where('base_id', $stock->base_id)
+                                    ->where('item_id', $stock->item_id)
+                                    ->sum('total_stock');
+                // 在庫数がマイナスになる数量ではないか(絶対値で比較している)
+                if($total_stock < abs($stock_update['quantity'])){
+                    throw new \RuntimeException("在庫数がマイナスになる数量が入力されている箇所があります。\n".
                                                 "倉庫名:".$stock->base->base_name."\n".
                                                 "商品コード：".$stock->item->item_code."\n".
                                                 "商品名：".$stock->item->item_name
                                             );
                 }
-                // 有効在庫数がマイナスになる数量ではないか(絶対値で比較している)
-                if($stock->available_stock < abs($stock_update['quantity'])){
-                    throw new \RuntimeException("有効在庫数がマイナスになる数量が入力されている箇所があります。\n".
+                // 出荷前の受注で引き当たっている数量を取得
+                $already_allocated = OrderItem::join('orders', 'orders.order_control_id', 'order_items.order_control_id')
+                                        ->join('items', 'items.item_code', '=', 'order_items.order_item_code')
+                                        ->where('orders.shipping_base_id', $stock->base_id)
+                                        ->where('items.item_id', $stock->item_id)
+                                        ->where('orders.order_status_id', '<', OrderStatusEnum::SHUKKA_ZUMI)
+                                        ->whereRaw('order_items.shipping_quantity - order_items.unallocated_quantity > 0')
+                                        ->selectRaw('SUM(order_items.shipping_quantity - order_items.unallocated_quantity) as allocated_quantity')
+                                        ->value('allocated_quantity') ?? 0;
+                // 操作後の在庫数を計算
+                $after_total_stock = $total_stock + $stock_update['quantity'];
+                // 操作後の在庫数が引当済み数量を下回る場合
+                if($after_total_stock < $already_allocated){
+                    throw new \RuntimeException("引当済み数量を下回る数量が入力されている箇所があります。\n".
                                                 "倉庫名:".$stock->base->base_name."\n".
                                                 "商品コード：".$stock->item->item_code."\n".
-                                                "商品名：".$stock->item->item_name
+                                                "商品名：".$stock->item->item_name."\n".
+                                                "現在の在庫数：".$total_stock."\n".
+                                                "操作数量：".$stock_update['quantity']."\n".
+                                                "引当済み数量：".$already_allocated."\n".
+                                                "操作後の在庫数：".$after_total_stock
                                             );
                 }
             }

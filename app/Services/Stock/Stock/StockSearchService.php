@@ -49,7 +49,6 @@ class StockSearchService
                     'item_id',
                     'base_id',
                     DB::raw('SUM(total_stock) as total_stock'),
-                    DB::raw('SUM(available_stock) as available_stock'),
                 )
                 ->groupBy('item_id', 'base_id');
             $query = $query->leftJoinSub($stocks_sub_query, 'stocks', function($join){
@@ -109,7 +108,6 @@ class StockSearchService
             foreach ($bases as $base){
                 $query->addSelect(DB::raw("
                     SUM(CASE WHEN item_base.base_id = '{$base->base_id}' THEN stocks.total_stock ELSE 0 END) as total_stock_{$base->base_id},
-                    SUM(CASE WHEN item_base.base_id = '{$base->base_id}' THEN stocks.available_stock ELSE 0 END) as available_stock_{$base->base_id},
                     SUM(CASE WHEN item_base.base_id = '{$base->base_id}' THEN shipping_quantity_sub_query.total_shipping_quantity ELSE 0 END) as total_shipping_quantity_{$base->base_id}
                 "));
             }
@@ -141,10 +139,10 @@ class StockSearchService
                 'item_base.base_name',
                 'item_base.base_color_code',
                 DB::raw('IFNULL(stocks.total_stock, 0) as total_stock'),
-                DB::raw('IFNULL(stocks.available_stock, 0) as available_stock'),
                 'stocks.item_location',
                 'stocks.lot',
                 'stocks.exp',
+                'stocks.stock_id',
             );
             // グループ化
             $query = $query->orderBy('item_base.base_sort_order', 'asc')

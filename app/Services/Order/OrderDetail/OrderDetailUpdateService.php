@@ -31,35 +31,6 @@ class OrderDetailUpdateService
         }
     }
 
-    // 引当済みの在庫数を戻す
-    public function incrementAllocatedStockBackToAvailableStock($order)
-    {
-        // 在庫をロック
-        Order::getSpecifyByOrderControlId($order->order_control_id)
-                ->join('order_items', 'order_items.order_control_id', 'orders.order_control_id')
-                ->join('items', 'items.item_code', 'order_items.order_item_code')
-                ->join('stocks', 'stocks.item_id', 'items.item_id')
-                ->where('stocks.base_id', $order->shipping_base_id)
-                ->lockForUpdate()
-                ->get();
-        // order_itemsの分だけループ処理
-        foreach($order->order_items as $order_item){
-            // 引当済みの在庫数を有効在庫数に加算（戻す）
-            Stock::where('base_id', $order->shipping_base_id)
-                ->where('item_id', $order_item->item->item_id)
-                ->increment('available_stock', ($order_item->shipping_quantity - $order_item->unallocated_quantity));
-            // 在庫引当状態を初期化
-            $order_item->update([
-                'is_stock_allocated'    => 0,
-                'unallocated_quantity'  => DB::raw("shipping_quantity"),
-            ]);
-            // 在庫引当状態を初期化
-            $order_item->update([
-                'is_stock_allocated'    => 0,
-            ]);
-        }
-    }
-
     // 出荷倉庫を更新
     public function updateShippingBase($request, $order)
     {

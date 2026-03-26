@@ -30,8 +30,6 @@ class OrderDetailUpdateController extends Controller
                 $order = $OrderDetailUpdateService->getOrder($request);
                 // 出荷倉庫を更新できるか確認
                 $OrderDetailUpdateService->checkUpdatableShippingBase($order);
-                // 引当済みの在庫数を戻す
-                $OrderDetailUpdateService->incrementAllocatedStockBackToAvailableStock($order);
                 // 出荷倉庫を更新
                 $OrderDetailUpdateService->updateShippingBase($request, $order);
             });

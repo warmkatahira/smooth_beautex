@@ -17,4 +17,5 @@ INSERT INTO `items` (`item_code`, `item_jan_code`, `item_name`, `item_category_1
 ('4560487688802', '4560487688802', 'クリームベージュ [LILMOON] | 1day - 10枚入 / -7.50', 'カラーコンタクトレンズ', 'LILMOON', true, NULL, 16, 20, 10, NULL, NULL, NULL, NULL, 1, 'no_image.png', 'TW', '900130', 40, 14),
 
 ('4573636320614', '4573636320614', 'パンデイアムルビット [YOUS] | 1month - -3.00', 'カラーコンタクトレンズ', 'YOUS', true, NULL, 16, 20, 10, NULL, NULL, NULL, NULL, 1, 'no_image.png', 'TW', '900130', 40, 15),
-('4573636320645', '4573636320645', 'パンデイアムルビット [YOUS] | 1month - -3.75', 'カラーコンタクトレンズ', 'YOUS', true, NULL, 16, 20, 10, NULL, NULL, NULL, NULL, 1, 'no_image.png', 'TW', '900130', 40, 16);
+('4573636320645', '4573636320645', 'パンデイアムルビット [YOUS] | 1month - -3.75', 'カラーコンタクトレンズ', 'YOUS', true, NULL, 16, 20, 10, NULL, NULL, NULL, NULL, 1, 'no_image.png', 'TW', '900130', 40, 16),
+('4580750309562', '4580750309562', "シフォンブラウン [Chu's me] | 1month - -5.00", 'カラーコンタクトレンズ', "Chu's me", true, NULL, 16, 20, 10, NULL, NULL, NULL, NULL, 1, 'no_image.png', 'TW', '900130', 40, 17);

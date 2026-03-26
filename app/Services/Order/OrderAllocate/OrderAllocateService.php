@@ -172,43 +172,43 @@ class OrderAllocateService
         ]);
         // 在庫引当の条件を満たしていて在庫管理している商品のレコードを取得(注文番号で昇順をかけている)
         $stock_allocate_orders = Order::join('order_items', 'order_items.order_control_id', 'orders.order_control_id')
-                                    ->join('items', 'items.item_code', 'order_items.order_item_code')
+                                    ->join('items', 'items.item_code', '=', 'order_items.order_item_code')
                                     ->whereIn('orders.order_control_id', $allocate_orders)
                                     ->where('order_items.is_stock_allocated', 0)
                                     ->where('items.is_stock_managed', 1)
-                                    ->select('order_item_id', 'shipping_base_id', 'item_id', 'unallocated_quantity')
-                                    ->orderBy('order_no', 'asc')
+                                    ->select('order_items.order_item_id', 'orders.shipping_base_id', 'items.item_id', 'order_items.unallocated_quantity')
+                                    ->orderBy('orders.order_no', 'asc')
                                     ->get();
         // 引当対象の分だけループ
         foreach($stock_allocate_orders as $stock_allocate_order){
             // 引当対象のレコードを取得
             $order_item = OrderItem::getSpecify($stock_allocate_order->order_item_id)->first();
-            // 出荷倉庫IDと商品IDを条件に有効在庫数が1以上の在庫を取得
-            $stocks = Stock::where('base_id', $stock_allocate_order->shipping_base_id)
-                        ->where('item_id', $stock_allocate_order->item_id)
-                        ->where('available_stock', '>', 0)
-                        ->orderBy('exp', 'asc')
-                        ->get();
-            // 在庫の分だけループ処理
-            foreach($stocks as $stock){
-                // 引当残がなければ、ループを抜ける
-                if($order_item->unallocated_quantity <= 0) break;
-                // 有効在庫数が引当残以上の場合
-                if($stock->available_stock >= $order_item->unallocated_quantity){
-                    // 有効在庫数を減算
-                    $stock->decrement('available_stock', $order_item->unallocated_quantity);
-                    // 受注詳細を更新
-                    $order_item->update([
-                        'is_stock_allocated'   => 1,
-                        'unallocated_quantity' => 0,
-                    ]);
-                    break;
-                }else{
-                    // 引当残を有効在庫数の分だけ減算
-                    $order_item->decrement('unallocated_quantity', $stock->available_stock);
-                    // 有効在庫数を0に更新
-                    $stock->update(['available_stock' => 0]);
-                }
+            // item×baseの合計在庫数を取得
+            $total_stock = Stock::where('base_id', $stock_allocate_order->shipping_base_id)
+                                ->where('item_id', $stock_allocate_order->item_id)
+                                ->sum('total_stock');
+            // 注文ステータスが出荷前で引き当てされている数量を取得
+            $already_allocated = OrderItem::join('orders', 'orders.order_control_id', 'order_items.order_control_id')
+                                        ->join('items', 'items.item_code', '=', 'order_items.order_item_code')
+                                        ->where('orders.shipping_base_id', $stock_allocate_order->shipping_base_id)
+                                        ->where('items.item_id', $stock_allocate_order->item_id)
+                                        ->where('orders.order_status_id', '<', OrderStatusEnum::SHUKKA_ZUMI)
+                                        ->whereNotIn('orders.order_control_id', $allocate_orders)
+                                        ->whereRaw('order_items.shipping_quantity - order_items.unallocated_quantity > 0')
+                                        ->selectRaw('SUM(order_items.shipping_quantity - order_items.unallocated_quantity) as allocated_quantity')
+                                        ->value('allocated_quantity') ?? 0;
+            // 引当可能残数を計算
+            $available_quantity = $total_stock - $already_allocated;
+            // 引当可能残数が今回引き当てたい数量以上の場合
+            if($available_quantity >= $order_item->unallocated_quantity){
+                // 全数引当OK
+                $order_item->update([
+                    'is_stock_allocated'   => 1,
+                    'unallocated_quantity' => 0,
+                ]);
+            }elseif($available_quantity > 0){
+                // 一部だけ引当OKなので、引当残を引当可能残数だけ減らす
+                $order_item->decrement('unallocated_quantity', $available_quantity);
             }
         }
     }

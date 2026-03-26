@@ -83,9 +83,9 @@ class ShippingWorkEndService
         $locked_stocks = Stock::whereIn('stock_id', $stock_ids)->lockForUpdate()->get();
         // 更新対象の在庫の分だけループ処理
         foreach($stocks as $stock){
-            // 全在庫数を減らす対象を取得
+            // 在庫数を減らす対象を取得
             $locked_stock = $locked_stocks->where('stock_id', $stock['stock_id'])->first();
-            // 全在庫数より出荷数の方が大きければエラーを返す
+            // 在庫数より出荷数の方が大きければエラーを返す
             if($locked_stock->total_stock < abs($stock['quantity'])){
                 throw new ShippingWorkEndException("在庫数がマイナスになる在庫があるため、出荷完了を中断しました。\n".
                         "出荷倉庫：".$stock['base_name']."\n".
@@ -93,7 +93,7 @@ class ShippingWorkEndService
                         "出荷数:".$stock['quantity'],
                         $order_control_ids->count(), 0);
             }
-            // 全在庫数から出荷数を引く（マイナス符号がついているので、incrementにしている）
+            // 在庫数から出荷数を引く（マイナス符号がついているので、incrementにしている）
             $locked_stock->increment('total_stock', $stock['quantity']);
         }
         return $stocks;
