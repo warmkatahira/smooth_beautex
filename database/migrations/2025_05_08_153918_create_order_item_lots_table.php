@@ -15,6 +15,7 @@ return new class extends Migration
             $table->increments('order_item_lot_id');
             $table->unsignedInteger('order_item_id');
             $table->string('lot', 20);
+            $table->string('exp', 6);
             $table->unsignedInteger('quantity');
             $table->timestamps();
             // 外部キー

@@ -6,6 +6,9 @@ use Illuminate\Foundation\Http\FormRequest;
 use App\Http\Requests\BaseRequest;
 // モデル
 use App\Models\Stock;
+use App\Models\OrderItemLot;
+// 列挙
+use App\Enums\OrderStatusEnum;
 
 class StockUpdateRequest extends BaseRequest
 {
@@ -25,6 +28,19 @@ class StockUpdateRequest extends BaseRequest
             // 取得できなかった場合
             if(!$stock){
                 // 処理を抜ける
+                return;
+            }
+            // 出荷作業中のLOT・EXPは変更不可
+            $locked = OrderItemLot::where('lot', $stock->lot)
+                                    ->where('exp', $stock->exp)
+                                    ->whereHas('order_item.order', function ($query) {
+                                        $query->where('order_status_id', OrderStatusEnum::SAGYO_CHU);
+                                    })
+                                    ->exists();
+            // 出荷作業中の場合
+            if($locked){
+                // エラーを返す
+                $validator->errors()->add('lot', '出荷検品でスキャンされたLOT・EXPは変更できません。');
                 return;
             }
             // 同じ組み合わせの在庫が存在するか確認

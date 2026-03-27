@@ -12,6 +12,7 @@ class OrderItemLot extends Model
     protected $fillable = [
         'order_item_id',
         'lot',
+        'exp',
         'quantity',
     ];
     // 指定したレコードを取得
