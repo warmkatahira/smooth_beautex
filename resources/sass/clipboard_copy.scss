@@ -1,0 +1,18 @@
+@use 'color' as color;
+
+// クリップボードコピー時に表示される表示のスタイル
+.clipboard_copy_success_msg {
+    display: none;
+    position: fixed;
+    width: 150px;
+    height: 40px;
+    line-height: 40px;
+    background-color: color.$tippy;
+    color: #fff;
+    top: 100px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    text-align: center;
+    border-radius: 5px;
+}

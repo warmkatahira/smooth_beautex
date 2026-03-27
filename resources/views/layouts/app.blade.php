@@ -32,6 +32,7 @@
             'resources/sass/dropdown.scss',
             'resources/sass/profile/profile_image.scss',
             'resources/sass/height_adjustment.scss',
+            'resources/sass/clipboard_copy.scss',
         ])
 
         <!-- Scripts -->
@@ -45,6 +46,7 @@
             'resources/js/file_select.js',
             'resources/js/checkbox.js',
             'resources/js/filter.js',
+            'resources/js/clipboard_copy.js',
         ])
 
         <!-- Select2 -->

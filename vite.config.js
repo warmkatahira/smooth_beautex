@@ -13,6 +13,7 @@ export default defineConfig({
                 'resources/js/search.js',
                 'resources/js/file_select.js',
                 'resources/js/search_date.js',
+                'resources/js/clipboard_copy.js',
                 'resources/sass/loading.scss',
                 'resources/sass/navigation.scss',
                 'resources/js/dropdown.js',
@@ -24,6 +25,7 @@ export default defineConfig({
                 'resources/sass/height_adjustment.scss',
                 'resources/sass/welcome.scss',
                 'resources/sass/common.scss',
+                'resources/sass/clipboard_copy.scss',
                 // 認証
                 'resources/js/auth/register.js',
                 // ダッシュボード

@@ -52,5 +52,8 @@
             <i id="{{ $openModalId }}" class="{{ $modalTippy }} las la-edit ml-auto pr-2 la-lg cursor-pointer"></i>
         @endif
     </div>
-    <p class="w-7/12 py-1 pl-3 bg-theme-sub">{!! nl2br(e($value)) !!}</p>
+    <div class="flex flex-row w-7/12 bg-theme-sub items-center relative group/clipboard">
+        <p class="py-1 pl-3">{!! nl2br(e($value)) !!}</p>
+        <x-clipboard-copy-btn :value="$value" :label="$label" />
+    </div>
 </div>

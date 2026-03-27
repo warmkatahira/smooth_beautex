@@ -11,10 +11,11 @@
         <p class="w-7/12 py-1 bg-theme-sub"></p>
     @endif
     @if(!is_null($order->tracking_no))
-        <div class="w-7/12 bg-theme-sub flex flex-col">
+        <div class="w-7/12 flex flex-row bg-theme-sub items-center relative group/clipboard">
             @foreach(TrackingNoUrlMakeFunc::make($order) as $key => $value)
                 <a href="{{ $value }}" class="py-1 pl-3 underline tippy_tracking_no_url" target="_blank" rel="noopener noreferrer">{{ $key }}</a>
             @endforeach
+            <x-clipboard-copy-btn :value="$order->tracking_no" label="配送伝票番号" />
         </div>
     @endif
 </div>
