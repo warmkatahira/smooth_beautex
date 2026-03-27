@@ -301,3 +301,10 @@ tippy('.tippy_supplement', {
     placement: 'right',
     theme: 'tippy_main_theme',
 });
+
+// LOTアコーディオン開閉
+$(document).on('click', '.lot_accordion_toggle', function(){
+    const target = $('#' + $(this).data('target'));
+    target.toggleClass('hidden');
+    $(this).toggleClass('la-angle-right la-angle-down');
+});

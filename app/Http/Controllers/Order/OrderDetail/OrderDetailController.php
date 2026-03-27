@@ -17,7 +17,7 @@ class OrderDetailController extends Controller
         // ページヘッダーをセッションに格納
         session(['page_header' => '受注詳細']);
         // 受注を取得
-        $order = Order::getSpecifyByOrderControlId($request->order_control_id)->with('order_items.item')->first();
+        $order = Order::getSpecifyByOrderControlId($request->order_control_id)->with(['order_items.item', 'order_items.order_item_lots'])->first();
         // 倉庫を取得
         $bases = Base::getAll()->get();
         // 運送会社を取得

@@ -4,7 +4,7 @@
     "name": "audio"
   },
   "resources/css/app.css": {
-    "file": "assets/app-Dr07vXYr.css",
+    "file": "assets/app-DSDd7zT7.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -96,7 +96,7 @@
     "isEntry": true
   },
   "resources/js/order/order_detail/order_detail.js": {
-    "file": "assets/order_detail-ChfQWDmQ.js",
+    "file": "assets/order_detail-CjYd4lnP.js",
     "name": "order_detail",
     "src": "resources/js/order/order_detail/order_detail.js",
     "isEntry": true,
