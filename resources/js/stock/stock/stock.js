@@ -35,3 +35,14 @@ $('.select_file input[type=file]').on("change",function(){
     // 要素をクリア
     $('.select_file').val(null);
 });
+
+// 更新ボタンを押下した場合
+$('#stock_update_enter').on("click",function(){
+    // 処理を実行するか確認
+    const result = window.confirm("更新を実行しますか？");
+    // 「はい」が押下されたらsubmit、「いいえ」が押下されたら処理キャンセル
+    if(result === true){
+        start_loading();
+        $("#stock_update_form").submit();
+    }
+});

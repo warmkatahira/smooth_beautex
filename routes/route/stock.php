@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 // +-+-+-+-+-+-+-+- 在庫 +-+-+-+-+-+-+-+-
 use App\Http\Controllers\Stock\Stock\StockController;
+use App\Http\Controllers\Stock\Stock\StockUpdateController;
 use App\Http\Controllers\Stock\Stock\StockDownloadController;
 // +-+-+-+-+-+-+-+- 入力在庫数操作 +-+-+-+-+-+-+-+-
 use App\Http\Controllers\Stock\InputStockOperation\InputStockOperationController;
@@ -27,6 +28,11 @@ Route::middleware('common')->group(function (){
         Route::get('download', 'download')->name('download');
     });
     Route::middleware(['warm_check'])->group(function () {
+        // +-+-+-+-+-+-+-+- 在庫更新 +-+-+-+-+-+-+-+-
+        Route::controller(StockUpdateController::class)->prefix('stock_update')->name('stock_update.')->group(function(){
+            Route::get('', 'index')->name('index');
+            Route::post('update', 'update')->name('update');
+        });
         // +-+-+-+-+-+-+-+- ロケーション更新 +-+-+-+-+-+-+-+-
         Route::controller(ItemLocationUpdateController::class)->prefix('item_location_update')->name('item_location_update.')->group(function(){
             Route::post('update', 'update')->name('update');

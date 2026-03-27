@@ -24,6 +24,8 @@ class BaseRequest extends FormRequest
             'max'                               => ":attributeは:max文字以内で入力して下さい。",
             'min'                               => ":attributeは:min以上で入力して下さい。",
             'sort_order.max'                    => ":attributeは:max以下で入力して下さい。",
+            'size'                              => ":attributeは:size文字で入力して下さい。",
+            'date_format'                       => ":attributeはyyyymm形式で入力して下さい。",
         ];
     }
 
@@ -58,6 +60,11 @@ class BaseRequest extends FormRequest
             'country_of_origin'             => '原産国',
             'hs_code'                       => 'HSコード',
             'item_weight_g'                 => '商品重量',
+            // 在庫
+            'stock_id'                  => '在庫',
+            'lot'                       => 'LOT',
+            'exo'                       => 'EXP',
+            'total_stock'               => '在庫数',
             // ユーザー情報
             'user_id'                   => 'ユーザーID',
             'last_name'                 => '姓',

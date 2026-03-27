@@ -3,6 +3,9 @@
         <table id="filter_table" class="text-xs" data-search-url="/stock/index_by_stock" data-scroll-target=".stock_list">
             <thead class="sticky top-0">
                 <tr class="text-left text-white bg-black whitespace-nowrap">
+                    @can('warm_check')
+                        <th class="font-thin py-1 px-2 text-center">操作</th>
+                    @endcan
                     <th class="font-thin py-1 px-2 text-center">商品画像</th>
                     <th class="font-thin py-1 px-2 text-center">倉庫名</th>
                     <th class="font-thin py-1 px-2 text-center">商品コード</th>
@@ -17,6 +20,7 @@
                     <th class="font-thin py-1 px-2 text-center">在庫数</th>
                 </tr>
                 <tr class="filter-row sticky top-0 bg-white z-10 h-8">
+                    <th></th>
                     <th></th>
                     <x-filter.select id="filter_base_id" name="filter_base_id" :selectItems="$bases" optionValue="base_id" optionText="base_name" />
                     <x-filter.input type="tel" id="filter_item_code" name="filter_item_code" />
@@ -33,6 +37,13 @@
             <tbody class="bg-white">
                 @foreach($stocks as $stock)
                     <tr style="--base-color: {{ $stock->base_color_code }};"  class="bg-[var(--base-color)] text-left cursor-default whitespace-nowrap hover:bg-theme-sub">
+                        @can('warm_check')
+                            <td class="py-1 px-2 border">
+                                <div class="flex flex-row gap-5">
+                                    <a href="{{ route('stock_update.index', ['stock_id' => $stock->stock_id]) }}" class="btn rounded bg-btn-enter text-white py-1 px-2">更新</a>
+                                </div>
+                            </td>
+                        @endcan
                         <td class="py-1 px-2 border">
                             <img class="w-10 h-10 mx-auto image_fade_in_modal_open" src="{{ asset('storage/item_images/'.$stock->item_image_file_name) }}">
                         </td>
