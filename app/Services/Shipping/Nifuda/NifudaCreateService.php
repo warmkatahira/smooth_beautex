@@ -140,7 +140,12 @@ class NifudaCreateService
                                                 fn($item) => ($item->item->item_weight_g ?? 0) * $item->shipping_quantity
                                             ));                                                                                 // 総重量
                     $worksheet->setCellValue('W'.$row, $order->order_control_id);                                               // メモ
-                    $worksheet->setCellValue('X'.$row, $order->subtotal);                                                       // 総商品金額(JPY)
+                    $worksheet->setCellValue('X'.$row, $package_items->sum(function($order_item) use ($order) {
+                                                $unit_price = $order->ship_country_code == 'US'
+                                                    ? floor($order_item->order_item_unit_price / 1.6)
+                                                    : $order_item->order_item_unit_price;
+                                                return $unit_price * $order_item->shipping_quantity;
+                                            }));                                                                                // 総商品金額(JPY)
                     // package_itemsの分だけループ処理
                     foreach($package_items as $order_item){
                         // 基準列（Y = 25列目）からのオフセットを加味して列を計算
@@ -155,9 +160,9 @@ class NifudaCreateService
                         $worksheet->setCellValue($colZ . $row, $order_item->item->hs_code);             // HSコード
                         $worksheet->setCellValue($colAA . $row, $order_item->shipping_quantity);        // 個数
                         $worksheet->setCellValue($colAB . $row, $order->ship_country_code == 'US' 
-                            ? $order_item->order_item_unit_price / 1.6 
+                            ? floor($order_item->order_item_unit_price / 1.6)
                             : $order_item->order_item_unit_price
-                        );                                                                              // 単価(USの場合だけ/1.6している)
+                        );                                                                              // 単価(USの場合だけ/1.6している)(小数点以下切り捨て)
                         $worksheet->setCellValue($colAC . $row, 'JPY');                                 // 通貨単位
                         $worksheet->setCellValue($colAE . $row, $order_item->item->country_of_origin);  // 原産国
                         // オフセットに+7する（右に7列分ずらすため）
@@ -174,7 +179,6 @@ class NifudaCreateService
             $writer->setUseBOM(true);
             $writer->save($file_path);
         });
-        return;
     }
 
     // 佐川急便(国内用)
@@ -249,7 +253,6 @@ class NifudaCreateService
                 unlink($utf8_path);
             }
         });
-        return;
     }
 
     // ヤマト運輸
@@ -310,7 +313,6 @@ class NifudaCreateService
             $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
             $writer->save($file_path);
         });
-        return;
     }
 
     // 荷札データ作成履歴を追加
@@ -322,6 +324,5 @@ class NifudaCreateService
             'directory_name'        => $directory_name,
             'created_by'            => Auth::user()->user_no,
         ]);
-        return;
     }
 }

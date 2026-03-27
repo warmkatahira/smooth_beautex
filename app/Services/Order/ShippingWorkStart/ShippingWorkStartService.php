@@ -71,8 +71,8 @@ class ShippingWorkStartService
             $threshold = 14500;
             // 受注に紐付いている商品の分だけループ処理
             foreach($order_items as $order_item){
-                // 商品単価を1.6で割り、購入数をかける
-                $price = ($order_item->order_item_unit_price / 1.6) * $order_item->shipping_quantity;
+                // 商品単価を1.6で割り、購入数をかける(小数点以下は切り捨て)
+                $price = floor($order_item->order_item_unit_price / 1.6) * $order_item->shipping_quantity;
                 // この商品を加算すると閾値を超える場合
                 if($cumulative + $price > $threshold){
                     // package_noをカウントアップして、合計商品金額を初期化
