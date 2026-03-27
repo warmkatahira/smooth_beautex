@@ -4,7 +4,7 @@
     "name": "audio"
   },
   "resources/css/app.css": {
-    "file": "assets/app-DB80hkjj.css",
+    "file": "assets/app-Dr07vXYr.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -33,6 +33,12 @@
     "file": "assets/checkbox-DhnS4dE9.js",
     "name": "checkbox",
     "src": "resources/js/checkbox.js",
+    "isEntry": true
+  },
+  "resources/js/clipboard_copy.js": {
+    "file": "assets/clipboard_copy-Dw1cwY2C.js",
+    "name": "clipboard_copy",
+    "src": "resources/js/clipboard_copy.js",
     "isEntry": true
   },
   "resources/js/dashboard/dashboard.js": {
@@ -90,7 +96,7 @@
     "isEntry": true
   },
   "resources/js/order/order_detail/order_detail.js": {
-    "file": "assets/order_detail-Caqo9Hvz.js",
+    "file": "assets/order_detail-ChfQWDmQ.js",
     "name": "order_detail",
     "src": "resources/js/order/order_detail/order_detail.js",
     "isEntry": true,
@@ -196,7 +202,7 @@
     ]
   },
   "resources/js/shipping/shipping_inspection/shipping_inspection.js": {
-    "file": "assets/shipping_inspection-CD0aXWIj.js",
+    "file": "assets/shipping_inspection-c_YSyss2.js",
     "name": "shipping_inspection",
     "src": "resources/js/shipping/shipping_inspection/shipping_inspection.js",
     "isEntry": true,
@@ -279,6 +285,11 @@
       "resources/js/loading.js"
     ]
   },
+  "resources/sass/clipboard_copy.scss": {
+    "file": "assets/clipboard_copy-jRROgx86.css",
+    "src": "resources/sass/clipboard_copy.scss",
+    "isEntry": true
+  },
   "resources/sass/common.scss": {
     "file": "assets/common-Qa2haRUR.css",
     "src": "resources/sass/common.scss",
@@ -295,7 +306,7 @@
     "isEntry": true
   },
   "resources/sass/height_adjustment.scss": {
-    "file": "assets/height_adjustment-CU7l_MJC.css",
+    "file": "assets/height_adjustment-BW71Kyf2.css",
     "src": "resources/sass/height_adjustment.scss",
     "isEntry": true
   },

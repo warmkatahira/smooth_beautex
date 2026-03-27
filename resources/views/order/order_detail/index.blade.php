@@ -23,5 +23,6 @@
 <x-order.order-detail.modal.order-mark-update-modal :order="$order" />
 <x-order.order-detail.modal.order-memo-update-modal :order="$order" />
 <x-order.order-detail.modal.shipping-work-memo-update-modal :order="$order" />
+<x-order.order-detail.modal.supplement-update-modal :order="$order" />
 <x-order.order-detail.modal.desired-delivery-date-update-modal :order="$order" />
 @vite(['resources/js/order/order_detail/order_detail.js'])

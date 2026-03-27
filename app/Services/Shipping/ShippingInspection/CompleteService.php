@@ -26,7 +26,6 @@ class CompleteService
             'is_shipping_inspection_complete' => 1,
             'shipping_inspection_date' => CarbonImmutable::now(),
         ]);
-        return;
     }
 
     // order_item_lotsテーブルを更新
@@ -44,6 +43,7 @@ class CompleteService
                     $param = [
                         'order_item_id' => $value['order_item_id'],
                         'lot' => $value['lot'],
+                        'exp' => $value['exp'],
                         'quantity' => $value['quantity'],
                     ];
                     $insert_lot[] = $param;
@@ -52,6 +52,5 @@ class CompleteService
             // テーブルへ追加
             OrderItemLot::upsert($insert_lot, 'order_item_lot_id');
         }
-        return;
     }
 }

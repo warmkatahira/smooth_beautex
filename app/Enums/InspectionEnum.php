@@ -13,5 +13,5 @@ enum InspectionEnum
     // EXPの長さ（桁数）を定義
     const EXP_LENGTH = 4;
     // EXPが現在から数えて何ヶ月以内をNGとするかの閾値
-    const EXP_THRESHOLD = 3;
+    const EXP_THRESHOLD = 1;
 }

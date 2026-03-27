@@ -76,6 +76,16 @@ $(document).on('click', function(e){
         $('#shipping_work_memo_update_modal').removeClass('hidden');
     }
     // クリックされた要素にモーダルを閉じるクラス名が設定されていれば、モーダルを閉じる
+    if(e.target.classList.contains('supplement_update_modal_close') === true){
+        $('#supplement_update_modal').addClass('hidden');
+    }
+    // クリックした要素のIDがモーダルを開くものであれば、モーダルを開く
+    if(e.target.id === 'supplement_update_modal_open'){
+        // テキストボックスを現在の値に変更
+        $('#supplement').val($('#current_supplement').val());
+        $('#supplement_update_modal').removeClass('hidden');
+    }
+    // クリックされた要素にモーダルを閉じるクラス名が設定されていれば、モーダルを閉じる
     if(e.target.classList.contains('desired_delivery_date_update_modal_close') === true){
         $('#desired_delivery_date_update_modal').addClass('hidden');
     }
@@ -153,6 +163,17 @@ $('#shipping_work_memo_update_enter').on("click",function(){
     }
 });
 
+// 補足事項の更新ボタンを押下した場合
+$('#supplement_update_enter').on("click",function(){
+    // 処理を実行するか確認
+    const result = window.confirm("補足事項の更新を実行しますか？");
+    // 「はい」が押下されたらsubmit、「いいえ」が押下されたら処理キャンセル
+    if(result === true){
+        start_loading();
+        $("#supplement_update_form").submit();
+    }
+});
+
 // 配送希望日の更新ボタンを押下した場合
 $('#desired_delivery_date_update_enter').on("click",function(){
     // 処理を実行するか確認
@@ -218,6 +239,15 @@ tippy('.tippy_shipping_work_memo_update', {
     theme: 'tippy_main_theme',
 });
 
+// 補足事項更新モーダルのツールチップ
+tippy('.tippy_supplement_update', {
+    content: "補足事項を更新する場合は、<br>こちらをクリックして下さい",
+    duration: 500,
+    allowHTML: true,
+    placement: 'right',
+    theme: 'tippy_main_theme',
+});
+
 // 配送希望日更新モーダルのツールチップ
 tippy('.tippy_desired_delivery_date_update', {
     content: "配送希望日を更新する場合は、<br>こちらをクリックして下さい",
@@ -257,6 +287,15 @@ tippy('.tippy_order_memo', {
 // 出荷作業メモのツールチップ
 tippy('.tippy_shipping_work_memo', {
     content: "出荷作業者に対して使用するメモです。<br>個別ピッキングリストに印字されます。",
+    duration: 500,
+    allowHTML: true,
+    placement: 'right',
+    theme: 'tippy_main_theme',
+});
+
+// 補足事項のツールチップ
+tippy('.tippy_supplement', {
+    content: "倉庫側への補足事項を入力する項目です。",
     duration: 500,
     allowHTML: true,
     placement: 'right',

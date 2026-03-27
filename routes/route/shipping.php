@@ -81,7 +81,7 @@ Route::middleware('common')->group(function (){
             Route::post('ajax_check_order_control_id', 'ajax_check_order_control_id');
             Route::post('ajax_check_tracking_no', 'ajax_check_tracking_no');
             Route::post('ajax_check_item_id_code', 'ajax_check_item_id_code');
-            Route::post('ajax_check_lot', 'ajax_check_lot');
+            Route::post('ajax_check_lot_exp', 'ajax_check_lot_exp');
             Route::post('complete', 'complete')->name('complete');
         });
         // +-+-+-+-+-+-+-+- 出荷完了 +-+-+-+-+-+-+-+-

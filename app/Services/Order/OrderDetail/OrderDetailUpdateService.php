@@ -137,6 +137,24 @@ class OrderDetailUpdateService
         ]);
     }
 
+    // 補足事項を更新できるか確認
+    public function checkUpdatableSupplement($order)
+    {
+        // 注文ステータスが「作業中」よりも大きい場合
+        if($order->order_status_id > OrderStatusEnum::SAGYO_CHU){
+            throw new \RuntimeException('補足事項を更新できない注文ステータスです。');
+        }
+    }
+
+    // 補足事項を更新
+    public function updateSupplement($request, $order)
+    {
+        // 補足事項を更新
+        $order->update([
+            'supplement' => $request->supplement,
+        ]);
+    }
+
     // 配送希望日を更新できるか確認
     public function checkUpdatableDesiredDeliveryDate($order)
     {

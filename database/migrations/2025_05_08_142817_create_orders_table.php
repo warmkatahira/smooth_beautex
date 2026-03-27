@@ -46,6 +46,7 @@ return new class extends Migration
             // ここまで受注データの内容
             $table->text('order_memo')->nullable();
             $table->text('shipping_work_memo')->nullable();
+            $table->text('supplement')->nullable();
             $table->unsignedInteger('order_category_id');
             $table->string('order_mark', 10)->nullable();
             $table->timestamps();

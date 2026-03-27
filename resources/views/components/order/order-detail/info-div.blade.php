@@ -38,6 +38,10 @@
     if($openModalId === 'shipping_work_memo_update_modal_open' && $order->order_status_id < OrderStatusEnum::SHUKKA_ZUMI){
         $is_modal_icon_disp = true;
     }
+    // 補足事項
+    if($openModalId === 'supplement_update_modal_open' && $order->order_status_id < OrderStatusEnum::SHUKKA_ZUMI){
+        $is_modal_icon_disp = true;
+    }
 @endphp
 
 <div class="flex flex-row border-b border-gray-300 text-xs">

@@ -150,8 +150,9 @@ $('#item_id_code').on("change",function(){
                     // JANコードで検品されているかつ、inspectionがfalse(検品数をカウントアップしていない)の場合
                     if(data['item_id_type'] === 'JAN' && !data['inspection']){
                         // LOT入力モーダルを表示
-                        $('#lot_input_modal').removeClass('hidden');
+                        $('#lot_exp_input_modal').removeClass('hidden');
                         $('#lot').val(null);
+                        $('#exp').val(null);
                         $('#lot_length').text('(' + (data['progress'][data['order_item_id']]['lot_1_length'] + data['progress'][data['order_item_id']]['lot_2_length']) + '桁)');
                         $('#lot').focus();
                         return;
@@ -212,13 +213,13 @@ function inspection_ng(message){
     $('#item_id_code_alert_modal_focus_element').focus();
 }
 
-// LOTが変更されたら
-$('#lot').on("change",function(){
+// 確定ボタンが押下されたら
+$('#lot_exp_input_enter').on("click",function(){
     // LOTに値がある場合のみ処理する
     if($('#lot').val()){
         // モーダルを閉じる
-        $('#lot_input_modal').addClass('hidden');
-        var ajax_url = '/shipping_inspection/ajax_check_lot';
+        $('#lot_exp_input_modal').addClass('hidden');
+        var ajax_url = '/shipping_inspection/ajax_check_lot_exp';
         $.ajax({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -228,6 +229,7 @@ $('#lot').on("change",function(){
             data: {
                 order_control_id: $('#order_control_id').val(),
                 lot: $('#lot').val(),
+                exp: $('#exp').val(),
             },
             dataType: 'json',
             success: function(data){
@@ -300,9 +302,9 @@ $(document).on('click', function(e) {
         set_item_id_code();
     }
     // クリックされた要素にモーダルを閉じるクラス名が設定されていれば、モーダルを閉じる
-    if (e.target.classList.contains('lot_input_modal_close') == true) {
+    if (e.target.classList.contains('lot_exp_input_modal_close') == true) {
         // モーダルを閉じる
-        $('#lot_input_modal').addClass('hidden');
+        $('#lot_exp_input_modal').addClass('hidden');
         set_item_id_code();
         $('#message').html('LOT入力が中断されました。');
         audio_play('ng');

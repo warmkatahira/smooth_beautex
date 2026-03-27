@@ -47,6 +47,7 @@ class Order extends Model
         'total_payment',
         'order_memo',
         'shipping_work_memo',
+        'supplement',
         'order_category_id',
         'order_mark',
     ];

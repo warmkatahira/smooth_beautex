@@ -42,6 +42,7 @@ Route::middleware('common')->group(function (){
             Route::post('order_mark', 'order_mark')->name('order_mark');
             Route::post('order_memo', 'order_memo')->name('order_memo');
             Route::post('shipping_work_memo', 'shipping_work_memo')->name('shipping_work_memo');
+            Route::post('supplement', 'supplement')->name('supplement');
             Route::post('desired_delivery_date', 'desired_delivery_date')->name('desired_delivery_date');
         });
         // +-+-+-+-+-+-+-+- 受注削除 +-+-+-+-+-+-+-+-

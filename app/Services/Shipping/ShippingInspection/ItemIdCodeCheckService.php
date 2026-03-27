@@ -29,13 +29,15 @@ class ItemIdCodeCheckService
         session(['exp_lot_check_result' => null]);          // 使用期限/Lotの確認結果を格納
         session(['exp' => null]);                           // 使用期限を格納
         session(['item_id_type' => null]);                  // JANコードかQRコードかを格納
+        // インスタンス化
+        $LotUpdateService = new LotUpdateService;
         // JANコードかQRコードか判定
         // JANの桁数以下の場合
         if(strlen($request->item_id_code) <= InspectionEnum::JAN_LENGTH){
             // JANを格納
             session(['item_id_type' => 'JAN']);
             // 検品対象の商品があるかチェック
-            $this->checkJanCode($progress, $request->item_id_code, $request->order_control_id);
+            $this->checkJanCode($progress, $request->item_id_code, $request->order_control_id, $LotUpdateService);
         }
         // JANの桁数より大きい場合
         if(strlen($request->item_id_code) > InspectionEnum::JAN_LENGTH){
@@ -45,6 +47,8 @@ class ItemIdCodeCheckService
             $this->checkQrCode($progress, $request->item_id_code);
             // 商品が見つかっていたら
             if(session('found') && session('order_item_id')){
+                // 変数を初期化
+                $exp = null;
                 // 検品対象が取得できていて、exp_start_positionがnull以外である
                 if(!is_null(session('order_item_id')) && !is_null($progress[session('order_item_id')]['exp_start_position'])){
                     // 使用期限のチェック
@@ -52,14 +56,12 @@ class ItemIdCodeCheckService
                 }
                 // 使用期限のチェックが問題なければ
                 if(is_null(session('exp_lot_check_result'))){
-                    // インスタンス化
-                    $LotUpdateService = new LotUpdateService;
                     // QRコードからLOTを取得
                     $lot = $this->getLotQr($progress, session('order_item_id'), $request->item_id_code);
                     // lotがNull以外の場合
                     if(!is_null($lot)){
                         // Lotの配列を更新
-                        $LotUpdateService->updateLotResult($lot, $request->order_control_id);
+                        $LotUpdateService->updateLotResult($lot, $exp);
                         // 検品数をカウントアップ
                         $this->updateInspectionQuantity($progress, session('order_item_id'));
                     }
@@ -72,38 +74,16 @@ class ItemIdCodeCheckService
         }
         // エラーがあったか確認(inspectionがtrueであれば、検品できているので、nullを返す)
         session(['error_message' => session('inspection') ? null : $this->checkError($request->item_id_code)]);
-        return;
     }
 
     // 検品対象の商品があるかチェック
-    public function checkJanCode($progress, $item_id_code, $order_control_id)
+    public function checkJanCode($progress, $item_id_code, $order_control_id, $LotUpdateService)
     {
-        // 配列の分だけループ処理
-        foreach($progress as $key => $value){
-            // JANコードが一致している場合
-            if($value['item_jan_code'] == $item_id_code){
-                // フラグをtrueにする
-                session(['found' => true]);
-            }
-            // JANコードが一致しているかつ、検品できる商品であるか
-            if($value['item_jan_code'] == $item_id_code && $value['shipping_quantity'] > $value['inspection_quantity']){
-                // 特定した商品IDを取得
-                session(['item_id' => $value['item_id']]);
-                // 特定した配列のキーを取得
-                session(['order_item_id' => $key]);
-                // LOT1開始位置がNullの場合
-                if(is_null($value['lot_1_start_position'])){
-                    // インスタンス化
-                    $LotUpdateService = new LotUpdateService;
-                    // 「-」をLotとしてセット
-                    $lot = '-';
-                    // Lotの配列を更新
-                    $LotUpdateService->updateLotResult($lot, $order_control_id);
-                    // 検品数をカウントアップ
-                    $this->updateInspectionQuantity($progress, session('order_item_id'));
-                }
-                break;
-            }
+        $this->findItemByJanCode($progress, $item_id_code);
+        // 検品ロットが「不要」の場合
+        if(session('order_item_id') && !$progress[session('order_item_id')]['is_inspection_lot_required']){
+            $LotUpdateService->updateLotResult('-', '-');
+            $this->updateInspectionQuantity($progress, session('order_item_id'));
         }
     }
 
@@ -138,20 +118,23 @@ class ItemIdCodeCheckService
         }
         // 検品できる商品が見つかっていないかつ、代表JANが一致していない場合
         if(is_null(session('order_item_id')) && !session('model_jan_match')){
-            // 商品識別コードの先頭13桁で照合
-            foreach($progress as $key => $value){
-                // JANコードが一致していたらフラグをtrueにする
-                if($value['item_jan_code'] == substr($item_id_code, 0, InspectionEnum::JAN_LENGTH)){
-                    session(['found' => true]);
-                }
-                // JANコードが一致しているかつ、検品できる商品であるか
-                if($value['item_jan_code'] == substr($item_id_code, 0, InspectionEnum::JAN_LENGTH) && $value['shipping_quantity'] > $value['inspection_quantity']){
-                    // 特定した商品IDを取得
-                    session(['item_id' => $value['item_id']]);
-                    // 特定した配列のキーを取得
-                    session(['order_item_id' => $key]);
-                    break;
-                }
+            $this->findItemByJanCode($progress, substr($item_id_code, 0, InspectionEnum::JAN_LENGTH));
+        }
+    }
+
+    // JANコードで商品を特定する共通処理
+    private function findItemByJanCode($progress, $jan_code)
+    {
+        foreach($progress as $key => $value){
+            // JANコードが一致していたらフラグをtrueにする
+            if($value['item_jan_code'] == $jan_code){
+                session(['found' => true]);
+            }
+            // JANコードが一致しているかつ、検品できる商品であるか
+            if($value['item_jan_code'] == $jan_code && $value['shipping_quantity'] > $value['inspection_quantity']){
+                session(['item_id' => $value['item_id']]);
+                session(['order_item_id' => $key]);
+                break;
             }
         }
     }
@@ -227,7 +210,6 @@ class ItemIdCodeCheckService
         session(['inspection_complete' => $progress[$key]['inspection_complete']]);
         // 受注内の全ての商品で検品が完了しているか確認
         session(['inspection_complete_order' => $this->checkInspectionCompleteOrder($progress)]);
-        return;
     }
 
     // 受注内の全ての商品で検品が完了しているか確認
@@ -238,7 +220,6 @@ class ItemIdCodeCheckService
             // 1つでもfalseがあれば、検品が完了していないので、falseを返す
             if($value['inspection_complete'] == false) {
                 return false;
-                break;
             }
         }
         // 全て完了しているので、trueを返す

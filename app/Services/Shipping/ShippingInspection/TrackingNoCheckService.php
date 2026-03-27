@@ -18,8 +18,9 @@ class TrackingNoCheckService
         $tracking_no = str_replace(['d', 'D', 'a', 'A'], '', $request->tracking_no);
         // 送信されてきた受注管理IDでordersからレコードを取得
         $order = Order::getSpecifyByOrderControlId($request->order_control_id)->where('order_status_id', OrderStatusEnum::SAGYO_CHU)->first();
-        // 配送伝票番号が一致しているか
-        if($tracking_no != $order->tracking_no){
+        // 配送伝票番号が含まれているか（複数の場合はカンマ区切りされている）
+        $tracking_nos = array_map('trim', explode(',', $order->tracking_no));
+        if(!in_array($tracking_no, $tracking_nos)){
             return '配送伝票番号が一致しません。';
         }
         // 問題なければnullを返す
@@ -38,6 +39,7 @@ class TrackingNoCheckService
                         'items.item_id',
                         'items.item_jan_code',
                         'items.item_name',
+                        'items.is_inspection_lot_required',
                         'items.model_jan_code',
                         'items.exp_start_position',
                         'items.lot_1_start_position',
@@ -67,6 +69,7 @@ class TrackingNoCheckService
                 'item_id'                       => $inspection_target->item_id,
                 'item_jan_code'                 => $inspection_target->item_jan_code,
                 'item_name'                     => $inspection_target->item_name,
+                'is_inspection_lot_required'    => $inspection_target->is_inspection_lot_required,
                 'model_jan_code'                => $inspection_target->model_jan_code,
                 'exp_start_position'            => $inspection_target->exp_start_position,
                 'lot_1_start_position'          => $inspection_target->lot_1_start_position,

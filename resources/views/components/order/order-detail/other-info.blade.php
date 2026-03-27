@@ -3,6 +3,11 @@
     <div class="flex flex-row gap-5">
         <div class="w-1/2">
             <div class="flex flex-col">
+                <x-order.order-detail.info-div label="補足事項" :value="$order->supplement" :order="$order" openModalId="supplement_update_modal_open" infoTippy="tippy_supplement" modalTippy="tippy_supplement_update" />
+            </div>
+        </div>
+        <div class="w-1/2">
+            <div class="flex flex-col">
                 @can('warm_check')
                     <x-order.order-detail.info-div label="受注マーク" :value="$order->order_mark" :order="$order" openModalId="order_mark_update_modal_open" infoTippy="tippy_order_mark" modalTippy="tippy_order_mark_update" />
                     <x-order.order-detail.info-div label="受注メモ" :value="$order->order_memo" :order="$order" openModalId="order_memo_update_modal_open" infoTippy="tippy_order_memo" modalTippy="tippy_order_memo_update" />

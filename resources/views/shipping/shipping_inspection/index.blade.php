@@ -35,5 +35,5 @@
     </div>
 </x-app-layout>
 <x-item-id-code-alert title="出荷検品商品アラート" />
-<x-shipping.shipping-inspection.lot-input-modal />
+<x-shipping.shipping-inspection.lot-exp-input-modal />
 @vite(['resources/js/shipping/shipping_inspection/shipping_inspection.js'])

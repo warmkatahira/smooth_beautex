@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Services\Shipping\ShippingInspection\OrderControlIdCheckService;
 use App\Services\Shipping\ShippingInspection\TrackingNoCheckService;
 use App\Services\Shipping\ShippingInspection\ItemIdCodeCheckService;
-use App\Services\Shipping\ShippingInspection\LotCheckService;
+use App\Services\Shipping\ShippingInspection\LotExpCheckService;
 use App\Services\Shipping\ShippingInspection\CompleteService;
 use App\Services\Common\MieruService;
 // その他
@@ -80,13 +80,13 @@ class ShippingInspectionController extends Controller
         ]);
     }
 
-    // Lotが入力された際の処理
-    public function ajax_check_lot(Request $request)
+    // LOTとEXPが入力された際の処理
+    public function ajax_check_lot_exp(Request $request)
     {
         // インスタンス化
-        $LotCheckService = new LotCheckService;
-        // Lot桁数を確認
-        $LotCheckService->check($request->lot, $request->order_control_id);
+        $LotExpCheckService = new LotExpCheckService;
+        // LOTとEXPを確認
+        $LotExpCheckService->check($request->lot, $request->exp);
         // 結果を返す
         return response()->json([
             'error_message' => session('error_message'),
