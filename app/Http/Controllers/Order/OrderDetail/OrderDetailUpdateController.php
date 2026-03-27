@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 // サービス
 use App\Services\Order\OrderDetail\OrderDetailUpdateService;
 use App\Services\Order\OrderAllocate\OrderAllocateService;
+use App\Services\Common\ChatworkService;
 // リクエスト
 use App\Http\Requests\Order\OrderDetail\ShippingBaseUpdateRequest;
 use App\Http\Requests\Order\OrderDetail\ShippingMethodUpdateRequest;
@@ -178,7 +179,7 @@ class OrderDetailUpdateController extends Controller
     public function supplement(SupplementUpdateRequest $request)
     {
         try{
-            DB::transaction(function () use ($request){
+            $order = DB::transaction(function () use ($request){
                 // インスタンス化
                 $OrderDetailUpdateService = new OrderDetailUpdateService;
                 // 受注をロックして取得
@@ -187,6 +188,7 @@ class OrderDetailUpdateController extends Controller
                 $OrderDetailUpdateService->checkUpdatableSupplement($order);
                 // 補足事項を更新
                 $OrderDetailUpdateService->updateSupplement($request, $order);
+                return $order;
             });
         }catch (\Exception $e){
             return redirect()->back()->with([
@@ -194,9 +196,13 @@ class OrderDetailUpdateController extends Controller
                 'alert_message' => $e->getMessage(),
             ]);
         }
+        // インスタンス化
+        $ChatworkService = new ChatworkService;
+        // Chatworkに通知する処理@補足事項更新
+        $ChatworkService->postMessageAtSupplement($request, $order, url()->previous());
         return redirect()->back()->with([
             'alert_type' => 'success',
-            'alert_message' => '受注メモを更新しました。',
+            'alert_message' => '補足事項を更新しました。',
         ]);
     }
 
