@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Order\OrderDetail;
+namespace App\Http\Requests\Order\OrderItem;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Http\Requests\BaseRequest;

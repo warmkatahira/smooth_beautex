@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Order\OrderDetail;
+namespace App\Http\Controllers\Order\OrderItem;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 // モデル
 use App\Models\Item;
-use App\Models\OrderItem;
 // リクエスト
-use App\Http\Requests\Order\OrderDetail\OrderItemCreateRequest;
+use App\Http\Requests\Order\OrderItem\OrderItemCreateRequest;
 // サービス
-use App\Services\Order\OrderDetail\OrderItemCreateService;
+use App\Services\Order\OrderItem\OrderItemCreateService;
 // その他
 use Illuminate\Support\Facades\DB;
 

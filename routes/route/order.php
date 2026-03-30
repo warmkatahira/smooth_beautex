@@ -9,7 +9,10 @@ use App\Http\Controllers\Order\OrderMgt\OrderMgtController;
 // +-+-+-+-+-+-+-+- 受注詳細 +-+-+-+-+-+-+-+-
 use App\Http\Controllers\Order\OrderDetail\OrderDetailController;
 use App\Http\Controllers\Order\OrderDetail\OrderDetailUpdateController;
-use App\Http\Controllers\Order\OrderDetail\OrderItemCreateController;
+// +-+-+-+-+-+-+-+- 受注商品追加 +-+-+-+-+-+-+-+-
+use App\Http\Controllers\Order\OrderItem\OrderItemCreateController;
+// +-+-+-+-+-+-+-+- 受注商品削除 +-+-+-+-+-+-+-+-
+use App\Http\Controllers\Order\OrderItem\OrderItemDeleteController;
 // +-+-+-+-+-+-+-+- 受注削除 +-+-+-+-+-+-+-+-
 use App\Http\Controllers\Order\OrderDelete\OrderDeleteController;
 // +-+-+-+-+-+-+-+- 出荷作業開始 +-+-+-+-+-+-+-+-
@@ -46,9 +49,14 @@ Route::middleware('common')->group(function (){
             Route::post('supplement', 'supplement')->name('supplement');
             Route::post('desired_delivery_date', 'desired_delivery_date')->name('desired_delivery_date');
         });
+        // +-+-+-+-+-+-+-+- 受注商品削除 +-+-+-+-+-+-+-+-
         Route::controller(OrderItemCreateController::class)->prefix('order_item_create')->name('order_item_create.')->group(function(){
             Route::get('search', 'search')->name('search');
             Route::post('create', 'create')->name('create');
+        });
+        // +-+-+-+-+-+-+-+- 受注商品削除 +-+-+-+-+-+-+-+-
+        Route::controller(OrderItemDeleteController::class)->prefix('order_item_delete')->name('order_item_delete.')->group(function(){
+            Route::post('delete', 'delete')->name('delete');
         });
         // +-+-+-+-+-+-+-+- 受注削除 +-+-+-+-+-+-+-+-
         Route::controller(OrderDeleteController::class)->prefix('order_delete')->name('order_delete.')->group(function(){

@@ -89,3 +89,16 @@ $('#order_item_create_enter').on("click",function(){
         $("#order_item_create_form").submit();
     }
 });
+
+// 削除ボタンを押下した場合
+$('.order_item_delete_enter').on("click",function(){
+    // 処理を実行するか確認
+    const result = window.confirm("商品削除を実行しますか？");
+    // 「はい」が押下されたらsubmit、「いいえ」が押下されたら処理キャンセル
+    if(result === true){
+        start_loading();
+        // 削除対象の商品IDを要素にセット
+        $('#order_item_id').val($(this).data('order-item-id'));
+        $("#order_item_delete_form").submit();
+    }
+});

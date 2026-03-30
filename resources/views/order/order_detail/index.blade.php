@@ -26,4 +26,4 @@
 <x-order.order-detail.modal.supplement-update-modal :order="$order" />
 <x-order.order-detail.modal.desired-delivery-date-update-modal :order="$order" />
 <x-order.order-detail.modal.order-item-create-modal :order="$order" />
-@vite(['resources/js/order/order_detail/order_detail.js', 'resources/js/order/order_detail/order_item_update.js'])
+@vite(['resources/js/order/order_detail/order_detail.js', 'resources/js/order/order_item/order_item_update.js'])
