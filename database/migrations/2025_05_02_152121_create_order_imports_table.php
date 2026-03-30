@@ -26,7 +26,7 @@ return new class extends Migration
             $table->date('order_date');
             $table->time('order_time');
             $table->string('ship_name', 255);
-            $table->string('ship_zip_code', 8);
+            $table->string('ship_zip_code', 20);
             $table->string('ship_country_code', 5)->nullable();
             $table->string('ship_province_code', 10)->nullable();
             $table->string('ship_province_name', 5)->nullable();

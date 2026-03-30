@@ -35,6 +35,8 @@ class OrderImportForQoo10Service
             $ship_zip_code = str_replace(["'", "-"], "", $line['郵便番号']);
             // 郵便番号をハイフンつきにして変数に格納
             $ship_zip_code = substr($ship_zip_code, 0, 3).'-'.substr($ship_zip_code, 3);
+            // 商品名に「再発送の申請」が含まれている場合は1、含まれていない場合は0
+            $is_redelivery = str_contains($line['商品名'], '再発送の申請') ? 1 : 0;
             // 追加先テーブルのカラム名に合わせて配列を整理
             $param = [
                 'order_import_date'         => $nowDate->toDateString(),

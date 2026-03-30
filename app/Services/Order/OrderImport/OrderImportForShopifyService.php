@@ -72,6 +72,8 @@ class OrderImportForShopifyService
             if($common_order_values[$line['Name']]['Shipping Country'] === 'JP'){
                 $ship_zip_code = substr(str_replace("-", "", $ship_zip_code), 0, 3).'-'.substr(str_replace("-", "", $ship_zip_code), 3);
             }
+            // 商品名に「再発送手続き」が含まれている場合は1、含まれていない場合は0
+            $is_redelivery = str_contains($line['Lineitem name'], '再発送手続き') ? 1 : 0;
             // 追加先テーブルのカラム名に合わせて配列を整理
             $param = [
                 'order_import_date'         => $nowDate->toDateString(),
@@ -92,7 +94,7 @@ class OrderImportForShopifyService
                 'ship_tel'                  => str_replace(' ', '', str_replace('+81', '0', $common_order_values[$line['Name']]['Shipping Phone'])), // +81を0に置換している
                 'subtotal'                  => $common_order_values[$line['Name']]['Subtotal'],
                 'total_payment'             => $common_order_values[$line['Name']]['Total'],
-                'order_item_code'           => $line['Lineitem sku'],
+                'order_item_code'           => $is_redelivery ? '再発送' : $line['Lineitem sku'],     // 再発送の場合は商品コードがNullなので、固定値を入れる
                 'order_item_name'           => $line['Lineitem name'],
                 'shipping_quantity'         => $line['Lineitem quantity'],
                 'order_item_unit_price'     => $line['Lineitem price'],
@@ -127,7 +129,7 @@ class OrderImportForShopifyService
             'order_status_id'           => 'required|in:' . implode(',', array_keys(OrderStatusEnum::CHANGE_LIST_FROM_ID_TO_JP)),
             'mall_shipping_method'      => 'required|string|max:20|in:' . implode(',', ShippingMethodEnum::SHOPIFY_SHIPPING_METHOD_LIST),
             'ship_name'                 => 'required|string|max:255',
-            'ship_zip_code'             => 'required|string|max:8',
+            'ship_zip_code'             => 'required|string|max:20',
             'ship_country_code'         => 'required|string|max:5',
             'ship_province_code'        => 'nullable|string|max:10',
             'ship_province_name'        => 'nullable|string|max:5|exists:prefectures,prefecture_name',

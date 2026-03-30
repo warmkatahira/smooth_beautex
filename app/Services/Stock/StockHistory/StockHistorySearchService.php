@@ -4,124 +4,124 @@ namespace App\Services\Stock\StockHistory;
 
 // モデル
 use App\Models\StockHistory;
+// サービス
+use App\Services\Common\BaseFilterService;
 // 列挙
 use App\Enums\SystemEnum;
 // その他
 use Illuminate\Support\Facades\DB;
 use Carbon\CarbonImmutable;
 
-class StockHistorySearchService
+class StockHistorySearchService extends BaseFilterService
 {
-    // セッションを削除
-    public function deleteSession()
-    {
-        session()->forget([
-            'search_stock_history_date_from',
-            'search_stock_history_date_to',
-            'search_stock_history_category_id',
-            'search_item_code',
-            'search_item_jan_code',
-            'search_item_name',
-            'search_item_category_1',
-        ]);
-        return;
-    }
-
     // セッションに検索条件を格納
     public function setSearchCondition($request)
     {
         // 変数が存在しない場合は検索が実行されていないので、初期条件をセット
-        if(!isset($request->search_type)){
-            session(['search_stock_history_date_from'   => CarbonImmutable::now()->toDateString()]);
-            session(['search_stock_history_date_to'     => CarbonImmutable::now()->toDateString()]);
+        if(!isset($request->process_type)){
+            // 当日の日付をセッションに格納
+            session(['filter_history_date_from' => CarbonImmutable::now()->toDateString()]);
+            session(['filter_history_date_to' => CarbonImmutable::now()->toDateString()]);
         }
-        // 「search」なら検索が実行されているので、検索条件をセット
-        if($request->search_type === 'search'){
-            session(['search_stock_history_date_from' => $request->search_stock_history_date_from]);
-            session(['search_stock_history_date_to' => $request->search_stock_history_date_to]);
-            session(['search_stock_history_category_id' => $request->search_stock_history_category_id]);
-            session(['search_item_code' => $request->search_item_code]);
-            session(['search_item_jan_code' => $request->search_item_jan_code]);
-            session(['search_item_name' => $request->search_item_name]);
-            session(['search_item_category_1' => $request->search_item_category_1]);
+        // 「filter」なら検索が実行されているので、検索条件をセット
+        if($request->process_type === 'filter'){
+            parent::setSearchCondition($request);
         }
-        return;
     }
 
-    // 検索結果を取得
-    public function getSearchResult()
+    // ベースクエリ
+    protected function baseQuery()
     {
         // クエリをセット
-        $query = StockHistory::join('stock_history_details', 'stock_history_details.stock_history_id', 'stock_histories.stock_history_id')
-                    ->join('stocks', 'stocks.stock_id', 'stock_history_details.stock_id')
-                    ->join('items', 'items.item_id', 'stocks.item_id')
-                    ->join('bases', 'bases.base_id', 'stocks.base_id')
-                    ->join('stock_history_categories', 'stock_history_categories.stock_history_category_id', 'stock_histories.stock_history_category_id')
-                    ->select(
-                        'stock_histories.stock_history_category_id',
-                        'stock_histories.user_no',
-                        'stock_histories.comment',
-                        'stock_histories.updated_at',
-                        'stock_history_details.quantity',
-                        'stocks.base_id',
-                        'items.item_code',
-                        'items.item_jan_code',
-                        'items.item_name',
-                        'items.item_category_1',
-                        'items.item_image_file_name',
-                        'bases.base_name',
-                        'bases.sort_order',
-                        'stock_history_categories.stock_history_category_name',
-                    );
-        // 日付の条件がある場合
-        if(!empty(session('search_stock_history_date_from')) && !empty(session('search_stock_history_date_to'))){
-            $query->whereDate('stock_histories.updated_at', '>=', session('search_stock_history_date_from'))
-                    ->whereDate('stock_histories.updated_at', '<=', session('search_stock_history_date_to'));
-        }
-        // 区分の条件がある場合
-        if(session('search_stock_history_category_id') != null){
-            // 条件を指定して取得
-            $query = $query->where('stock_histories.stock_history_category_id', session('search_stock_history_category_id'));
-        }
-        // 商品コードの条件がある場合
-        if(session('search_item_code') != null){
-            // 条件を指定して取得
-            $query = $query->where('item_code', 'LIKE', '%'.session('search_item_code').'%');
-        }
-        // 商品JANコードの条件がある場合
-        if(session('search_item_jan_code') != null){
-            // 条件を指定して取得
-            $query = $query->where('item_jan_code', 'LIKE', '%'.session('search_item_jan_code').'%');
-        }
-        // 商品名の条件がある場合
-        if(session('search_item_name') != null){
-            // 条件を指定して取得
-            $query = $query->where('item_name', 'LIKE', '%'.session('search_item_name').'%');
-        }
-        // 商品カテゴリ1の条件がある場合
-        if(session('search_item_category_1') != null){
-            // 条件を指定して取得
-            $query = $query->where('item_category_1', 'LIKE', '%'.session('search_item_category_1').'%');
-        }
-        // グループ化+並び替え
+        return StockHistory::join('stock_history_details', 'stock_history_details.stock_history_id', 'stock_histories.stock_history_id')
+                                ->join('stocks', 'stocks.stock_id', 'stock_history_details.stock_id')
+                                ->join('items', 'items.item_id', 'stocks.item_id')
+                                ->join('bases', 'bases.base_id', 'stocks.base_id')
+                                ->join('stock_history_categories', 'stock_history_categories.stock_history_category_id', 'stock_histories.stock_history_category_id')
+                                ->select(
+                                    'stock_histories.stock_history_category_id',
+                                    'stock_histories.user_no',
+                                    'stock_histories.comment',
+                                    'stock_histories.updated_at',
+                                    'stock_history_details.quantity',
+                                    'stocks.base_id',
+                                    'items.item_code',
+                                    'items.item_jan_code',
+                                    'items.item_name',
+                                    'items.item_category_1',
+                                    'items.item_image_file_name',
+                                    'bases.base_name',
+                                    'bases.sort_order',
+                                    'stock_history_categories.stock_history_category_name',
+                                    'stocks.lot',
+                                    'stocks.exp',
+                                );
+    }
+
+    // LIKEキー
+    protected function likeKeys(): array
+    {
+        return [
+            'filter_item_code',
+            'filter_item_jan_code',
+            'filter_item_name',
+            'filter_item_category_1',
+            'filter_item_category_2',
+            'filter_comment',
+        ];
+    }
+
+    // 特殊キー
+    protected function specialKeys(): array
+    {
+        return [
+            // 履歴日
+            'filter_history_date_from' => function ($query, $value) {
+                $query->whereDate('stock_histories.updated_at', '>=', session('filter_history_date_from'))
+                    ->whereDate('stock_histories.updated_at', '<=', session('filter_history_date_to'));
+            },
+            // 履歴時間
+            'filter_history_time' => function ($query, $value) {
+                $query->whereRaw("TIME(stock_histories.updated_at) LIKE ?", [session('filter_history_time') . '%']);
+            },
+            // 数量
+            'filter_quantity' => function ($query, $value) {
+                $query->where('stock_history_details.quantity', (int)$value);
+            },
+        ];
+    }
+
+    // 無視するキー
+    protected function ignoreKeys(): array
+    {
+        return [
+            'filter_history_date_to',
+        ];
+    }
+
+    // 並び替え
+    protected function applySort($query)
+    {
         return $query->groupBy(
-            'stock_histories.stock_history_category_id',
-            'stock_histories.user_no',
-            'stock_histories.comment',
-            'stock_histories.updated_at',
-            'stock_history_details.quantity',
-            'stocks.base_id',
-            'items.item_code',
-            'items.item_jan_code',
-            'items.item_name',
-            'items.item_category_1',
-            'items.item_image_file_name',
-            'bases.base_name',
-            'bases.sort_order',
-            'stock_history_categories.stock_history_category_name',
-        )
-        ->orderBy('stock_histories.updated_at', 'asc')
-        ->orderBy('items.item_code', 'asc')
-        ->orderBy('bases.sort_order', 'asc');
+                'stock_histories.stock_history_category_id',
+                'stock_histories.user_no',
+                'stock_histories.comment',
+                'stock_histories.updated_at',
+                'stock_history_details.quantity',
+                'stocks.base_id',
+                'items.item_code',
+                'items.item_jan_code',
+                'items.item_name',
+                'items.item_category_1',
+                'items.item_image_file_name',
+                'bases.base_name',
+                'bases.sort_order',
+                'stock_history_categories.stock_history_category_name',
+                'stocks.lot',
+                'stocks.exp',
+            )
+            ->orderBy('stock_histories.updated_at', 'asc')
+            ->orderBy('items.item_code', 'asc')
+            ->orderBy('bases.sort_order', 'asc');
     }
 }

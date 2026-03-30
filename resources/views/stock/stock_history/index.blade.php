@@ -4,7 +4,6 @@
         <x-pagination :pages="$stock_histories" />
     </div>
     <div class="flex flex-row gap-x-5 items-start">
-        <x-stock.stock-history.search route="stock_history.index" :stockHistoryCategories="$stock_history_categories" />
-        <x-stock.stock-history.list :stockHistories="$stock_histories" />
+        <x-stock.stock-history.list :stockHistories="$stock_histories" :stockHistoryCategories="$stock_history_categories" :bases="$bases" :users="$users" />
     </div>
 </x-app-layout>

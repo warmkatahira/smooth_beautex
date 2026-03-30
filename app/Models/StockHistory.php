@@ -28,8 +28,8 @@ class StockHistory extends Model
     public static function downloadHeader()
     {
         return [
-            '日付',
-            '時間',
+            '履歴日',
+            '履歴時間',
             '区分',
             '実行ユーザー',
             '倉庫名',
@@ -37,16 +37,11 @@ class StockHistory extends Model
             '商品JANコード',
             '商品名',
             '商品カテゴリ1',
+            '商品カテゴリ2',
+            'LOT',
+            'EXP',
             '数量',
             'コメント',
-        ];
-    }
-    // ダウンロード時のヘッダーを定義
-    public static function downloadHeaderAtBilling()
-    {
-        return [
-            '入荷日',
-            '数量',
         ];
     }
 }

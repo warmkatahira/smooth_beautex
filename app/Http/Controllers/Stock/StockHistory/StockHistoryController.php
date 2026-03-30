@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 // モデル
 use App\Models\StockHistoryCategory;
 use App\Models\Item;
+use App\Models\User;
+use App\Models\Base;
 // サービス
 use App\Services\Stock\StockHistory\StockHistorySearchService;
 // トレイト
@@ -31,10 +33,16 @@ class StockHistoryController extends Controller
         // ページネーションを実施
         $stock_histories = $this->setPagination($result);
         // 在庫履歴区分を取得
-        $stock_history_categories = StockHistoryCategory::getAll()->get();       
+        $stock_history_categories = StockHistoryCategory::getAll()->get();
+        // ユーザーを取得
+        $users = User::getAll()->get();
+        // 倉庫を取得
+        $bases = Base::getAll()->get();
         return view('stock.stock_history.index')->with([
             'stock_histories' => $stock_histories,
             'stock_history_categories' => $stock_history_categories,
+            'users' => $users,
+            'bases' => $bases,
         ]);
     }
 }

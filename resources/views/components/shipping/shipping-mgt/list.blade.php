@@ -63,16 +63,25 @@
                         </td>
                         <td class="py-1 px-2 border text-center">{{ CarbonImmutable::parse($order->order_import_date)->isoFormat('Y年MM月DD日(ddd)') }}</td>
                         <td class="py-1 px-2 border text-center">{{ CarbonImmutable::parse($order->order_import_time)->isoFormat('HH:mm:ss') }}</td>
-                        <td class="py-1 px-2 border text-center">{{ $order->order_no }}</td>
+                        <td class="py-1 px-2 border text-center relative group/clipboard">
+                            {{ $order->order_no }}
+                            <x-clipboard-copy-btn :value="$order->order_no" label="注文番号" />
+                        </td>
                         <td class="py-1 px-2 border text-center">{{ CarbonImmutable::parse($order->order_date)->isoFormat('Y年MM月DD日(ddd)') }}</td>
                         <td class="py-1 px-2 border text-center">{{ CarbonImmutable::parse($order->order_time)->isoFormat('HH:mm:ss') }}</td>
-                        <td class="py-1 px-2 border text-center">{{ $order->order_control_id }}</td>
+                        <td class="py-1 px-2 border text-center relative group/clipboard">
+                            {{ $order->order_control_id }}
+                            <x-clipboard-copy-btn :value="$order->order_control_id" label="受注管理ID" />
+                        </td>
                         <td class="py-1 px-2 border text-center">{{ $order->order_category->order_category_name }}</td>
                         <td class="py-1 px-2 border text-center">
                             <img src="{{ asset('image/'.$order->order_category->mall->mall_image_file_name) }}" class="w-12 inline-block">
                         </td>
                         <td class="py-1 px-2 border text-center">{{ $order->base?->base_name }}</td>
-                        <td class="py-1 px-2 border">{{ $order->ship_name }}</td>
+                        <td class="py-1 px-2 border relative group/clipboard">
+                            {{ $order->ship_name }}
+                            <x-clipboard-copy-btn :value="$order->ship_name" label="配送先名" />
+                        </td>
                         <td class="py-1 px-2 border text-center">{{ $order->ship_region_type }}</td>
                         <td class="py-1 px-2 border text-center">{{ $order->ship_prefecture_name }}</td>
                         <td class="py-1 px-2 border text-center">

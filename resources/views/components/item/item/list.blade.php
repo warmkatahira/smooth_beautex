@@ -33,7 +33,7 @@
             </thead>
             <tbody class="bg-white">
                 @foreach($items as $item)
-                    <tr class="text-left cursor-default whitespace-nowrap">
+                    <tr class="text-left cursor-default whitespace-nowrap hover:bg-theme-sub group">
                         @can('warm_check')
                             <td class="py-1 px-2 border">
                                 <div class="flex flex-row gap-5">
@@ -45,11 +45,26 @@
                         <td class="py-1 px-2 border">
                             <img class="w-10 h-10 mx-auto image_fade_in_modal_open" src="{{ asset('storage/item_images/'.$item->item_image_file_name) }}">
                         </td>
-                        <td class="py-1 px-2 border">{{ $item->item_code }}</td>
-                        <td class="py-1 px-2 border">{{ $item->item_jan_code }}</td>
-                        <td class="py-1 px-2 border">{{ $item->item_name }}</td>
-                        <td class="py-1 px-2 border">{{ $item->item_category_1 }}</td>
-                        <td class="py-1 px-2 border">{{ $item->item_category_2 }}</td>
+                        <td class="py-1 px-2 border relative group/clipboard">
+                            {{ $item->item_code }}
+                            <x-clipboard-copy-btn :value="$item->item_code" label="商品コード" />
+                        </td>
+                        <td class="py-1 px-2 border relative group/clipboard">
+                            {{ $item->item_jan_code }}
+                            <x-clipboard-copy-btn :value="$item->item_jan_code" label="商品JANコード" />
+                        </td>
+                        <td class="py-1 px-2 border relative group/clipboard">
+                            {{ $item->item_name }}
+                            <x-clipboard-copy-btn :value="$item->item_name" label="商品名" />
+                        </td>
+                        <td class="py-1 px-2 border relative group/clipboard">
+                            {{ $item->item_category_1 }}
+                            <x-clipboard-copy-btn :value="$item->item_category_1" label="商品カテゴリ1" />
+                        </td>
+                        <td class="py-1 px-2 border relative group/clipboard">
+                            {{ $item->item_category_2 }}
+                            <x-clipboard-copy-btn :value="$item->item_category_2" label="商品カテゴリ2" />
+                        </td>
                         <td class="py-1 px-2 border text-center">
                             <x-list.status :value="$item->is_inspection_lot_required" label1="必要" label0="不要" />
                         </td>

@@ -12,4 +12,5 @@ INSERT INTO `auto_process_conditions` (`auto_process_condition_id`, `auto_proces
 (5, 3, 'mall_shipping_method', '=', '通常配送', '2026-03-17 01:00:31', '2026-03-17 01:00:31'),
 (6, 2, 'mall_shipping_method', '=', 'Standard EMS', '2026-03-17 01:01:09', '2026-03-17 01:01:09'),
 (7, 2, 'mall_shipping_method', '=', 'Standard Shipping', '2026-03-17 01:01:09', '2026-03-17 01:01:09'),
-(8, 4, 'mall_shipping_method', '=', 'UPS ( Fastest )', '2026-03-17 01:01:09', '2026-03-17 01:01:09');
+(8, 2, 'mall_shipping_method', '=', 'ReShip', '2026-03-17 01:01:09', '2026-03-17 01:01:09'),
+(9, 4, 'mall_shipping_method', '=', 'UPS ( Fastest )', '2026-03-17 01:01:09', '2026-03-17 01:01:09');

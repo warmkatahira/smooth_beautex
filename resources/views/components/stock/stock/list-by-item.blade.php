@@ -37,11 +37,26 @@
                         <td class="py-1 px-2 border">
                             <img class="w-10 h-10 mx-auto image_fade_in_modal_open" src="{{ asset('storage/item_images/'.$stock->item_image_file_name) }}">
                         </td>
-                        <td class="py-1 px-2 border">{{ $stock->item_code }}</td>
-                        <td class="py-1 px-2 border">{{ $stock->item_jan_code }}</td>
-                        <td class="py-1 px-2 border">{{ $stock->item_name }}</td>
-                        <td class="py-1 px-2 border">{{ $stock->item_category_1 }}</td>
-                        <td class="py-1 px-2 border">{{ $stock->item_category_2 }}</td>
+                        <td class="py-1 px-2 border relative group/clipboard">
+                            {{ $stock->item_code }}
+                            <x-clipboard-copy-btn :value="$stock->item_code" label="商品コード" />
+                        </td>
+                        <td class="py-1 px-2 border relative group/clipboard">
+                            {{ $stock->item_jan_code }}
+                            <x-clipboard-copy-btn :value="$stock->item_jan_code" label="商品JANコード" />
+                        </td>
+                        <td class="py-1 px-2 border relative group/clipboard">
+                            {{ $stock->item_name }}
+                            <x-clipboard-copy-btn :value="$stock->item_name" label="商品名" />
+                        </td>
+                        <td class="py-1 px-2 border relative group/clipboard">
+                            {{ $stock->item_category_1 }}
+                            <x-clipboard-copy-btn :value="$stock->item_category_1" label="商品カテゴリ1" />
+                        </td>
+                        <td class="py-1 px-2 border relative group/clipboard">
+                            {{ $stock->item_category_2 }}
+                            <x-clipboard-copy-btn :value="$stock->item_category_2" label="商品カテゴリ2" />
+                        </td>
                         <td class="py-1 px-2 border text-center">
                             <x-list.status :value="$stock->is_stock_managed" label1="有効" label0="無効" />
                         </td>

@@ -20,6 +20,5 @@ class ShippingHistoryService
             session(['filter_shipping_date_from' => $request->filter_shipping_date_from]);
             session(['filter_shipping_date_to' => $request->filter_shipping_date_to]);
         }
-        return;
     }
 }
