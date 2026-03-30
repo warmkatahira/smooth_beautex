@@ -28,10 +28,11 @@
                 <table id="receiving_complete_table" class="text-sm w-full">
                     <thead>
                         <tr class="text-xs text-left text-white bg-black whitespace-nowrap sticky top-0">
-                            <th class="font-thin py-1 px-2 text-center operation">操作</th>
                             <th class="font-thin py-1 px-2 text-center item_code">商品コード</th>
                             <th class="font-thin py-1 px-2 text-center item_jan_code">商品JANコード</th>
                             <th class="font-thin py-1 px-2 text-center item_name">商品名</th>
+                            <th class="font-thin py-1 px-2 text-center lot">LOT</th>
+                            <th class="font-thin py-1 px-2 text-center exp">EXP</th>
                             <th class="font-thin py-1 px-2 text-center quantity">数量</th>
                         </tr>
                     </thead>
@@ -43,5 +44,5 @@
     </div>
 </x-app-layout>
 <x-item-id-code-alert title="入庫検品商品アラート" />
-<x-stock.receiving-inspection.item-change-modal />
+<x-shipping.shipping-inspection.lot-exp-input-modal />
 @vite(['resources/js/stock/receiving_inspection/receiving_inspection.js', 'resources/sass/stock/receiving_inspection/receiving_inspection.scss'])

@@ -55,9 +55,7 @@ Route::middleware('common')->group(function (){
         Route::controller(ReceivingInspectionController::class)->prefix('receiving_inspection')->name('receiving_inspection.')->group(function(){
             Route::get('', 'index')->name('index');
             Route::get('ajax_check_item_id_code', 'ajax_check_item_id_code');
-            Route::post('ajax_delete_item_id', 'ajax_delete_item_id');
-            Route::post('ajax_get_item_id_change_target', 'ajax_get_item_id_change_target');
-            Route::post('ajax_change_item_id', 'ajax_change_item_id');
+            Route::post('ajax_check_lot_exp', 'ajax_check_lot_exp');
         });
         Route::controller(ReceivingInspectionEnterController::class)->prefix('receiving_inspection_enter')->name('receiving_inspection_enter.')->group(function(){
             Route::post('enter', 'enter')->name('enter');

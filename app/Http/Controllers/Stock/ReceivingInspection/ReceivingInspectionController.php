@@ -8,8 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Base;
 // サービス
 use App\Services\Stock\ReceivingInspection\ItemIdCodeCheckService;
-use App\Services\Stock\ReceivingInspection\ItemIdDeleteService;
-use App\Services\Stock\ReceivingInspection\ItemIdChangeService;
+use App\Services\Stock\ReceivingInspection\LotExpCheckService;
 
 class ReceivingInspectionController extends Controller
 {
@@ -33,16 +32,6 @@ class ReceivingInspectionController extends Controller
         $ItemIdCodeCheckService = new ItemIdCodeCheckService;
         // 商品マスタから検品した商品を特定
         $ItemIdCodeCheckService->check($request);
-        // 商品が見つかっていれば処理を継続
-        if(session('found')){
-            // 商品識別コードからEXPを取得し、チェック
-            $ItemIdCodeCheckService->checkExp($request->item_id_code);
-            // エラーが無ければ処理を継続
-            if(is_null(session('exp_check_result'))){
-                // 検品情報を配列に格納
-                $ItemIdCodeCheckService->setScanInfo();
-            }
-        }
         // 商品が見つかっていない場合
         if(!session('found')){
             session(['error_message' => '商品が見つかりませんでした。<br>' . $request->item_id_code]);
@@ -50,56 +39,33 @@ class ReceivingInspectionController extends Controller
         // 結果を返す
         return response()->json([
             'error_message' => session('error_message'),
-            'exp_check_result' => session('exp_check_result'),
+            'exp_lot_check_result' => session('exp_lot_check_result'),
             'add' => session('add'),
             'quantity' => session('quantity'),
-            'item_id' => session('item_id'),
-            'item_code' => session('item_code'),
-            'item_jan_code' => session('item_jan_code'),
-            'item_name' => session('item_name'),
+            'item' => session('item'),
+            'quantity' => session('quantity'),
+            'lot' => session('lot'),
+            'exp' => session('exp'),
+            'item_id_type' => session('item_id_type'),
+        ]);
+    }
+
+    // LOTとEXPが入力された際の処理
+    public function ajax_check_lot_exp(Request $request)
+    {
+        // インスタンス化
+        $LotExpCheckService = new LotExpCheckService;
+        // LOTとEXPを確認
+        $LotExpCheckService->check($request->lot, $request->exp);
+        // 結果を返す
+        return response()->json([
+            'error_message' => session('error_message'),
+            'add' => session('add'),
             'quantity' => session('quantity'),
             'progress' => session('progress'),
-        ]);
-    }
-
-    // 検品商品が削除された際の処理
-    public function ajax_delete_item_id(Request $request)
-    {
-        // インスタンス化
-        $ItemIdDeleteService = new ItemIdDeleteService;
-        // 検品商品を削除
-        $ItemIdDeleteService->delete($request);
-        // 結果を返す
-        return response()->json([
-            'item_id' => $request->item_id,
-            'progress' => session('progress'),
-        ]);
-    }
-
-    // 検品商品の変更対象を取得する処理
-    public function ajax_get_item_id_change_target(Request $request)
-    {
-        // インスタンス化
-        $ItemIdChangeService = new ItemIdChangeService;
-        // 検品商品変更対象を取得
-        $items = $ItemIdChangeService->getChangeTarget($request);
-        // 結果を返す
-        return response()->json([
-            'items' => $items,
-        ]);
-    }
-
-    // 検品商品の変更がされた際の処理
-    public function ajax_change_item_id(Request $request)
-    {
-        // インスタンス化
-        $ItemIdChangeService = new ItemIdChangeService;
-        // 検品商品の変更
-        $item = $ItemIdChangeService->changeItem($request);
-        // 結果を返す
-        return response()->json([
-            'item' => $item,
-            'item_id' => $request->item_id,
+            'lot' => session('lot'),
+            'exp' => session('exp'),
+            'item' => session('item'),
         ]);
     }
 }

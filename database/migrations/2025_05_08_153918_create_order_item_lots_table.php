@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('order_item_lots', function (Blueprint $table){
             $table->increments('order_item_lot_id');
             $table->unsignedInteger('order_item_id');
-            $table->string('lot', 20);
-            $table->string('exp', 6);
+            $table->string('lot', 20)->nullable();
+            $table->string('exp', 6)->nullable();
             $table->unsignedInteger('quantity');
             $table->timestamps();
             // 外部キー

@@ -44,9 +44,10 @@ class OrderItemCreateService
     {
         // 現在の注文ステータスが「出荷待ち」の場合
         if($order->order_status_id == OrderStatusEnum::SHUKKA_MACHI){
-            // 注文ステータスを「引当待ち」に変更
+            // 引当済みを「0」にし、注文ステータスを「引当待ち」に変更
             $order->update([
-                'order_status_id' => OrderStatusEnum::HIKIATE_MACHI,
+                'is_allocated'      => 0,
+                'order_status_id'   => OrderStatusEnum::HIKIATE_MACHI,
             ]);
         }
     }
