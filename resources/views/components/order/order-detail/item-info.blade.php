@@ -1,9 +1,13 @@
 @php
+    // LOTが存在するか確認
     $has_lots = $order->order_items->contains(fn($item) => $item->order_item_lots->isNotEmpty());
 @endphp
 
 <div>
-    <p class="text-base font-semibold border-b pb-2 mb-4">商品情報</p>
+    <div class="flex flex-row items-start">
+        <p class="text-base font-semibold pb-2 mb-4">商品情報</p>
+        <button type="button" id="order_item_create_modal_open" class="btn bg-btn-enter text-white ml-auto px-5 py-1 rounded-md">商品追加</button>
+    </div>
     <div class="disable_scrollbar flex flex-grow overflow-scroll">
         <div class="order_detail_list bg-white overflow-x-auto overflow-y-auto border border-gray-600">
             <table class="text-xs">
@@ -42,6 +46,7 @@
                             <td class="py-1 px-2 border text-center">{!! displayCheckIfTrue($order_item->is_stock_allocated) !!}</td>
                             <td class="py-1 px-2 border">{{ $order_item->order_item_code }}</td>
                             <td class="py-1 px-2 border">{{ $order_item->item?->item_jan_code }}</td>
+                            <td class="py-1 px-2 border">{{ $order_item->item?->item_name }}</td>
                             <td class="py-1 px-2 border text-right">{{ number_format($order_item->shipping_quantity) }}</td>
                             <td class="py-1 px-2 border text-right">{{ number_format($order_item->order_item_unit_price) }}</td>
                             <td class="py-1 px-2 border text-right">{{ number_format($order_item->unallocated_quantity) }}</td>

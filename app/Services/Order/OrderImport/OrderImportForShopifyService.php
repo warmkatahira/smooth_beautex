@@ -140,7 +140,7 @@ class OrderImportForShopifyService
             'order_item_code'           => 'required|string|max:255',
             'order_item_name'           => 'required|string|max:255',
             'shipping_quantity'         => 'required|integer|min:1',
-            'order_item_unit_price'     => 'required|integer|min:1',
+            'order_item_unit_price'     => 'required|integer|min:0',
             'unallocated_quantity'      => 'required|integer|min:1',
             'order_category_id'         => 'required|exists:order_categories,order_category_id',
         ];

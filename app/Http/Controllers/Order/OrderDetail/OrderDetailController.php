@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\Base;
 use App\Models\DeliveryCompany;
-use App\Services\Common\MieruService;
 
 class OrderDetailController extends Controller
 {

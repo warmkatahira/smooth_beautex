@@ -42,6 +42,9 @@ class BaseRequest extends FormRequest
             'shipping_group_name'       => '出荷グループ名',
             'estimated_shipping_date'   => '出荷予定日',
             'shipping_group_id'         => '出荷グループ',
+            'order_item_code'           => '商品コード',
+            'shipping_quantity'         => '出荷数',
+            'order_item_unit_price'     => '商品単価',
             // 商品情報
             'item_id'                       => '商品',
             'item_jan_code'                 => '商品JANコード',

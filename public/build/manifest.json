@@ -4,7 +4,7 @@
     "name": "audio"
   },
   "resources/css/app.css": {
-    "file": "assets/app-DSDd7zT7.css",
+    "file": "assets/app-Ds8h_nwE.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -99,6 +99,15 @@
     "file": "assets/order_detail-CjYd4lnP.js",
     "name": "order_detail",
     "src": "resources/js/order/order_detail/order_detail.js",
+    "isEntry": true,
+    "imports": [
+      "resources/js/loading.js"
+    ]
+  },
+  "resources/js/order/order_detail/order_item_update.js": {
+    "file": "assets/order_item_update-BUfzQ42A.js",
+    "name": "order_item_update",
+    "src": "resources/js/order/order_detail/order_item_update.js",
     "isEntry": true,
     "imports": [
       "resources/js/loading.js"
