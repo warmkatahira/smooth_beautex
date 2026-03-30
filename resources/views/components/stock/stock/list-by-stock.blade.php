@@ -1,8 +1,8 @@
 <div class="disable_scrollbar flex flex-grow overflow-scroll">
     <div class="stock_list bg-white overflow-x-auto overflow-y-auto border border-gray-600">
         <table id="filter_table" class="text-xs" data-search-url="/stock/index_by_stock" data-scroll-target=".stock_list">
-            <thead class="sticky top-0">
-                <tr class="text-left text-white bg-black whitespace-nowrap">
+            <thead">
+                <tr class="text-left text-white bg-black whitespace-nowrap sticky top-0 h-7 z-10">
                     @can('warm_check')
                         <th class="font-thin py-1 px-2 text-center">操作</th>
                     @endcan
@@ -19,7 +19,7 @@
                     <th class="font-thin py-1 px-2 text-center">EXP</th>
                     <th class="font-thin py-1 px-2 text-center">在庫数</th>
                 </tr>
-                <tr class="filter-row sticky top-0 bg-white z-10 h-8">
+                <tr class="filter-row sticky top-[28px] bg-white z-10">
                     <th></th>
                     <th></th>
                     <x-filter.select id="filter_base_id" name="filter_base_id" :selectItems="$bases" optionValue="base_id" optionText="base_name" />
@@ -32,6 +32,7 @@
                     <x-filter.select-boolean id="filter_is_stock_managed" name="filter_is_stock_managed" label1="有効" label0="無効" />
                     <x-filter.input type="tel" id="filter_lot" name="filter_lot" />
                     <x-filter.input type="tel" id="filter_exp" name="filter_exp" placeholder="YYYYMM形式" />
+                    <x-filter.input type="tel" id="filter_total_stock" name="filter_total_stock" />
                 </tr>
             </thead>
             <tbody class="bg-white">

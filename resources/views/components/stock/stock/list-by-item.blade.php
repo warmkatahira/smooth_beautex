@@ -1,14 +1,14 @@
 <div class="disable_scrollbar flex flex-grow overflow-scroll">
     <div class="stock_list bg-white overflow-x-auto overflow-y-auto border border-gray-600">
         <table id="filter_table" class="text-xs" data-search-url="/stock/index_by_item" data-scroll-target=".stock_list">
-            <thead class="sticky top-0">
+            <thead class="sticky top-0 z-10">
                 <tr class="text-center whitespace-nowrap">
                     <th class="font-thin py-1 text-sm bg-black text-white" colspan="7" scope="colgroup">商品情報</th>
                     @foreach ($bases as $base)
-                        <th style="background-color: {{ $base->base_color_code }};" class="font-thin py-1 text-sm" colspan="3" scope="colgroup">{{ $base->base_name }}</th>
+                        <th style="background-color: {{ $base->base_color_code }};" class="font-thin py-1 text-sm" colspan="2" scope="colgroup">{{ $base->base_name }}</th>
                     @endforeach
                 </tr>
-                <tr class="text-left text-white bg-black whitespace-nowrap">
+                <tr class="text-left text-white bg-black whitespace-nowrap h-7">
                     <th class="font-thin py-1 px-2 text-center">商品画像</th>
                     <th class="font-thin py-1 px-2 text-center">商品コード</th>
                     <th class="font-thin py-1 px-2 text-center">商品JANコード</th>
@@ -21,7 +21,7 @@
                         <th class="font-thin py-1 px-2 text-center">受注数</th>
                     @endforeach
                 </tr>
-                <tr class="filter-row sticky top-0 bg-white z-10 h-8">
+                <tr class="filter-row bg-white">
                     <th></th>
                     <x-filter.input type="tel" id="filter_item_code" name="filter_item_code" />
                     <x-filter.input type="tel" id="filter_item_jan_code" name="filter_item_jan_code" />

@@ -62,6 +62,16 @@ class StockSearchService
                     ->on('stocks.base_id', '=', 'item_base.base_id');
             });
         }
+        // 在庫数の条件がある場合
+        if(session('filter_total_stock') !== null){
+            if($route_name === RouteNameEnum::STOCK_BY_ITEM){
+                // STOCK_BY_ITEMはgroupBy後にSUMで集計されているのでhaving
+                $query = $query->havingRaw("SUM(stocks.total_stock) = ?", [session('filter_total_stock')]);
+            } else {
+                // それ以外はそのままwhere
+                $query = $query->where('stocks.total_stock', session('filter_total_stock'));
+            }
+        }
         // LOTの条件がある場合
         if(session('filter_lot') != null){
             // 条件を指定して取得
@@ -148,6 +158,7 @@ class StockSearchService
             $query = $query->orderBy('item_base.base_sort_order', 'asc')
                         ->orderBy('item_base.item_sort_order', 'asc');
         }
+        
         return with([
             'stocks' => $query,
             'bases' => $bases,

@@ -44,6 +44,7 @@ class ItemSearchService extends BaseFilterService
         return [
             'filter_lot',
             'filter_exp',
+            'filter_total_stock',
         ];
     }
 

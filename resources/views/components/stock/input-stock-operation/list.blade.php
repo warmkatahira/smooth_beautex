@@ -1,8 +1,8 @@
 <div class="disable_scrollbar flex flex-grow overflow-scroll">
     <div class="input_stock_operation_list bg-white overflow-x-auto overflow-y-auto border border-gray-600">
         <table id="filter_table" class="text-xs" data-search-url="/input_stock_operation" data-scroll-target=".input_stock_operation_list">
-            <thead class="sticky top-0">
-                <tr class="text-left text-white bg-black whitespace-nowrap">
+            <thead>
+                <tr class="text-left text-white bg-black whitespace-nowrap sticky top-0 h-7 z-10">
                     <th class="font-thin py-1 px-2 text-center">商品画像</th>
                     <th class="font-thin py-1 px-2 text-center">倉庫名</th>
                     <th class="font-thin py-1 px-2 text-center">商品コード</th>
@@ -17,7 +17,7 @@
                     <th class="font-thin py-1 px-2 text-center">在庫数</th>
                     <th class="font-thin py-1 px-2 text-center">数量<i class="lar la-question-circle la-lg ml-1 tippy_quantity"></i></th>
                 </tr>
-                <tr class="filter-row sticky top-0 bg-white z-10 h-8">
+                <tr class="filter-row sticky top-[28px] bg-white z-10">
                     <th></th>
                     <x-filter.select id="filter_base_id" name="filter_base_id" :selectItems="$bases" optionValue="base_id" optionText="base_name" />
                     <x-filter.input type="tel" id="filter_item_code" name="filter_item_code" />
