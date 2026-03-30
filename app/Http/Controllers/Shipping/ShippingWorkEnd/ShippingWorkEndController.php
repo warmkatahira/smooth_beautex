@@ -27,10 +27,10 @@ class ShippingWorkEndController extends Controller
         session(['page_header' => '出荷完了']);
         // 出荷完了対象と出荷完了対象外を出荷倉庫毎で取得
         $shipping_work_end_info = Order::where('order_status_id', OrderStatusEnum::SAGYO_CHU)
-                ->selectRaw('shipping_base_id, is_shipping_inspection_complete, COUNT(*) as count')
-                ->groupBy('shipping_base_id', 'is_shipping_inspection_complete')
-                ->with('base')
-                ->get();
+                                        ->selectRaw('shipping_base_id, is_shipping_inspection_complete, COUNT(*) as count')
+                                        ->groupBy('shipping_base_id', 'is_shipping_inspection_complete')
+                                        ->with('base')
+                                        ->get();
         // 配列を初期化
         $shipping_work_end_info_arr = [];
         // 倉庫を取得

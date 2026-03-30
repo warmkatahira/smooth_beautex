@@ -45,9 +45,18 @@
                             </td>
                             <td class="py-1 px-2 border text-center">{!! displayCheckIfTrue($order_item->is_item_allocated) !!}</td>
                             <td class="py-1 px-2 border text-center">{!! displayCheckIfTrue($order_item->is_stock_allocated) !!}</td>
-                            <td class="py-1 px-2 border">{{ $order_item->order_item_code }}</td>
-                            <td class="py-1 px-2 border">{{ $order_item->item?->item_jan_code }}</td>
-                            <td class="py-1 px-2 border">{{ $order_item->item?->item_name ?? $order_item->order_item_name }}</td>
+                            <td class="py-1 px-2 border relative group/clipboard">
+                                {{ $order_item->order_item_code }}
+                                <x-clipboard-copy-btn :value="$order_item->order_item_code" label="商品コード" />
+                            </td>
+                            <td class="py-1 px-2 border relative group/clipboard">
+                                {{ $order_item->item?->item_jan_code }}
+                                <x-clipboard-copy-btn :value="$order_item->item?->item_jan_code" label="商品JANコード" />
+                            </td>
+                            <td class="py-1 px-2 border relative group/clipboard">
+                                {{ $order_item->item?->item_name ?? $order_item->order_item_name }}
+                                <x-clipboard-copy-btn :value="$order_item->item?->item_name ?? $order_item->order_item_name" label="商品名" />
+                            </td>
                             <td class="py-1 px-2 border text-right">{{ number_format($order_item->shipping_quantity) }}</td>
                             <td class="py-1 px-2 border text-right">{{ number_format($order_item->order_item_unit_price) }}</td>
                             <td class="py-1 px-2 border text-right">{{ number_format($order_item->unallocated_quantity) }}</td>

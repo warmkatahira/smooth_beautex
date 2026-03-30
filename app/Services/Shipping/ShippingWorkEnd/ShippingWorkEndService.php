@@ -37,6 +37,10 @@ class ShippingWorkEndService
         if($orders->contains('tracking_no', null)){
             throw new ShippingWorkEndException('出荷完了対象に配送伝票番号が未更新の受注が存在するため、出荷完了を中断しました。', $orders->count(), 0);
         }
+        // 出荷検品が未完了の受注がある場合
+        if($orders->contains(fn($order) => !$order->is_shipping_inspection_complete)){
+            throw new ShippingWorkEndException('出荷完了対象に出荷検品が未完了の受注が存在するため、出荷完了を中断しました。', $orders->count(), 0);
+        }
         // 受注管理IDを取得
         return $orders->pluck('order_control_id');
     }
@@ -44,38 +48,62 @@ class ShippingWorkEndService
     // stocksテーブル更新処理
     public function updateStock($order_control_ids)
     {
-        // 出荷完了される受注の商品毎の受注数を取得(在庫管理されている商品のみ取得)
-        $order_quantities = Order::join('order_items', 'order_items.order_control_id', 'orders.order_control_id')
-                            ->join('items', 'items.item_code', 'order_items.order_item_code')
-                            ->join('bases', 'bases.base_id', 'orders.shipping_base_id')
-                            ->whereIn('orders.order_control_id', $order_control_ids)
-                            ->where('is_stock_managed', 1)
-                            ->select('items.item_id', 'items.item_code', 'base_name', 'shipping_base_id', DB::raw('SUM(order_items.shipping_quantity) as total_shipping_quantity'))
-                            ->groupBy('items.item_id', 'items.item_code', 'base_name', 'shipping_base_id')
-                            ->lockForUpdate()
-                            ->get();
+        // 出荷完了される受注のorder_item_lotsを取得（在庫管理されている商品のみ）
+        $order_item_lots = Order::join('order_items', 'order_items.order_control_id', 'orders.order_control_id')
+                                ->join('order_item_lots', 'order_item_lots.order_item_id', 'order_items.order_item_id')
+                                ->join('items', 'items.item_code', 'order_items.order_item_code')
+                                ->join('bases', 'bases.base_id', 'orders.shipping_base_id')
+                                ->whereIn('orders.order_control_id', $order_control_ids)
+                                ->where('items.is_stock_managed', 1)
+                                ->select(
+                                    'items.item_id',
+                                    'items.item_code',
+                                    'bases.base_id as shipping_base_id',
+                                    'bases.base_name',
+                                    'order_item_lots.lot',
+                                    'order_item_lots.exp',
+                                    DB::raw('SUM(order_item_lots.quantity) as total_shipping_quantity')
+                                )
+                                ->groupBy(
+                                    'items.item_id',
+                                    'items.item_code',
+                                    'bases.base_id',
+                                    'bases.base_name',
+                                    'order_item_lots.lot',
+                                    'order_item_lots.exp',
+                                )
+                                ->lockForUpdate()
+                                ->get();
         // 更新に必要な情報を格納する配列を初期化
         $stocks = [];
-        // 検品結果の在庫情報の分だけループ処理
-        foreach($order_quantities as $shipping_quantity){
-            // 在庫テーブルから情報を取得
-            $stock = Stock::where('base_id', $shipping_quantity->shipping_base_id)
-                        ->where('item_id', $shipping_quantity->item_id)
-                        ->first();
-            // 在庫が取得できなかった場合エラーを返す
+        // 検品結果の分だけループ処理
+        foreach($order_item_lots as $order_item_lot){
+            // item_id + base_id + lot + exp で在庫を取得
+            $stock = Stock::where('item_id', $order_item_lot->item_id)
+                            ->where('base_id', $order_item_lot->shipping_base_id)
+                            ->where('lot', $order_item_lot->lot)
+                            ->where('exp', $order_item_lot->exp)
+                            ->first();
+            // 在庫が取得できなかった場合エラー
             if(is_null($stock)){
-                throw new ShippingWorkEndException("在庫が取得できない商品があったため、出荷完了を中断しました。\n".
-                        "出荷倉庫：".$shipping_quantity->base_name."\n".
-                        "商品コード:".$shipping_quantity->item_code,
-                        $order_control_ids->count(), 0);
+                throw new ShippingWorkEndException(
+                    "在庫が取得できない商品があったため、出荷完了を中断しました。\n".
+                    "出荷倉庫：".$order_item_lot->base_name."\n".
+                    "商品コード：".$order_item_lot->item_code."\n".
+                    "LOT：".$order_item_lot->lot."\n".
+                    "EXP：".formatExp($order_item_lot->exp),
+                    $order_control_ids->count(), 0
+                );
             }
-            // 配列に情報を格納(在庫履歴でマイナスにしておく必要があるので、マイナス符号をつけている)
+            // 配列に情報を格納
             $stocks[] = [
-                            'stock_id' => $stock->stock_id,
-                            'base_name' => $shipping_quantity->base_name,
-                            'item_code' => $shipping_quantity->item_code,
-                            'quantity' => '-'.$shipping_quantity->total_shipping_quantity,
-                        ];
+                'stock_id'  => $stock->stock_id,
+                'base_name' => $order_item_lot->base_name,
+                'item_code' => $order_item_lot->item_code,
+                'lot'       => $order_item_lot->lot,
+                'exp'       => $order_item_lot->exp,
+                'quantity'  => -(int)$order_item_lot->total_shipping_quantity,
+            ];
         }
         // stock_idだけを抜き出し
         $stock_ids = collect($stocks)->pluck('stock_id');
@@ -87,11 +115,15 @@ class ShippingWorkEndService
             $locked_stock = $locked_stocks->where('stock_id', $stock['stock_id'])->first();
             // 在庫数より出荷数の方が大きければエラーを返す
             if($locked_stock->total_stock < abs($stock['quantity'])){
-                throw new ShippingWorkEndException("在庫数がマイナスになる在庫があるため、出荷完了を中断しました。\n".
+                throw new ShippingWorkEndException(
+                        "在庫数がマイナスになる在庫があるため、出荷完了を中断しました。\n".
                         "出荷倉庫：".$stock['base_name']."\n".
-                        "商品コード:".$stock['item_code']."\n".
-                        "出荷数:".$stock['quantity'],
-                        $order_control_ids->count(), 0);
+                        "商品コード：".$stock['item_code']."\n".
+                        "LOT：".$stock['lot']."\n".
+                        "EXP：".formatExp($stock['exp'])."\n".
+                        "出荷数：".$stock['quantity'],
+                        $order_control_ids->count(), 0
+                    );
             }
             // 在庫数から出荷数を引く（マイナス符号がついているので、incrementにしている）
             $locked_stock->increment('total_stock', $stock['quantity']);
@@ -104,8 +136,8 @@ class ShippingWorkEndService
     {
         // 出荷日、受注ステータス、出荷グループIDを更新
         Order::whereIn('order_control_id', $order_control_ids)->update([
-            'shipping_date' => CarbonImmutable::now()->toDateString(),
-            'order_status_id' => OrderStatusEnum::SHUKKA_ZUMI,
+            'shipping_date'     => CarbonImmutable::now()->toDateString(),
+            'order_status_id'   => OrderStatusEnum::SHUKKA_ZUMI,
             'shipping_group_id' => Null,
         ]);
     }
@@ -122,9 +154,9 @@ class ShippingWorkEndService
     {
         // レコードを追加
         ShippingWorkEndHistory::create([
-            'target_count' => $target_count,
+            'target_count'  => $target_count,
             'is_successful' => $is_successful,
-            'message' => $message,
+            'message'       => $message,
         ]);
     }
 }
