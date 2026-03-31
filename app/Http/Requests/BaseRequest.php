@@ -46,6 +46,12 @@ class BaseRequest extends FormRequest
             'order_item_id'             => '受注商品',
             'shipping_quantity'         => '出荷数',
             'order_item_unit_price'     => '商品単価',
+            'ship_country_code'         => '配送先国名コード',
+            'ship_province_code'        => '配送先都道府県コード',
+            'ship_province_name'        => '配送先都道府県名',
+            'ship_city'                 => '配送先市区町村',
+            'ship_address_1'            => '配送先住所1',
+            'ship_address_2'            => '配送先住所2',
             // 商品情報
             'item_id'                       => '商品',
             'item_jan_code'                 => '商品JANコード',

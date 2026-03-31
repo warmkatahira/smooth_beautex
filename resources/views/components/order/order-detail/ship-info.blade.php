@@ -5,7 +5,7 @@
             <div class="flex flex-col">
                 <x-order.order-detail.info-div label="配送地域" :value="$order->ship_region_type" />
                 <x-order.order-detail.info-div label="配送先郵便番号" :value="$order->ship_zip_code" />
-                <x-order.order-detail.info-div label="配送先住所" :value="$order->full_ship_address" />
+                <x-order.order-detail.info-div label="配送先住所" :value="$order->full_ship_address" :order="$order" openModalId="ship_address_update_modal_open" modalTippy="tippy_ship_address_update" />
             </div>
         </div>
         <div class="w-1/2">

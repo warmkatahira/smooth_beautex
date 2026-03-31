@@ -119,6 +119,29 @@ class OrderDetailUpdateService
         ]);
     }
 
+    // 配送先住所を更新できるか確認
+    public function checkUpdatableShipAddress($order)
+    {
+        // 注文ステータスが「作業中」よりも大きい場合
+        if($order->order_status_id > OrderStatusEnum::SAGYO_CHU){
+            throw new \RuntimeException('配送先住所を更新できない注文ステータスです。');
+        }
+    }
+
+    // 配送先住所を更新
+    public function updateShipAddress($request, $order)
+    {
+        // 配送先住所を更新
+        $order->update([
+            'ship_country_code'     => $request->ship_country_code,
+            'ship_province_code'    => $request->ship_province_code,
+            'ship_province_name'    => $request->ship_province_name,
+            'ship_city'             => $request->ship_city,
+            'ship_address_1'        => $request->ship_address_1,
+            'ship_address_2'        => $request->ship_address_2,
+        ]);
+    }
+
     // 出荷作業メモを更新できるか確認
     public function checkUpdatableShippingWorkMemo($order)
     {

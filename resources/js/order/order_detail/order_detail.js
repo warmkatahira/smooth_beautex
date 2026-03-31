@@ -46,6 +46,14 @@ $(document).on('click', function(e){
         $('#tracking_no_update_modal').removeClass('hidden');
     }
     // クリックされた要素にモーダルを閉じるクラス名が設定されていれば、モーダルを閉じる
+    if(e.target.classList.contains('ship_address_update_modal_close') === true){
+        $('#ship_address_update_modal').addClass('hidden');
+    }
+    // クリックした要素のIDがモーダルを開くものであれば、モーダルを開く
+    if(e.target.id === 'ship_address_update_modal_open'){
+        $('#ship_address_update_modal').removeClass('hidden');
+    }
+    // クリックされた要素にモーダルを閉じるクラス名が設定されていれば、モーダルを閉じる
     if(e.target.classList.contains('order_mark_update_modal_close') === true){
         $('#order_mark_update_modal').addClass('hidden');
     }
@@ -130,6 +138,17 @@ $('#tracking_no_update_enter').on("click",function(){
     }
 });
 
+// 配送先住所の更新ボタンを押下した場合
+$('#ship_address_update_enter').on("click",function(){
+    // 処理を実行するか確認
+    const result = window.confirm("配送先住所の更新を実行しますか？");
+    // 「はい」が押下されたらsubmit、「いいえ」が押下されたら処理キャンセル
+    if(result === true){
+        start_loading();
+        $("#ship_address_update_form").submit();
+    }
+});
+
 // 受注マークの更新ボタンを押下した場合
 $('#order_mark_update_enter').on("click",function(){
     // 処理を実行するか確認
@@ -206,6 +225,15 @@ tippy('.tippy_shipping_method_update', {
 // 配送伝票番号更新モーダルのツールチップ
 tippy('.tippy_tracking_no_update', {
     content: "配送伝票番号を更新する場合は、<br>こちらをクリックして下さい",
+    duration: 500,
+    allowHTML: true,
+    placement: 'right',
+    theme: 'tippy_main_theme',
+});
+
+// 配送先住所更新モーダルのツールチップ
+tippy('.tippy_tracking_no_update', {
+    content: "配送先住所を更新する場合は、<br>こちらをクリックして下さい",
     duration: 500,
     allowHTML: true,
     placement: 'right',

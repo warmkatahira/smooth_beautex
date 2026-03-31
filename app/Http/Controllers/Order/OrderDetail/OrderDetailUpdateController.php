@@ -14,6 +14,7 @@ use App\Http\Requests\Order\OrderDetail\ShippingMethodUpdateRequest;
 use App\Http\Requests\Order\OrderDetail\TrackingNoUpdateRequest;
 use App\Http\Requests\Order\OrderDetail\OrderMarkUpdateRequest;
 use App\Http\Requests\Order\OrderDetail\OrderMemoUpdateRequest;
+use App\Http\Requests\Order\OrderDetail\ShipAddressUpdateRequest;
 use App\Http\Requests\Order\OrderDetail\ShippingWorkMemoUpdateRequest;
 use App\Http\Requests\Order\OrderDetail\SupplementUpdateRequest;
 use App\Http\Requests\Order\OrderDetail\DesiredDeliveryDateUpdateRequest;
@@ -98,6 +99,31 @@ class OrderDetailUpdateController extends Controller
         return redirect()->back()->with([
             'alert_type' => 'success',
             'alert_message' => '配送伝票番号を更新しました。',
+        ]);
+    }
+
+    public function ship_address(ShipAddressUpdateRequest $request)
+    {
+        try{
+            DB::transaction(function () use ($request){
+                // インスタンス化
+                $OrderDetailUpdateService = new OrderDetailUpdateService;
+                // 受注をロックして取得
+                $order = $OrderDetailUpdateService->getOrder($request);
+                // 配送先住所を更新できるか確認
+                $OrderDetailUpdateService->checkUpdatableShipAddress($order);
+                // 配送先住所を更新
+                $OrderDetailUpdateService->updateShipAddress($request, $order);
+            });
+        }catch (\Exception $e){
+            return redirect()->back()->with([
+                'alert_type' => 'error',
+                'alert_message' => $e->getMessage(),
+            ]);
+        }
+        return redirect()->back()->with([
+            'alert_type' => 'success',
+            'alert_message' => '配送先住所を更新しました。',
         ]);
     }
 
