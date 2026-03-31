@@ -5,7 +5,7 @@ namespace App\Http\Requests\SystemAdmin\User;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Http\Requests\BaseRequest;
 
-class UserUpdateRequest extends BaseRequest
+class UserCreateRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,14 +13,6 @@ class UserUpdateRequest extends BaseRequest
     public function authorize(): bool
     {
         return true;
-    }
-
-    protected function prepareForValidation(): void
-    {
-        $this->merge([
-            'status'                => $this->boolean('status'),
-            'must_change_password'  => $this->boolean('must_change_password'),
-        ]);
     }
 
     /**
@@ -31,12 +23,12 @@ class UserUpdateRequest extends BaseRequest
     public function rules(): array
     {
         return [
+            'user_id'               => 'required|string|max:20|unique:users,user_id',
             'last_name'             => 'required|string|max:20',
             'first_name'            => 'nullable|string|max:20',
             'status'                => 'required|boolean',
             'role_id'               => 'required|exists:roles,role_id',
             'company_id'            => 'required|exists:companies,company_id',
-            'must_change_password'  => 'required|boolean',
         ];
     }
 

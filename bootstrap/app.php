@@ -10,6 +10,7 @@ use App\Http\Middleware\AdminCheckMiddleware;
 use App\Http\Middleware\OperationLogRecordMiddleware;
 use App\Http\Middleware\WarmCheckMiddleware;
 use App\Http\Middleware\NavigationRouteCheckMiddleware;
+use App\Http\Middleware\ForcePasswordChangeMiddleware;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -22,6 +23,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->appendToGroup('common', [
             // 認証確認
             Authenticate::class,
+            // パスワード変更確認
+            ForcePasswordChangeMiddleware::class,
             // 操作ログ記録
             OperationLogRecordMiddleware::class,
             // ユーザーステータス確認

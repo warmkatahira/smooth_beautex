@@ -1,4 +1,4 @@
-<div class="disable_scrollbar flex flex-grow overflow-scroll my-3">
+<div class="disable_scrollbar flex flex-grow overflow-scroll">
     <div class="user_list bg-white overflow-x-auto overflow-y-auto border border-gray-600">
         <table class="text-xs">
             <thead>
@@ -11,6 +11,7 @@
                     <th class="font-thin py-1 px-2 text-center">ステータス</th>
                     <th class="font-thin py-1 px-2 text-center">権限</th>
                     <th class="font-thin py-1 px-2 text-center">会社名</th>
+                    <th class="font-thin py-1 px-2 text-center">パスワード変更</th>
                     <th class="font-thin py-1 px-2 text-center">最終ログイン日時</th>
                 </tr>
             </thead>
@@ -29,9 +30,14 @@
                             {{ $user->full_name }}
                         </td>
                         <td class="py-1 px-2 border">{{ $user->email }}</td>
-                        <td class="py-1 px-2 border text-center">{{ $user->status_text }}</td>
+                        <td class="py-1 px-2 border text-center">
+                            <x-list.status :value="$user->status" label1="有効" label0="無効" />
+                        </td>
                         <td class="py-1 px-2 border">{{ $user->role->role_name }}</td>
                         <td class="py-1 px-2 border">{{ $user->company->company_name }}</td>
+                        <td class="py-1 px-2 border text-center">
+                            <x-list.status :value="$user->must_change_password" label1="必要" label0="不要" />
+                        </td>
                         <td class="py-1 px-2 border">
                             @if($user->last_login_at)
                                 {{ CarbonImmutable::parse($user->last_login_at)->isoFormat('YYYY年MM月DD日(ddd) HH時mm分ss秒').'('.CarbonImmutable::parse($user->last_login_at)->diffForHumans().')' }}

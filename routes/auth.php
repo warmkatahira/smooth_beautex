@@ -10,6 +10,7 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\ChangePasswordController;
 
 Route::middleware('guest')->group(function (){
     Route::get('register', [RegisteredUserController::class, 'create'])
@@ -53,6 +54,14 @@ Route::middleware('auth')->group(function (){
     Route::post('confirm-password', [ConfirmablePasswordController::class, 'store']);
 
     Route::put('password', [PasswordController::class, 'update'])->name('password.update');
+
+    Route::get('password/change', [ChangePasswordController::class, 'showChangeForm'])
+        ->name('password.change.form')
+        ->middleware('auth');
+
+    Route::post('password/change', [ChangePasswordController::class, 'update'])
+        ->name('password.change.update')
+        ->middleware('auth');
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');

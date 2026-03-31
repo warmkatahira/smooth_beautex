@@ -82,6 +82,7 @@ class BaseRequest extends FormRequest
             'email'                     => 'メールアドレス',
             'password'                  => 'パスワード',
             'status'                    => 'ステータス',
+            'must_change_password'      => 'パスワード変更',
             // 荷送人
             'shipper_id'                => '荷送人',
             'shipper_company_name'      => '荷送人会社名',

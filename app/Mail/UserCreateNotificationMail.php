@@ -9,16 +9,17 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class UserRegisteredMail extends Mailable
+class UserCreateNotificationMail extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($user)
+    public function __construct($user, $password)
     {
         $this->user = $user;
+        $this->password = $password;
     }
 
     /**
@@ -53,9 +54,10 @@ class UserRegisteredMail extends Mailable
 
     public function build()
     {
-        return $this->view('mail.user_registered_mail')
+        return $this->view('mail.user_create_notification_mail')
                 ->with([
-                    'user' => $this->user,
+                    'user'      => $this->user,
+                    'password'  => $this->password,
                 ]);
     }
 }

@@ -31,6 +31,7 @@ class User extends Authenticatable
         'status',
         'role_id',
         'company_id',
+        'must_change_password',
         'profile_image_file_name',
         'last_login_at',
     ];

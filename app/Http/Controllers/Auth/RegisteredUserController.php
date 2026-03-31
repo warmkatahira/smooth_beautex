@@ -13,9 +13,6 @@ use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 // リクエスト
 use App\Http\Requests\Auth\UserCreateRequest;
-// その他
-use App\Mail\UserRegisteredMail;
-use Illuminate\Support\Facades\Mail;
 
 class RegisteredUserController extends Controller
 {
@@ -45,19 +42,6 @@ class RegisteredUserController extends Controller
         ]);
 
         event(new Registered($user));
-
-        // +-+-+-+-+-+-+-+-+-+-   ユーザー登録通知メール   +-+-+-+-+-+-+-+-+-+-
-        // インスタンス化
-        $mail = new UserRegisteredMail($user);
-        // 送信先のメールアドレスを格納
-        $to_users = 't.katahira@warm.co.jp';
-        // Toを設定
-        $mail->to($to_users);
-        // 件名を設定
-        $mail->subject('【smooth】ユーザー登録通知');
-        // メールを送信
-        Mail::send($mail);
-        // +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 
         // 自動ログインさせない
         //Auth::login($user);

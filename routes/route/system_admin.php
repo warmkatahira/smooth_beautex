@@ -8,6 +8,7 @@ use App\Http\Controllers\SystemAdmin\Base\BaseCreateController;
 use App\Http\Controllers\SystemAdmin\Base\BaseUpdateController;
 // +-+-+-+-+-+-+-+- ユーザー +-+-+-+-+-+-+-+-
 use App\Http\Controllers\SystemAdmin\User\UserController;
+use App\Http\Controllers\SystemAdmin\User\UserCreateController;
 use App\Http\Controllers\SystemAdmin\User\UserUpdateController;
 // +-+-+-+-+-+-+-+- 操作ログ +-+-+-+-+-+-+-+-
 use App\Http\Controllers\SystemAdmin\OperationLog\OperationLogController;
@@ -41,6 +42,10 @@ Route::middleware('common')->group(function (){
             // +-+-+-+-+-+-+-+- ユーザー +-+-+-+-+-+-+-+-
             Route::controller(UserController::class)->prefix('user')->name('user.')->group(function(){
                 Route::get('', 'index')->name('index');
+            });
+            Route::controller(UserCreateController::class)->prefix('user_create')->name('user_create.')->group(function(){
+                Route::get('', 'index')->name('index');
+                Route::post('create', 'create')->name('create');
             });
             Route::controller(UserUpdateController::class)->prefix('user_update')->name('user_update.')->group(function(){
                 Route::get('', 'index')->name('index');

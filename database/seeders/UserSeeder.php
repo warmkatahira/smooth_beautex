@@ -23,6 +23,7 @@ class UserSeeder extends Seeder
             'status' => 1,
             'role_id' => 'admin',
             'company_id' => 'warm',
+            'must_change_password' => false,
         ]);
     }
 }

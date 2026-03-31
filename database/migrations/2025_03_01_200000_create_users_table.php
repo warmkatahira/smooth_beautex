@@ -16,12 +16,13 @@ return new class extends Migration
             $table->string('user_id', 20)->unique();
             $table->string('last_name', 20);
             $table->string('first_name', 20)->nullable();
-            $table->string('email')->unique();
+            $table->string('email')->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->boolean('status')->default(0);
             $table->string('role_id', 10)->default('user');
             $table->string('company_id', 10);
+            $table->boolean('must_change_password')->default(true);
             $table->string('profile_image_file_name', 50)->default('no_image.png');
             $table->timestamp('last_login_at')->nullable();
             $table->rememberToken();
