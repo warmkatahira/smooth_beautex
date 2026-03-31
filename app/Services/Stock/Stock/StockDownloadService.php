@@ -36,9 +36,16 @@ class StockDownloadService
                         $row = [
                             $stock->item_code,
                             $stock->item_jan_code,
+                            $stock->color_id,
+                            $stock->color_row,
                             $stock->item_name,
                             $stock->item_category_1,
                             $stock->item_category_2,
+                            $stock->brand,
+                            $stock->wearing_period,
+                            $stock->quantity_per_box,
+                            $stock->manufacturer,
+                            $stock->supplier,
                             $stock->is_stock_managed_text,
                         ];
                         // 倉庫の分だけループ処理
@@ -54,13 +61,20 @@ class StockDownloadService
                             $stock->base_name,
                             $stock->item_code,
                             $stock->item_jan_code,
+                            $stock->color_id,
+                            $stock->color_row,
                             $stock->item_name,
                             $stock->item_category_1,
                             $stock->item_category_2,
+                            $stock->brand,
+                            $stock->wearing_period,
+                            $stock->quantity_per_box,
+                            $stock->manufacturer,
+                            $stock->supplier,
                             $stock->item_location,
                             $stock->is_stock_managed_text,
                             $stock->lot,
-                            "'".formatExp($stock->exp),
+                            $stock->exp !== null ? "'".formatExp($stock->exp) : null,
                             $stock->total_stock,
                         ];
                     }
