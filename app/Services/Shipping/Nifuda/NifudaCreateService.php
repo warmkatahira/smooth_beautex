@@ -131,7 +131,10 @@ class NifudaCreateService
                     $worksheet->setCellValue('C'.$row, "");                                                                     // 受取人会社名
                     $worksheet->setCellValue('E'.$row, $order->ship_country_code);                                              // 受取人国名
                     $worksheet->setCellValue('G'.$row, $order->ship_address_1);                                                 // 受取人住所2
-                    $worksheet->setCellValue('H'.$row, $order->ship_address_2.','.$order->ship_city);                           // 受取人住所3
+                    $worksheet->setCellValue('H'.$row, implode(',', array_filter([
+                                                $order->ship_address_2,
+                                                $order->ship_city,
+                                            ])));                                                                               // 受取人住所3
                     $worksheet->setCellValue('I'.$row, $order->ship_province_code);                                             // 受取人州名など
                     $worksheet->setCellValue('J'.$row, $order->ship_zip_code);                                                  // 受取人郵便番号
                     $worksheet->setCellValue('K'.$row, $order->ship_tel);                                                       // 受取人ご連絡先電話番号
