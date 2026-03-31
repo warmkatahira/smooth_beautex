@@ -9,9 +9,16 @@
                     <th class="font-thin py-1 px-2 text-center">商品画像</th>
                     <th class="font-thin py-1 px-2 text-center">商品コード</th>
                     <th class="font-thin py-1 px-2 text-center">商品JANコード</th>
+                    <th class="font-thin py-1 px-2 text-center">カラーID</th>
+                    <th class="font-thin py-1 px-2 text-center">カラーROW</th>
                     <th class="font-thin py-1 px-2 text-center">商品名</th>
                     <th class="font-thin py-1 px-2 text-center">商品カテゴリ1</th>
                     <th class="font-thin py-1 px-2 text-center">商品カテゴリ2</th>
+                    <th class="font-thin py-1 px-2 text-center">ブランド</th>
+                    <th class="font-thin py-1 px-2 text-center">装用期間</th>
+                    <th class="font-thin py-1 px-2 text-center">入数</th>
+                    <th class="font-thin py-1 px-2 text-center">メーカー</th>
+                    <th class="font-thin py-1 px-2 text-center">仕入先</th>
                     <th class="font-thin py-1 px-2 text-center">検品ロット</th>
                     <th class="font-thin py-1 px-2 text-center">在庫管理</th>
                     <th class="font-thin py-1 px-2 text-center">並び順</th>
@@ -22,9 +29,16 @@
                     <th></th>
                     <x-filter.input type="tel" id="filter_item_code" name="filter_item_code" />
                     <x-filter.input type="tel" id="filter_item_jan_code" name="filter_item_jan_code" />
+                    <x-filter.input type="tel" id="filter_color_id" name="filter_color_id" />
+                    <x-filter.input type="tel" id="filter_color_row" name="filter_color_row" />
                     <x-filter.input type="text" id="filter_item_name" name="filter_item_name" />
                     <x-filter.input type="text" id="filter_item_category_1" name="filter_item_category_1" />
                     <x-filter.input type="text" id="filter_item_category_2" name="filter_item_category_2" />
+                    <x-filter.input type="text" id="filter_brand" name="filter_brand" />
+                    <x-filter.input type="text" id="filter_wearing_period" name="filter_wearing_period" />
+                    <x-filter.input type="text" id="filter_quantity_per_box" name="filter_quantity_per_box" />
+                    <x-filter.input type="text" id="filter_manufacturer" name="filter_manufacturer" />
+                    <x-filter.input type="text" id="filter_supplier" name="filter_supplier" />
                     <x-filter.select-boolean id="filter_is_inspection_lot_required" name="filter_is_inspection_lot_required" label1="必要" label0="不要" />
                     <x-filter.select-boolean id="filter_is_stock_managed" name="filter_is_stock_managed" label1="有効" label0="無効" />
                     <x-filter.input type="tel" id="filter_sort_order" name="filter_sort_order" />
@@ -54,6 +68,14 @@
                             <x-clipboard-copy-btn :value="$item->item_jan_code" label="商品JANコード" />
                         </td>
                         <td class="py-1 px-2 border relative group/clipboard">
+                            {{ $item->color_id }}
+                            <x-clipboard-copy-btn :value="$item->color_id" label="カラーID" />
+                        </td>
+                        <td class="py-1 px-2 border text-right relative group/clipboard">
+                            {{ $item->color_row }}
+                            <x-clipboard-copy-btn :value="$item->color_row" label="カラーROW" />
+                        </td>
+                        <td class="py-1 px-2 border relative group/clipboard">
                             {{ $item->item_name }}
                             <x-clipboard-copy-btn :value="$item->item_name" label="商品名" />
                         </td>
@@ -64,6 +86,26 @@
                         <td class="py-1 px-2 border relative group/clipboard">
                             {{ $item->item_category_2 }}
                             <x-clipboard-copy-btn :value="$item->item_category_2" label="商品カテゴリ2" />
+                        </td>
+                        <td class="py-1 px-2 border relative group/clipboard">
+                            {{ $item->brand }}
+                            <x-clipboard-copy-btn :value="$item->brand" label="ブランド" />
+                        </td>
+                        <td class="py-1 px-2 border relative group/clipboard">
+                            {{ $item->wearing_period }}
+                            <x-clipboard-copy-btn :value="$item->wearing_period" label="装用期間" />
+                        </td>
+                        <td class="py-1 px-2 border relative group/clipboard">
+                            {{ $item->quantity_per_box }}
+                            <x-clipboard-copy-btn :value="$item->quantity_per_box" label="入数" />
+                        </td>
+                        <td class="py-1 px-2 border relative group/clipboard">
+                            {{ $item->manufacturer }}
+                            <x-clipboard-copy-btn :value="$item->manufacturer" label="メーカー" />
+                        </td>
+                        <td class="py-1 px-2 border relative group/clipboard">
+                            {{ $item->supplier }}
+                            <x-clipboard-copy-btn :value="$item->supplier" label="仕入先" />
                         </td>
                         <td class="py-1 px-2 border text-center">
                             <x-list.status :value="$item->is_inspection_lot_required" label1="必要" label0="不要" />

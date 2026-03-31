@@ -26,16 +26,27 @@ class ItemSearchService extends BaseFilterService
         return [
             'filter_item_code',
             'filter_item_jan_code',
+            'filter_color_id',
             'filter_item_name',
             'filter_item_category_1',
             'filter_item_category_2',
+            'filter_brand',
+            'filter_wearing_period',
+            'filter_quantity_per_box',
+            'filter_manufacturer',
+            'filter_supplier',
         ];
     }
 
     // 特殊キー
     protected function specialKeys(): array
     {
-        return [];
+        return [
+            // カラーROW
+            'filter_color_row' => function ($query, $value) {
+                $query->where('color_row', '=', $value);
+            },
+        ];
     }
 
     // 無視するキー

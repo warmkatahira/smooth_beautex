@@ -28,6 +28,13 @@ class ItemImport extends Model
         'country_of_origin',
         'hs_code',
         'item_weight_g',
+        'brand',
+        'wearing_period',
+        'quantity_per_box',
+        'color_id',
+        'color_row',
+        'manufacturer',
+        'supplier',
         'sort_order',
     ];
     // itemsテーブルとのリレーション

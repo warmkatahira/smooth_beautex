@@ -190,6 +190,7 @@ class ItemUploadJobs implements ShouldQueue
             case '商品コード':
             case '商品JANコード':
             case '代表JANコード':
+            case 'カラーID':
                 // 半角・全角スペースを取り除いている
                 $adjustment_value = str_replace(array(" ", "　", "'"), "", $value);
                 break;
@@ -227,10 +228,21 @@ class ItemUploadJobs implements ShouldQueue
                     break;
                 case 'item_category_1':
                 case 'item_category_2':
+                case 'wearing_period':
+                case 'quantity_per_box':
+                case 'color_id':
+                case 'manufacturer':
+                case 'supplier':
                     $rules += ['*.'.$column => 'nullable|max:20'];
                     break;
+                case 'brand':
+                    $rules += ['*.'.$column => 'nullable|max:50'];
+                    break;
+                case 'color_row':
+                    $rules += ['*.'.$column => 'nullable|integer|min:1|max:255'];
+                    break;
                 case 'is_inspection_lot_required':
-                    $rules += ['*.'.$column => 'reqired|boolean'];
+                    $rules += ['*.'.$column => 'required|boolean'];
                     break;
                 case 'model_jan_code':
                     $rules += ['*.'.$column => 'nullable|max:13'];
@@ -260,13 +272,14 @@ class ItemUploadJobs implements ShouldQueue
                     $rules += ['*.'.$column => 'required|boolean'];
                     break;
                 case 'country_of_origin':
-                    $rules += ['*.'.$column => 'nullable|max:10'];
-                    break;
                 case 'hs_code':
                     $rules += ['*.'.$column => 'nullable|max:10'];
                     break;
                 case 'sort_order':
-                    $rules += ['*.'.$column => 'nullable|integer|min:1'];
+                    $rules += ['*.'.$column => 'required|integer|min:1'];
+                    break;
+                case 'item_weight_g':
+                    $rules += ['*.'.$column => 'nullable|integer|min:0'];
                     break;
                 default:
                     break;
@@ -307,6 +320,13 @@ class ItemUploadJobs implements ShouldQueue
             '*.is_stock_managed'            => '在庫管理',
             '*.country_of_origin'           => '原産国',
             '*.hs_code'                     => 'HSコード',
+            '*.brand'                       => 'ブランド',
+            '*.wearing_period'              => '装用期間',
+            '*.quantity_per_box'            => '入数',
+            '*.color_id'                    => 'カラーID',
+            '*.color_row'                   => 'カラーROW',
+            '*.manufacturer'                => 'メーカー',
+            '*.supplier'                    => '仕入先',
             '*.sort_order'                  => '並び順',
         ];
         // バリデーション実施
@@ -375,7 +395,6 @@ class ItemUploadJobs implements ShouldQueue
             }
             return count($update_item);
         }
-        return;
     }
 
     public function item_upload_error_export($validation_error, $nowDate, $item_upload_history, $message)
@@ -408,6 +427,5 @@ class ItemUploadJobs implements ShouldQueue
         }
         // ファイルに出力
         file_put_contents($csvFilePath, $csvContent);
-        return;
     }
 }
