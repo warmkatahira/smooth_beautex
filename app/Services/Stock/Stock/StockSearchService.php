@@ -64,7 +64,7 @@ class StockSearchService
             });
         } else {
             // LOT・EXP別にそのままJOIN
-            $query = $query->leftJoin('stocks', function($join){
+            $query = $query->join('stocks', function($join){
                 $join->on('stocks.item_id', '=', 'item_base.item_id')
                     ->on('stocks.base_id', '=', 'item_base.base_id');
             });

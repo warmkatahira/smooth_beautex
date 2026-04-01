@@ -101,6 +101,10 @@ class OrderImportForShopifyService
                 'unallocated_quantity'      => $line['Lineitem quantity'],
                 'order_category_id'         => $order_category_id,
             ];
+            // シンガポールの都市名を英語に置換
+            if($param['ship_country_code'] === 'SG' && $param['ship_city'] === 'シンガポール'){
+                $param['ship_city'] = 'Singapore';
+            }
             // 値が空であれば、nullを格納
             $param = array_map(function ($value){
                 return $value === "" ? null : $value;

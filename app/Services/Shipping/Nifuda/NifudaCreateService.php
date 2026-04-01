@@ -127,7 +127,7 @@ class NifudaCreateService
                     $content_type = $order->ship_country_code == 'US' ? 0 : 3;
                     // 各情報を出力
                     $worksheet->setCellValue('A'.$row, $shipper_company_name);                                                  // 出荷人会社名
-                    $worksheet->setCellValue('B'.$row, $order->ship_name);                                                      // 受取人お名前
+                    $worksheet->setCellValue('B'.$row, $order->ship_name.' (' . $order->order_no . ')');                        // 受取人お名前
                     $worksheet->setCellValue('C'.$row, "");                                                                     // 受取人会社名
                     $worksheet->setCellValue('E'.$row, $order->ship_country_code);                                              // 受取人国名
                     $worksheet->setCellValue('G'.$row, $order->ship_address_1);                                                 // 受取人住所2

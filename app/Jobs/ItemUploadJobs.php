@@ -28,7 +28,7 @@ class ItemUploadJobs implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $timeout = 600;              // 最大実行時間を120秒に設定
+    public $timeout = 600;              // 最大実行時間を600秒に設定
     public $user_no;                    // プロパティの定義
     public $save_file_full_path;        // プロパティの定義
     public $upload_original_file_name;  // プロパティの定義
@@ -197,6 +197,7 @@ class ItemUploadJobs implements ShouldQueue
             case '検品ロット':
                 // 不要を「0」、必要を「1」に変換
                 $adjustment_value = $value === '不要' ? 0 : ($value === '必要' ? 1 : $value);
+                break;
             case '在庫管理':
                 // 無効を「0」、有効を「1」に変換
                 $adjustment_value = $value === '無効' ? 0 : ($value === '有効' ? 1 : $value);
@@ -363,6 +364,30 @@ class ItemUploadJobs implements ShouldQueue
         // +-+-+-+-+-+-+-+-+-   商品コードがitemsテーブルに存在しない場合は、追加処理を行う   +-+-+-+-+-+-+-+-+-
         // item_importsテーブルにしか存在していないレコードを取得(商品マスタに追加するカラムだけ取得)
         if($upload_type === ItemUploadEnum::UPLOAD_TYPE_CREATE){
+            $chunk_size = 500;
+            $proc_count = 0;
+            ItemImport::doesntHave('item')
+                ->select(array_merge(
+                    ['item_import_id'],
+                    array_map(function($col){
+                        return DB::raw("item_imports.{$col} as {$col}");
+                    }, $headers)
+                ))
+                ->chunkById($chunk_size, function($chunk) use (&$proc_count){
+                    $create_item = collect($chunk)->map(function($item){
+                        // (array)ではなくtoArray()を使う
+                        $item = $item->toArray();
+                        unset($item['item_import_id']);
+                        return $item;
+                    })->toArray();
+                    Item::upsert($create_item, 'item_id');
+                    $proc_count += count($create_item);
+                }, 'item_import_id');
+            return $proc_count;
+        }
+        
+        
+        /* if($upload_type === ItemUploadEnum::UPLOAD_TYPE_CREATE){
             // itemsに存在しないレコードを取得
             $create_item = ItemImport::doesntHave('item')->select(array_map(function ($column){
                 return $column;
@@ -370,10 +395,41 @@ class ItemUploadJobs implements ShouldQueue
             // itemsテーブルに追加
             Item::upsert($create_item, 'item_id');
             return count($create_item);
-        }
+        } */
         // +-+-+-+-+-+-+-+-+-   商品コードがitemsテーブルに存在する場合は、更新処理を行う   +-+-+-+-+-+-+-+-+-
         // itemsテーブルとitem_importsテーブルを結合して更新に必要なカラムを取得（結合した結果、どっちのテーブルにも存在しているデータ）
         if($upload_type === ItemUploadEnum::UPLOAD_TYPE_UPDATE){
+            // item_codeを除いた更新対象カラムを定義
+            $update_columns = array_values(array_filter($headers, fn($col) => $col !== 'item_code'));
+            $chunk_size = 500;
+            $proc_count = 0;
+            // チャンク単位で取得・UPDATE
+            Item::join('item_imports', 'item_imports.item_code', 'items.item_code')
+                    ->select(array_merge(
+                        // chunkByIdのためにitems.item_idを追加
+                        [DB::raw('items.item_id as item_id')],
+                        array_map(function ($column){
+                            return DB::raw("item_imports.{$column} as {$column}");
+                        }, $headers)
+                    ))
+                    ->chunkById($chunk_size, function($chunk) use ($update_columns, &$proc_count){
+                        DB::transaction(function() use ($chunk, $update_columns, &$proc_count){
+                            // item_idを除いてupsert
+                            $update_item = collect($chunk)->map(function($item){
+                                // (array)$item ではなく toArray() を使う
+                                $item = $item->toArray();
+                                unset($item['item_id']);
+                                return $item;
+                            })->toArray();
+                            Item::upsert($update_item, ['item_code'], $update_columns);
+                            $proc_count += count($update_item);
+                        });
+                    }, 'item_id');
+            return $proc_count;
+        }
+
+
+        /* if($upload_type === ItemUploadEnum::UPLOAD_TYPE_UPDATE){
             // itemsにするレコードを取得
             $update_item = Item::join('item_imports', 'item_imports.item_code', 'items.item_code')->select(array_map(function ($column){
                 return 'item_imports.' . $column;
@@ -394,7 +450,7 @@ class ItemUploadJobs implements ShouldQueue
                 Item::getSpecifyByItemCode($item['item_code'])->update($param);
             }
             return count($update_item);
-        }
+        } */
     }
 
     public function item_upload_error_export($validation_error, $nowDate, $item_upload_history, $message)

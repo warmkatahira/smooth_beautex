@@ -43,10 +43,10 @@ class ItemUploadService
         // インポートしたデータのヘッダーを取得
         $data_header = array_keys(mb_convert_encoding($all_line[0], 'UTF-8', 'ASCII, JIS, UTF-8, SJIS-win'));
         // ファイルタイプを判別（先方からの商品マスタなのか、smoothの商品マスタなのか）
-        if($data_header[0] === '商品コード'){
-            $file_type = ItemUploadEnum::PUSH_COLOR_ITEM_MASTER;
-        }else{
+        if(in_array('検品ロット', $data_header)){
             $file_type = ItemUploadEnum::SMOOTH_ITEM_MASTER;
+        }else{
+            $file_type = ItemUploadEnum::PUSH_COLOR_ITEM_MASTER;
         }
         // 必須ヘッダーを取得
         $required_header = ItemUploadEnum::get_required_header($upload_type, $file_type);
