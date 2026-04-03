@@ -23,9 +23,10 @@ class UserCreateRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'user_id'               => 'required|string|max:20|unique:users,user_id',
+            'user_id'               => 'required|string|max:50|unique:users,user_id',
             'last_name'             => 'required|string|max:20',
             'first_name'            => 'nullable|string|max:20',
+            'email'                 => 'nullable|email|unique:users,email',
             'status'                => 'required|boolean',
             'role_id'               => 'required|exists:roles,role_id',
             'company_id'            => 'required|exists:companies,company_id',

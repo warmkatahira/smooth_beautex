@@ -11,7 +11,8 @@
             <x-form.p label="ユーザーID" :value="$user->user_id" grayedOut="true" />
         @endif
         <x-form.input type="text" label="姓" id="last_name" name="last_name" :value="$form_mode === 'update' ? $user->last_name : null" required="true" />
-        <x-form.input type="text" label="名" id="first_name" name="first_name" :value="$form_mode === 'update' ? $user->first_name : null" required="true" />
+        <x-form.input type="text" label="名" id="first_name" name="first_name" :value="$form_mode === 'update' ? $user->first_name : null" />
+        <x-form.input type="tel" label="メールアドレス" id="email" name="email" :value="$form_mode === 'update' ? $user->email : null" />
         <x-form.switch-boolean label="ステータス" id="status" name="status" label0="無効" label1="有効" :value="$form_mode === 'update' ? $user->status : null" required="true" />
         <x-form.select label="権限" id="role_id" name="role_id" :value="$form_mode === 'update' ? $user->role_id : null" :items="$roles" optionValue="role_id" optionText="role_name" required="true" />
         <x-form.select label="会社" id="company_id" name="company_id" :value="$form_mode === 'update' ? $user->company_id : null" :items="$companies" optionValue="company_id" optionText="company_name" required="true" />

@@ -33,6 +33,7 @@ class UserUpdateRequest extends BaseRequest
         return [
             'last_name'             => 'required|string|max:20',
             'first_name'            => 'nullable|string|max:20',
+            'email'                 => 'nullable|email|unique:users,email,'.$this->user_no.',user_no',
             'status'                => 'required|boolean',
             'role_id'               => 'required|exists:roles,role_id',
             'company_id'            => 'required|exists:companies,company_id',
