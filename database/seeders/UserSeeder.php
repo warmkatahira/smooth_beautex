@@ -25,5 +25,38 @@ class UserSeeder extends Seeder
             'company_id' => 'warm',
             'must_change_password' => false,
         ]);
+        User::create([
+            'user_id' => 'shim@eleanor.co.jp',
+            'last_name' => '清水',
+            'first_name' => '厚芳',
+            'email' => 'shim@eleanor.co.jp',
+            'password' => bcrypt('adw66tj'),
+            'status' => 1,
+            'role_id' => 'user',
+            'company_id' => 'beautex',
+            'must_change_password' => true,
+        ]);
+        User::create([
+            'user_id' => 'iwase@beautex.co.jp',
+            'last_name' => '岩瀬',
+            'first_name' => '直紀',
+            'email' => 'iwase@beautex.co.jp',
+            'password' => bcrypt('m0diu4fd'),
+            'status' => 1,
+            'role_id' => 'user',
+            'company_id' => 'beautex',
+            'must_change_password' => true,
+        ]);
+        User::create([
+            'user_id' => 'hirano@eleanor.co.jp',
+            'last_name' => '平野',
+            'first_name' => '愛理',
+            'email' => 'hirano@eleanor.co.jp',
+            'password' => bcrypt('jp43qdc'),
+            'status' => 1,
+            'role_id' => 'user',
+            'company_id' => 'beautex',
+            'must_change_password' => true,
+        ]);
     }
 }
