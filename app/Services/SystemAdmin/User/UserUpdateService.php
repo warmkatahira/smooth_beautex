@@ -22,7 +22,7 @@ class UserUpdateService
         $user->status = $request->status;
         $user->role_id = $request->role_id;
         $user->company_id = $request->company_id;
-        $user->must_change_password = $request->must_change_password;
+        $user->is_must_change_password = $request->is_must_change_password;
         // ユーザーを更新
         $user->save();
     }

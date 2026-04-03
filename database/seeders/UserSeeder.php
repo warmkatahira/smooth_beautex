@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
             'status' => 1,
             'role_id' => 'admin',
             'company_id' => 'warm',
-            'must_change_password' => false,
+            'is_must_change_password' => false,
         ]);
         User::create([
             'user_id' => 'shim@eleanor.co.jp',
@@ -34,7 +34,7 @@ class UserSeeder extends Seeder
             'status' => 1,
             'role_id' => 'user',
             'company_id' => 'beautex',
-            'must_change_password' => true,
+            'is_must_change_password' => true,
         ]);
         User::create([
             'user_id' => 'iwase@beautex.co.jp',
@@ -45,7 +45,7 @@ class UserSeeder extends Seeder
             'status' => 1,
             'role_id' => 'user',
             'company_id' => 'beautex',
-            'must_change_password' => true,
+            'is_must_change_password' => true,
         ]);
         User::create([
             'user_id' => 'hirano@eleanor.co.jp',
@@ -56,7 +56,7 @@ class UserSeeder extends Seeder
             'status' => 1,
             'role_id' => 'user',
             'company_id' => 'beautex',
-            'must_change_password' => true,
+            'is_must_change_password' => true,
         ]);
     }
 }

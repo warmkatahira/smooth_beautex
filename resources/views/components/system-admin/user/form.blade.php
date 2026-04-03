@@ -17,7 +17,7 @@
         <x-form.select label="権限" id="role_id" name="role_id" :value="$form_mode === 'update' ? $user->role_id : null" :items="$roles" optionValue="role_id" optionText="role_name" required="true" />
         <x-form.select label="会社" id="company_id" name="company_id" :value="$form_mode === 'update' ? $user->company_id : null" :items="$companies" optionValue="company_id" optionText="company_name" required="true" />
         @if($form_mode === 'update')
-            <x-form.switch-boolean label="パスワード変更" id="must_change_password" name="must_change_password" label0="不要" label1="必要" :value="$form_mode === 'update' ? $user->must_change_password : null" required="true" />
+            <x-form.switch-boolean label="パスワード変更" id="is_must_change_password" name="is_must_change_password" label0="不要" label1="必要" :value="$form_mode === 'update' ? $user->is_must_change_password : null" required="true" />
         @endif
     </div>
     @if($form_mode === 'update')

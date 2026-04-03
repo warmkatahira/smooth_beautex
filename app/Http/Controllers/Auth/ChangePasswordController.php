@@ -28,7 +28,7 @@ class ChangePasswordController extends Controller
         }
         // パスワードを変更して、フラグを0に変更
         $user->password = Hash::make($request->password);
-        $user->must_change_password = 0;
+        $user->is_must_change_password = 0;
         $user->save();
         return redirect()->route('dashboard.index')->with([
             'alert_type' => 'success',

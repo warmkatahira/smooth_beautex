@@ -22,7 +22,7 @@ return new class extends Migration
             $table->boolean('status')->default(0);
             $table->string('role_id', 10)->default('user');
             $table->string('company_id', 10);
-            $table->boolean('must_change_password')->default(true);
+            $table->boolean('is_must_change_password')->default(true);
             $table->string('profile_image_file_name', 50)->default('no_image.png');
             $table->timestamp('last_login_at')->nullable();
             $table->rememberToken();

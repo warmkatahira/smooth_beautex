@@ -18,8 +18,8 @@ class UserUpdateRequest extends BaseRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'status'                => $this->boolean('status'),
-            'must_change_password'  => $this->boolean('must_change_password'),
+            'status'                    => $this->boolean('status'),
+            'is_must_change_password'   => $this->boolean('is_must_change_password'),
         ]);
     }
 
@@ -31,13 +31,13 @@ class UserUpdateRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'last_name'             => 'required|string|max:20',
-            'first_name'            => 'nullable|string|max:20',
-            'email'                 => 'nullable|email|unique:users,email,'.$this->user_no.',user_no',
-            'status'                => 'required|boolean',
-            'role_id'               => 'required|exists:roles,role_id',
-            'company_id'            => 'required|exists:companies,company_id',
-            'must_change_password'  => 'required|boolean',
+            'last_name'                 => 'required|string|max:20',
+            'first_name'                => 'nullable|string|max:20',
+            'email'                     => 'nullable|email|unique:users,email,'.$this->user_no.',user_no',
+            'status'                    => 'required|boolean',
+            'role_id'                   => 'required|exists:roles,role_id',
+            'company_id'                => 'required|exists:companies,company_id',
+            'is_must_change_password'   => 'required|boolean',
         ];
     }
 

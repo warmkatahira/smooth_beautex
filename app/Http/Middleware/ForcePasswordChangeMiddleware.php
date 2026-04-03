@@ -17,8 +17,8 @@ class ForcePasswordChangeMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // ログインしているかつ must_change_passwordが1の場合
-        if(auth()->check() && auth()->user()->must_change_password){
+        // ログインしているかつ is_must_change_passwordが1の場合
+        if(auth()->check() && auth()->user()->is_must_change_password){
             // すでにパスワード変更画面にいる場合は許可
             if($request->routeIs('password.change.*')){
                 return $next($request);

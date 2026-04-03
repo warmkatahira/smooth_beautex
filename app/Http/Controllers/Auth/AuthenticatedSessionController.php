@@ -29,7 +29,7 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         // 「1」ならパスワード変更画面へ遷移
-        if ($request->user()->must_change_password) {
+        if ($request->user()->is_must_change_password) {
             return redirect()->route('password.change.form');
         }
 

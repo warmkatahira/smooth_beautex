@@ -19,6 +19,6 @@ class Company extends Model
     // 全てのレコードを取得
     public static function getAll()
     {
-        return self::orderBy('company_id', 'asc');
+        return self::orderBy('sort_order', 'asc');
     }
 }
