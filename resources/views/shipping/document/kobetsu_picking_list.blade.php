@@ -29,7 +29,7 @@
                             $desired_delivery_date = CarbonImmutable::parse($order->desired_delivery_date)->isoFormat('Y年MM月DD日(ddd)');
                         }
                     @endphp
-                    <x-shipping.kobetsu-picking-list.info-div label="出荷個口No" :value="$order->package_no" />
+                    <x-shipping.kobetsu-picking-list.info-div label="出荷個口No" :value="$order->package_no_index . '/' . $order->package_no_total" />
                     <x-shipping.kobetsu-picking-list.info-div label="出荷グループ名" :value="$order->shipping_group?->shipping_group_name" />
                     <x-shipping.kobetsu-picking-list.info-div label="注文番号" :value="$order->order_no" />
                     <x-shipping.kobetsu-picking-list.info-div label="受注管理ID" :value="$order->order_control_id" />

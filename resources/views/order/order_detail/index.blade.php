@@ -13,6 +13,7 @@
         <x-order.order-detail.order-info :order="$order" />
         <x-order.order-detail.ship-info :order="$order" />
         <x-order.order-detail.shipping-info :order="$order" />
+        <x-order.order-detail.inspection-info :order="$order" />
         <x-order.order-detail.other-info :order="$order" />
         <x-order.order-detail.item-info :order="$order" />
     </div>

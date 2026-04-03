@@ -24,6 +24,7 @@
                     <th class="font-thin py-1 px-2 text-center">出荷個口No</th>
                     <th class="font-thin py-1 px-2 text-center">配送伝票番号</th>
                     @can('warm_check')
+                        <th class="font-thin py-1 px-2 text-center">出荷検品状態</th>
                         <th class="font-thin py-1 px-2 text-center">出荷検品完了日時</th>
                     @endcan
                 </tr>
@@ -48,6 +49,7 @@
                     <x-filter.input type="tel" id="filter_desired_delivery_time" name="filter_desired_delivery_time" />
                     <x-filter.input type="tel" id="filter_package_count" name="filter_package_count" />
                     <x-filter.input type="tel" id="filter_tracking_no" name="filter_tracking_no" />
+                    <x-filter.select-boolean id="filter_is_shipping_inspection_complete" name="filter_is_shipping_inspection_complete" label1="実施済" label0="未実施" />
                 </tr>
             </thead>
             <tbody class="bg-white">
@@ -103,6 +105,9 @@
                             @endforeach
                         </td>
                         @can('warm_check')
+                            <td class="py-1 px-2 border text-center">
+                                <x-list.status :value="$order->is_shipping_inspection_complete" label1="実施済" label0="未実施" />
+                            </td>
                             <td class="py-1 px-2 border text-center">
                                 @if(!is_null($order->shipping_inspection_date))
                                     {{ CarbonImmutable::parse($order->shipping_inspection_date)->isoFormat('Y年MM月DD日(ddd) HH:mm:ss') }}

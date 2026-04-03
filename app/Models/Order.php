@@ -95,6 +95,11 @@ class Order extends Model
     {
         return $this->ship_country_code === 'JP' ? '国内' : '海外';
     }
+    // 出荷検品状態を返すアクセサ
+    public function getIsShippingInspectionCompleteTextAttribute()
+    {
+        return $this->is_shipping_inspection_complete ? '実施済' : '未実施';
+    }
     // 出荷完了対象の受注を取得
     public static function getShippingWorkEndTarget()
     {

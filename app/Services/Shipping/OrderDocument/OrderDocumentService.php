@@ -30,12 +30,17 @@ class OrderDocumentService
             // package_noが1種類以下はそのまま返す
             if($packageNos->count() <= 1){
                 $order->package_no = $packageNos->first();
+                $order->package_no_index = 1;
+                $order->package_no_total = 1;
                 return [$order];
             }
             // package_noの数だけOrderを複製して返す
-            return $packageNos->map(function ($packageNo) use ($order) {
+            return $packageNos->map(function ($packageNo) use ($order, $packageNos) {
                 $cloned = clone $order;
                 $cloned->package_no = $packageNo;
+                // 何分の何かを設定
+                $cloned->package_no_index = $packageNos->search($packageNo) + 1;
+                $cloned->package_no_total = $packageNos->count();
                 $cloned->setRelation(
                     'order_items',
                     $order->order_items->where('package_no', $packageNo)->values()

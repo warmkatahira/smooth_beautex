@@ -6,7 +6,9 @@
 <div>
     <div class="flex flex-row items-start">
         <p class="text-base font-semibold pb-2 mb-4">商品情報</p>
-        <button type="button" id="order_item_create_modal_open" class="btn bg-btn-enter text-white ml-auto px-5 py-1 rounded-md">商品追加</button>
+        @if($order->order_status_id <= OrderStatusEnum::SHUKKA_MACHI)
+            <button type="button" id="order_item_create_modal_open" class="btn bg-btn-enter text-white ml-auto px-5 py-1 rounded-md">商品追加</button>
+        @endif
     </div>
     <div class="disable_scrollbar flex flex-grow overflow-scroll">
         <div class="order_detail_list bg-white overflow-x-auto overflow-y-auto border border-gray-600">
