@@ -118,6 +118,14 @@ class NifudaCreateService
                 $packages = $order->order_items->sortBy('package_no')->groupBy('package_no');
                 // package_noの分だけループ処理
                 foreach($packages as $package_no => $package_items){
+                    // 総重量を運賃区切りに丸める
+                    $total_weight = $package_items->sum(
+                        fn($item) => ($item->item->item_weight_g ?? 0) * $item->shipping_quantity
+                    );
+                    // 重量の区切りを定義
+                    $weight_tiers = [500, 600, 700, 800, 900, 1000, 1250, 1500, 1750, 2000];
+                    // 2001g以上の場合は、計算した重量を適用
+                    $rounded_weight = collect($weight_tiers)->first(fn($tier) => $total_weight <= $tier) ?? $total_weight;
                     // 内容品のオフセット用の変数を初期化
                     $column_offset = 0;
                     // 出荷人会社名を変数に格納
@@ -139,9 +147,7 @@ class NifudaCreateService
                     $worksheet->setCellValue('J'.$row, $order->ship_zip_code);                                                  // 受取人郵便番号
                     $worksheet->setCellValue('K'.$row, $order->ship_tel);                                                       // 受取人ご連絡先電話番号
                     $worksheet->setCellValue('N'.$row, $content_type);                                                          // 内容品種別
-                    $worksheet->setCellValue('P'.$row, $package_items->sum(
-                                                fn($item) => ($item->item->item_weight_g ?? 0) * $item->shipping_quantity
-                                            ));                                                                                 // 総重量
+                    $worksheet->setCellValue('P'.$row, $rounded_weight);                                                        // 総重量
                     $worksheet->setCellValue('W'.$row, $order->order_control_id);                                               // メモ
                     $worksheet->setCellValue('X'.$row, $package_items->sum(function($order_item) use ($order) {
                                                 $unit_price = $order->ship_country_code == 'US'
