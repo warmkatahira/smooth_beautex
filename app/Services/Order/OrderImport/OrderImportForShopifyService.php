@@ -132,7 +132,7 @@ class OrderImportForShopifyService
             'order_time'                => 'required|date_format:H:i:s',
             'order_status_id'           => 'required|in:' . implode(',', array_keys(OrderStatusEnum::CHANGE_LIST_FROM_ID_TO_JP)),
             //'mall_shipping_method'      => 'required|string|max:20|in:' . implode(',', ShippingMethodEnum::SHOPIFY_SHIPPING_METHOD_LIST),
-            'mall_shipping_method'      => 'required|string|max:20',
+            'mall_shipping_method'      => 'nullable|string|max:20',
             'ship_name'                 => 'required|string|max:255',
             'ship_zip_code'             => 'nullable|string|max:20',
             'ship_country_code'         => 'required|string|max:5',

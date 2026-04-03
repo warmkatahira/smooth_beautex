@@ -17,7 +17,7 @@ return new class extends Migration
             $table->date('order_import_date');
             $table->time('order_import_time');
             $table->unsignedInteger('order_status_id');
-            $table->string('mall_shipping_method', 20);
+            $table->string('mall_shipping_method', 20)->nullable();
             $table->string('shipping_base_id', 10)->nullable();
             $table->date('desired_delivery_date')->nullable();
             $table->string('desired_delivery_time', 20)->nullable();

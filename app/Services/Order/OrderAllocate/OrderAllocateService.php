@@ -28,6 +28,8 @@ class OrderAllocateService
                     // 処理終了
                     return;
                 }
+                // 再引当に備えてフラグをリセット
+                $this->resetAllocateFlags($allocate_orders);
                 // 商品引当処理
                 $this->procItemAllocate($allocate_orders);
                 // 引当対象在庫のロック（引当対象がいるかの結果も返す）
@@ -85,6 +87,20 @@ class OrderAllocateService
                         ->lockForUpdate()
                         ->get();
         return $allocate_orders;
+    }
+
+    // 再引当に備えてフラグをリセット
+    public function resetAllocateFlags($allocate_orders)
+    {
+        // 受注管理IDを取得
+        $order_control_ids = $allocate_orders->pluck('order_control_id');
+        // 引き当て関連カラムをリセット
+        OrderItem::whereIn('order_control_id', $order_control_ids)
+            ->update([
+                'is_item_allocated'   => 0,
+                'is_stock_allocated'  => 0,
+                'unallocated_quantity' => DB::raw('shipping_quantity'),
+            ]);
     }
 
     // 商品引当処理
@@ -170,13 +186,15 @@ class OrderAllocateService
             'is_stock_allocated'    => 1,
             'unallocated_quantity'  => 0,
         ]);
-        // 在庫引当の条件を満たしていて在庫管理している商品のレコードを取得(注文番号で昇順をかけている)
+        // 在庫引当の条件を満たしていて在庫管理している商品のレコードを取得(取込日時+注文番号で昇順をかけている)
         $stock_allocate_orders = Order::join('order_items', 'order_items.order_control_id', 'orders.order_control_id')
                                     ->join('items', 'items.item_code', '=', 'order_items.order_item_code')
                                     ->whereIn('orders.order_control_id', $allocate_orders)
                                     ->where('order_items.is_stock_allocated', 0)
                                     ->where('items.is_stock_managed', 1)
                                     ->select('order_items.order_item_id', 'orders.shipping_base_id', 'items.item_id', 'order_items.unallocated_quantity')
+                                    ->orderBy('orders.order_import_date', 'asc')
+                                    ->orderBy('orders.order_import_time', 'asc')
                                     ->orderBy('orders.order_no', 'asc')
                                     ->get();
         // 引当対象の分だけループ
@@ -224,8 +242,10 @@ class OrderAllocateService
             $item_allocated_ng_count = $order->order_items->where('is_item_allocated', 0)->count();
             // 配下レコードの在庫引当NG数を取得
             $stock_allocated_ng_count = $order->order_items->where('is_stock_allocated', 0)->count();
-            // 優先順位: 商品引当NG > 在庫引当NG > 引当OK
-            if($item_allocated_ng_count >= 1){
+            // shipping_method_idがnullかチェック
+            $is_shipping_method_id_null = is_null($order->shipping_method_id);
+            // 優先順位: 商品引当NG or 配送方法ID = Null > 在庫引当NG > 引当OK
+            if($item_allocated_ng_count >= 1 || $is_shipping_method_id_null){
                 $is_allocated = 0;
                 $order_status_id = OrderStatusEnum::KAKUNIN_MACHI;
             }elseif($stock_allocated_ng_count >= 1){
