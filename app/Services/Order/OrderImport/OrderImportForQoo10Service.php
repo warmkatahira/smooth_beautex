@@ -52,16 +52,17 @@ class OrderImportForQoo10Service
                 'ship_province_name'        => Prefecture::extractPrefecture($line['住所']),
                 'ship_address_1'            => $line['住所'],
                 'ship_tel'                  => $line['受取人携帯電話番号'] != '-' ? $line['受取人携帯電話番号'] : $line['受取人電話番号'], // 携帯電話番号がなければ、電話番号を適用
-                'order_item_code'           => $line['オプションコード'],
+                'order_item_code'           => $is_redelivery ? '再発送' : $line['オプションコード'],
                 'order_item_name'           => $line['商品名'],
                 'shipping_quantity'         => $line['数量'],
                 'order_item_unit_price'     => str_replace([","], "", $line['販売価格']),   // 4桁以上だと「,」が付いてくるので、取り除く
                 'unallocated_quantity'      => $line['数量'],
                 'order_category_id'         => $order_category_id,
             ];
-            // 値が空であれば、nullを格納
-            $param = array_map(function ($value){
-                return $value === "" ? null : $value;
+            // 値が空であればnull、先頭の「'」を除去
+            $param = array_map(function ($value) {
+                if($value === "") return null;
+                return is_string($value) ? ltrim($value, "'") : $value;
             }, $param);
             // インポートデータのバリデーション処理
             $message = $this->validation($param, $key + 2);
