@@ -3,13 +3,20 @@
     <div class="flex flex-row gap-10 my-5">
         <form method="POST" action="{{ route('item_update.update') }}" id="item_update_form" enctype="multipart/form-data">
             @csrf
-            <div class="flex flex-col gap-3">
+            <div class="flex flex-col border border-gray-400 divide-y divide-gray-400">
                 <x-form.image-select label="商品画像" id="item_image_file_name" :required="false" />
                 <x-form.p label="商品コード" :value="$item->item_code" />
                 <x-form.input type="text" label="商品JANコード" id="item_jan_code" name="item_jan_code" :value="$item->item_jan_code" required="true" />
+                <x-form.input type="text" label="カラーID" id="color_id" name="color_id" :value="$item->color_id" />
+                <x-form.input type="text" label="カラーROW" id="color_row" name="color_row" :value="$item->color_row" />
                 <x-form.input type="text" label="商品名" id="item_name" name="item_name" :value="$item->item_name" required="true" />
                 <x-form.input type="text" label="商品カテゴリ1" id="item_category_1" name="item_category_1" :value="$item->item_category_1" />
                 <x-form.input type="text" label="商品カテゴリ2" id="item_category_2" name="item_category_2" :value="$item->item_category_2" />
+                <x-form.input type="text" label="ブランド" id="brand" name="brand" :value="$item->brand" />
+                <x-form.input type="text" label="装用期間" id="wearing_period" name="wearing_period" :value="$item->wearing_period" />
+                <x-form.input type="text" label="入数" id="quantity_per_box" name="quantity_per_box" :value="$item->quantity_per_box" />
+                <x-form.input type="text" label="メーカー" id="manufacturer" name="manufacturer" :value="$item->manufacturer" />
+                <x-form.input type="text" label="仕入先" id="supplier" name="supplier" :value="$item->supplier" />
                 <x-form.switch-boolean label="検品ロット" id="is_inspection_lot_required" name="is_inspection_lot_required" label0="不要" label1="必要" :value="$item->is_inspection_lot_required" required="true" />
                 <x-form.input type="text" label="代表JANコード" id="model_jan_code" name="model_jan_code" :value="$item->model_jan_code" />
                 <x-form.input type="tel" label="EXP開始位置" id="exp_start_position" name="exp_start_position" :value="$item->exp_start_position" />

@@ -3,7 +3,7 @@
     <div class="flex flex-row gap-10 my-5">
         <form method="POST" action="{{ route('stock_update.update') }}" id="stock_update_form">
             @csrf
-            <div class="flex flex-col gap-3">
+            <div class="flex flex-col border border-gray-400 divide-y divide-gray-400">
                 <x-form.p label="商品コード" :value="$stock->item->item_code" />
                 <x-form.p label="商品JANコード" :value="$stock->item->item_jan_code" />
                 <x-form.p label="商品名" :value="$stock->item->item_name" />

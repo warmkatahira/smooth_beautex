@@ -3,7 +3,7 @@
     <div class="flex flex-row gap-10 my-5">
         <form method="POST" action="{{ route('base_shipping_method_update.update') }}" id="base_shipping_method_update_form">
             @csrf
-            <div class="flex flex-col gap-3">
+            <div class="flex flex-col border border-gray-400 divide-y divide-gray-400">
                 <x-form.p label="倉庫名" :value="$base_shipping_method->base->base_name" />
                 <x-form.p label="運送会社" :value="$base_shipping_method->shipping_method->delivery_company->delivery_company" />
                 <x-form.p label="配送方法" :value="$base_shipping_method->shipping_method->shipping_method" />

@@ -15,6 +15,14 @@ class ItemUpdateRequest extends BaseRequest
         return true;
     }
 
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'is_stock_managed' => $this->boolean('is_stock_managed'),
+            'is_inspection_lot_required' => $this->boolean('is_inspection_lot_required'),
+        ]);
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -24,9 +32,17 @@ class ItemUpdateRequest extends BaseRequest
     {
         return [
             'item_jan_code'                 => 'required|string|max:13',
+            'color_id'                      => 'nullable|string|max:20',
+            'color_row'                     => 'nullable|integer|between:0,255',
             'item_name'                     => 'required|string|max:255',
             'item_category_1'               => 'nullable|string|max:20',
             'item_category_2'               => 'nullable|string|max:20',
+            'brand'                         => 'nullable|string|max:50',
+            'wearing_period'                => 'nullable|string|max:20',
+            'quantity_per_box'              => 'nullable|string|max:20',
+            'manufacturer'                  => 'nullable|string|max:20',
+            'supplier'                      => 'nullable|string|max:20',
+            'is_inspection_lot_required'    => 'required|boolean',
             'model_jan_code'                => 'nullable|string|max:13',
             'exp_start_position'            => 'nullable|integer|min:1',
             'lot_1_start_position'          => 'nullable|integer|min:1',

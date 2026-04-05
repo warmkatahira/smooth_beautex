@@ -3,7 +3,7 @@
     <div class="flex flex-row gap-10 my-5">
         <form method="POST" action="{{ route('order_category_update.update') }}" id="order_category_update_form" enctype="multipart/form-data">
             @csrf
-            <div class="flex flex-col gap-3">
+            <div class="flex flex-col border border-gray-400 divide-y divide-gray-400">
                 <x-form.input type="text" label="受注区分名" id="order_category_name" name="order_category_name" :value="$order_category->order_category_name" required="true" />
                 <x-form.image-select label="受注区分画像" id="order_category_image_file_name" :required="null" />
                 <x-form.select label="荷送人" id="shipper_id" name="shipper_id" :value="$order_category->shipper_id" :items="$shippers" optionValue="shipper_id" optionText="shipper_name" required="true" />

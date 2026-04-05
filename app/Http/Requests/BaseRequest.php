@@ -26,6 +26,7 @@ class BaseRequest extends FormRequest
             'sort_order.max'                    => ":attributeは:max以下で入力して下さい。",
             'size'                              => ":attributeは:size文字で入力して下さい。",
             'date_format'                       => ":attributeはyyyymm形式で入力して下さい。",
+            'between'                           => ":attributeは:minから:maxの間で入力して下さい。",
         ];
     }
 
@@ -55,9 +56,16 @@ class BaseRequest extends FormRequest
             // 商品情報
             'item_id'                       => '商品',
             'item_jan_code'                 => '商品JANコード',
+            'color_id'                      => 'カラーID',
+            'color_row'                     => 'カラーROW',
             'item_name'                     => '商品名',
             'item_category_1'               => '商品カテゴリ1',
             'item_category_2'               => '商品カテゴリ2',
+            'brand'                         => 'ブランド',
+            'wearing_period'                => '装用期間',
+            'quantity_per_box'              => '入数',
+            'manufacturer'                  => 'メーカー',
+            'supplier'                      => '仕入先',
             'model_jan_code'                => '代表JANコード',
             'exp_start_position'            => 'EXP開始位置',
             'lot_1_start_position'          => 'LOT1開始位置',

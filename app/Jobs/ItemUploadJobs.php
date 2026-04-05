@@ -399,6 +399,31 @@ class ItemUploadJobs implements ShouldQueue
         // +-+-+-+-+-+-+-+-+-   商品コードがitemsテーブルに存在する場合は、更新処理を行う   +-+-+-+-+-+-+-+-+-
         // itemsテーブルとitem_importsテーブルを結合して更新に必要なカラムを取得（結合した結果、どっちのテーブルにも存在しているデータ）
         if($upload_type === ItemUploadEnum::UPLOAD_TYPE_UPDATE){
+            // is_stock_managedが含まれている場合のみチェック
+            if(in_array('is_stock_managed', $headers)){
+                // 在庫管理フラグが変わる商品コードを特定
+                $conflicting_item_codes = Item::join('item_imports', 'item_imports.item_code', 'items.item_code')
+                                                ->whereColumn('items.is_stock_managed', '!=', 'item_imports.is_stock_managed')
+                                                ->pluck('items.item_code');
+                // 在庫管理が変わる商品がある場合
+                if($conflicting_item_codes->isNotEmpty()){
+                    // 出荷完了前の受注に含まれているか確認
+                    $exists = OrderItem::whereIn('order_item_code', $conflicting_item_codes)
+                        ->whereHas('order', function ($query) {
+                            $query->where('order_status_id', '!=', OrderStatusEnum::SHUKKA_ZUMI);
+                        })
+                        ->exists();
+                    // 含まれている場合
+                    if($exists){
+                        throw new ItemUploadException(
+                            '在庫管理フラグが変更される商品が出荷完了前の受注に含まれているため、アップロードできませんでした。',
+                            [],
+                            CarbonImmutable::now(),
+                            $item_upload_history
+                        );
+                    }
+                }
+            }
             // item_codeを除いた更新対象カラムを定義
             $update_columns = array_values(array_filter($headers, fn($col) => $col !== 'item_code'));
             $chunk_size = 500;

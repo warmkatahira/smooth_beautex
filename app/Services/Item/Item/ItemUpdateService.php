@@ -41,9 +41,16 @@ class ItemUpdateService
         // 商品を更新
         $item->update([
             'item_jan_code'                 => $request->item_jan_code,
+            'color_id'                      => $request->color_id,
+            'color_row'                     => $request->color_row,
             'item_name'                     => $request->item_name,
             'item_category_1'               => $request->item_category_1,
             'item_category_2'               => $request->item_category_2,
+            'brand'                         => $request->brand,
+            'wearing_period'                => $request->wearing_period,
+            'quantity_per_box'              => $request->quantity_per_box,
+            'manufacturer'                  => $request->manufacturer,
+            'supplier'                      => $request->supplier,
             'is_inspection_lot_required'    => $request->is_inspection_lot_required,
             'model_jan_code'                => $request->model_jan_code,
             'exp_start_position'            => $request->exp_start_position,
