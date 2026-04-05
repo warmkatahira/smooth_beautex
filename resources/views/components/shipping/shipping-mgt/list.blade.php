@@ -26,6 +26,7 @@
                     @can('warm_check')
                         <th class="font-thin py-1 px-2 text-center">出荷検品状態</th>
                         <th class="font-thin py-1 px-2 text-center">出荷検品完了日時</th>
+                        <th class="font-thin py-1 px-2 text-center">出荷検品LOT</th>
                     @endcan
                 </tr>
                 <tr class="filter-row sticky top-[28px] bg-white z-10">
@@ -50,6 +51,8 @@
                     <x-filter.input type="tel" id="filter_package_count" name="filter_package_count" />
                     <x-filter.input type="tel" id="filter_tracking_no" name="filter_tracking_no" />
                     <x-filter.select-boolean id="filter_is_shipping_inspection_complete" name="filter_is_shipping_inspection_complete" label1="実施済" label0="未実施" />
+                    <th></th>
+                    <x-filter.select-boolean id="filter_shipping_inspection_lot" name="filter_shipping_inspection_lot" label1="NG" label0="OK" />
                 </tr>
             </thead>
             <tbody class="bg-white">
@@ -111,6 +114,17 @@
                             <td class="py-1 px-2 border text-center">
                                 @if(!is_null($order->shipping_inspection_date))
                                     {{ CarbonImmutable::parse($order->shipping_inspection_date)->isoFormat('Y年MM月DD日(ddd) HH:mm:ss') }}
+                                @endif
+                            </td>
+                            <td class="py-1 px-2 border text-center">
+                                @if($order->is_shipping_inspection_complete)
+                                    @if($order->invalid_lot_count > 0)
+                                        <span class="inline-block bg-status-ng-bg text-status-ng-text text-xs font-bold px-2 py-0.5 rounded">NG</span>
+                                    @else
+                                        <span class="inline-block bg-status-ok-bg text-status-ok-text text-xs font-bold px-2 py-0.5 rounded">OK</span>
+                                    @endif
+                                @else
+                                    <span class="text-gray-300 text-xs">-</span>
                                 @endif
                             </td>
                         @endcan

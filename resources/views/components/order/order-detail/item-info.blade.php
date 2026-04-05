@@ -1,6 +1,8 @@
 @php
     // LOTが存在するか確認
     $has_lots = $order->order_items->contains(fn($item) => $item->order_item_lots->isNotEmpty());
+    // LOT照合を表示するか（出荷済みは非表示）
+    $show_shipping_inspection_lot = $has_lots && $order->order_status_id < OrderStatusEnum::SHUKKA_ZUMI;
 @endphp
 
 <div>
@@ -28,6 +30,9 @@
                         <th class="font-thin py-1 px-2 text-center">商品単価</th>
                         <th class="font-thin py-1 px-2 text-center">引当残</th>
                         @if($has_lots)
+                            @if($show_shipping_inspection_lot)
+                                <th class="font-thin py-1 px-2 text-center">LOT照合</th>
+                            @endif
                             <th class="font-thin py-1 px-2 text-center">LOT</th>
                         @endif
                     </tr>
@@ -55,7 +60,7 @@
                                 {{ $order_item->item?->item_jan_code }}
                                 <x-clipboard-copy-btn :value="$order_item->item?->item_jan_code" label="商品JANコード" />
                             </td>
-                            <td class="py-1 px-2 border relative group/clipboard">
+                            <td class="py-1 px-2 border relative group/clipboard whitespace-normal max-w-lg">
                                 {{ $order_item->item?->item_name ?? $order_item->order_item_name }}
                                 <x-clipboard-copy-btn :value="$order_item->item?->item_name ?? $order_item->order_item_name" label="商品名" />
                             </td>
@@ -63,6 +68,17 @@
                             <td class="py-1 px-2 border text-right">{{ number_format($order_item->order_item_unit_price) }}</td>
                             <td class="py-1 px-2 border text-right">{{ number_format($order_item->unallocated_quantity) }}</td>
                             @if($has_lots)
+                                @if($show_shipping_inspection_lot)
+                                    <td class="py-1 px-2 border text-center">
+                                        @if($order_item->order_item_lots->isEmpty() || $order_item->order_item_lots->every(fn($lot) => is_null($lot->lot)))
+                                            <span class="text-gray-300 text-xs">-</span>
+                                        @elseif($order_item->order_item_lots->contains(fn($lot) => $lot->is_valid === false))
+                                            <span class="inline-block bg-status-ng-bg text-status-ng-text text-xs font-bold px-2 py-0.5 rounded">NG</span>
+                                        @else
+                                            <span class="inline-block bg-status-ok-bg text-status-ok-text text-xs font-bold px-2 py-0.5 rounded">OK</span>
+                                        @endif
+                                    </td>
+                                @endif
                                 <td class="py-1 px-2 border text-center">
                                     @if($order_item->order_item_lots->isNotEmpty())
                                         <i class="las la-angle-right la-lg cursor-pointer lot_accordion_toggle" data-target="lot_detail_{{ $order_item->order_item_id }}"></i>
@@ -72,13 +88,16 @@
                         </tr>
                         @if($order_item->order_item_lots->isNotEmpty())
                             <tr id="lot_detail_{{ $order_item->order_item_id }}" class="hidden bg-gray-50">
-                                <td colspan="10" class="py-2 px-4 border">
+                                <td colspan="{{ $show_shipping_inspection_lot ? 12 : 11 }}" class="py-2 px-4 border">
                                     <table class="text-xs border ">
                                         <thead>
                                             <tr class="text-left text-white bg-gray-600">
                                                 <th class="font-thin py-1 px-2">LOT</th>
                                                 <th class="font-thin py-1 px-2">EXP</th>
                                                 <th class="font-thin py-1 px-2 text-right">数量</th>
+                                                @if($show_shipping_inspection_lot)
+                                                    <th class="font-thin py-1 px-2 text-center">LOT照合</th>
+                                                @endif
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -87,6 +106,17 @@
                                                     <td class="py-1 px-2 border">{{ $lot->lot }}</td>
                                                     <td class="py-1 px-2 border">{{ formatExp($lot->exp) }}</td>
                                                     <td class="py-1 px-2 border text-right">{{ number_format($lot->quantity) }}</td>
+                                                    @if($show_shipping_inspection_lot)
+                                                        <td class="py-1 px-2 border text-center">
+                                                            @if(is_null($lot->lot))
+                                                                <span class="text-gray-300 text-xs">-</span>
+                                                            @elseif($lot->is_valid)
+                                                                <span class="inline-block bg-status-ok-bg text-status-ok-text text-xs font-bold px-2 py-0.5 rounded">OK</span>
+                                                            @else
+                                                                <span class="inline-block bg-status-ng-bg text-status-ng-text text-xs font-bold px-2 py-0.5 rounded">NG</span>
+                                                            @endif
+                                                        </td>
+                                                    @endif
                                                 </tr>
                                             @endforeach
                                         </tbody>

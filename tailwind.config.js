@@ -41,6 +41,14 @@ export default {
                         bg:   "#e5e7eb",   // gray-200
                         dot:  "#9ca3af",   // gray-400
                     },
+                    ok: {
+                        text: "#166534",   // green-800
+                        bg:   "#bbf7d0",   // green-200
+                    },
+                    ng: {
+                        text: "#991b1b",   // red-800
+                        bg:   "#fecaca",   // red-200
+                    },
                 },
                 common: {
                     'disabled'      : "#d1d5db",

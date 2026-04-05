@@ -63,6 +63,22 @@ class OrderSearchService extends BaseFilterService
                     ->select([
                         'orders.*',
                         DB::raw('COUNT(DISTINCT order_items.package_no) as package_count'),
+                        // 出荷検品完了かつ、stocksに存在しないLOT×EXPがスキャンされている件数
+                        DB::raw('(
+                            SELECT COUNT(*) FROM order_item_lots oil
+                            INNER JOIN order_items oi ON oi.order_item_id = oil.order_item_id
+                            INNER JOIN items i ON i.item_code = oi.order_item_code
+                            WHERE oi.order_control_id = orders.order_control_id
+                            AND orders.is_shipping_inspection_complete = true
+                            AND oil.lot IS NOT NULL
+                            AND NOT EXISTS (
+                                SELECT 1 FROM stocks s
+                                WHERE s.lot     = oil.lot
+                                    AND s.exp     = oil.exp
+                                    AND s.item_id = i.item_id
+                                    AND s.base_id = orders.shipping_base_id
+                            )
+                        ) as invalid_lot_count'),
                     ]);
     }
 
@@ -114,6 +130,24 @@ class OrderSearchService extends BaseFilterService
             // 出荷個口No
             'filter_package_count' => function ($query, $value) {
                 $query->having(DB::raw('COUNT(DISTINCT order_items.package_no)'), '=', $value);
+            },
+            // 出荷検品LOT
+            'filter_shipping_inspection_lot' => function ($query, $value) {
+                $query->where('orders.is_shipping_inspection_complete', true)
+                    ->having(DB::raw('(
+                        SELECT COUNT(*) FROM order_item_lots oil
+                        INNER JOIN order_items oi ON oi.order_item_id = oil.order_item_id
+                        INNER JOIN items i ON i.item_code = oi.order_item_code
+                        WHERE oi.order_control_id = orders.order_control_id
+                            AND oil.lot IS NOT NULL
+                            AND NOT EXISTS (
+                                SELECT 1 FROM stocks s
+                                WHERE s.lot     = oil.lot
+                                AND s.exp     = oil.exp
+                                AND s.item_id = i.item_id
+                                AND s.base_id = orders.shipping_base_id
+                            )
+                    )'), $value === '1' ? '>' : '=', 0);
             },
         ];
     }
