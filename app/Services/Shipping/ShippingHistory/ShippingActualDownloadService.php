@@ -44,7 +44,7 @@ class ShippingActualDownloadService
         $create_groups = Order::join('order_categories', 'order_categories.order_category_id', 'orders.order_category_id')
                             ->join('malls', 'malls.mall_id', 'order_categories.mall_id')
                             ->whereIn('order_control_id', $order_control_ids)
-                            ->select('orders.order_category_id', 'order_category_name', 'malls.mall_id')
+                            ->select('orders.order_category_id', 'order_category_name', 'malls.mall_id', 'malls.mall_name')
                             ->distinct()
                             ->get();
         // 受注区分の分だけループ処理
@@ -70,7 +70,7 @@ class ShippingActualDownloadService
     public function createShippingActualFileAtQoo10($nowDate, $create_group, $create_orders, $directory_path)
     {
         // ファイル名を取得
-        $file_name = "【" . SystemEnum::CUSTOMER_NAME_JP . "様】【" . $create_group->order_category_name . "】出荷実績データ_" . $nowDate->format('Ymd') . ".xlsx";
+        $file_name = "【" . SystemEnum::CUSTOMER_NAME_JP . "様】【" . $create_group->mall_name . "】【" . $create_group->order_category_name . "】出荷実績データ_" . $nowDate->format('Ymd') . ".xlsx";
         // ファイルパスを取得
         $file_path = $directory_path . '/' . $file_name;
         // 一時ファイルパスを生成
@@ -115,7 +115,7 @@ class ShippingActualDownloadService
     public function createShippingActualFileAtShopify($nowDate, $create_group, $create_orders, $directory_path)
     {
         // ファイル名を取得
-        $file_name = "【" . SystemEnum::CUSTOMER_NAME_JP . "様】【" . $create_group->order_category_name . "】出荷実績データ_" . $nowDate->format('Ymd') . ".xlsx";
+        $file_name = "【" . SystemEnum::CUSTOMER_NAME_JP . "様】【" . $create_group->mall_name . "】【" . $create_group->order_category_name . "】出荷実績データ_" . $nowDate->format('Ymd') . ".xlsx";
         // ファイルパスを取得
         $file_path = $directory_path . '/' . $file_name;
         // 一時ファイルパスを生成

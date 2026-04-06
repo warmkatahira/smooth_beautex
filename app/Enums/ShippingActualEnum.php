@@ -73,6 +73,7 @@ enum ShippingActualEnum
         // 配送方法IDによって返す値を可変
         return match($shipping_method_id) {
             ShippingMethodEnum::YAMATO_NEKOPOS_ID   => 'ネコポス',
+            ShippingMethodEnum::YAMATO_NORMAL_ID    => 'ヤマト運輸',
             ShippingMethodEnum::SAGAWA_NORMAL_ID    => '佐川急便',
             default                                 => $shipping_method_id,
         };
@@ -84,8 +85,10 @@ enum ShippingActualEnum
         // 配送方法IDによって返す値を可変
         return match($shipping_method_id) {
             ShippingMethodEnum::YAMATO_NEKOPOS_ID   => 'ヤマト運輸',
+            ShippingMethodEnum::YAMATO_NORMAL_ID    => 'ヤマト運輸',
             ShippingMethodEnum::SAGAWA_NORMAL_ID    => '佐川急便',
             ShippingMethodEnum::SAGAWA_EMS_ID       => 'Japan Post',
+            ShippingMethodEnum::UPS_ID              => 'UPS',
             default                                 => $shipping_method_id,
         };
     }
