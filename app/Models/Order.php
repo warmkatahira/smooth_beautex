@@ -51,6 +51,8 @@ class Order extends Model
         'order_category_id',
         'order_mark',
         'is_redelivery',
+        'is_stock_allocation_skipped',
+        'is_shipping_inspection_skipped',
     ];
     // 指定したレコードを取得
     public static function getSpecifyByOrderControlId($order_control_id)
