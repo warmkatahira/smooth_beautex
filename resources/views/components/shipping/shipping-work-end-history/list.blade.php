@@ -7,6 +7,7 @@
                     <th class="font-thin py-1 px-2">出荷完了実施日時</th>
                     <th class="font-thin py-1 px-2">処理件数</th>
                     <th class="font-thin py-1 px-2">処理結果</th>
+                    <th class="font-thin py-1 px-2">エラーファイル名</th>
                     <th class="font-thin py-1 px-2">メッセージ</th>
                 </tr>
             </thead>
@@ -16,6 +17,11 @@
                         <td class="py-1 px-2 border">{{ CarbonImmutable::parse($shipping_work_end_history->created_at)->isoFormat('Y年MM月DD日(ddd) HH時mm分ss秒') }}</td>
                         <td class="py-1 px-2 border text-right">{{ number_format($shipping_work_end_history->target_count) }}</td>
                         <td class="py-1 px-2 border text-center">{{ $shipping_work_end_history->statusText }}</td>
+                        <td class="py-1 px-2 border">
+                            @if(!is_null($shipping_work_end_history->error_file_name))
+                                <a href="{{ route('shipping_work_end_history.error_download', ['filename' => $shipping_work_end_history->error_file_name]) }}" class="text-center text-blue-500"><i class="las la-cloud-download-alt mr-1 la-lg"></i>ダウンロード</a>
+                            @endif
+                        </td>
                         <td class="py-1 px-2 border">{!! nl2br(e($shipping_work_end_history->message)) !!}</td>
                     </tr>
                 @endforeach

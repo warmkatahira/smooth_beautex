@@ -44,7 +44,7 @@ class InputStockOperationEnterService
         // 在庫操作対象の分だけループ処理
         foreach($stock_update_arr as $stock_update){
             // 在庫を取得
-            $stock = Stock::getSpecify($stock_update['stock_id'])->with('base')->with('item')->first();
+            $stock = Stock::getSpecify($stock_update['stock_id'])->with(['base', 'item'])->first();
             // 数量がマイナスの場合
             if($stock_update['quantity'] < 0){
                 // 商品×倉庫単位の合計在庫数を取得
@@ -65,6 +65,7 @@ class InputStockOperationEnterService
                                         ->where('orders.shipping_base_id', $stock->base_id)
                                         ->where('items.item_id', $stock->item_id)
                                         ->where('orders.order_status_id', '<', OrderStatusEnum::SHUKKA_ZUMI)
+                                        ->where('orders.is_stock_allocation_skipped', 0)
                                         ->whereRaw('order_items.shipping_quantity - order_items.unallocated_quantity > 0')
                                         ->selectRaw('SUM(order_items.shipping_quantity - order_items.unallocated_quantity) as allocated_quantity')
                                         ->value('allocated_quantity') ?? 0;

@@ -15,6 +15,7 @@ class ShippingWorkEndHistory extends Model
         'target_count',
         'is_successful',
         'message',
+        'error_file_name',
     ];
     // 10日前までのデータを取得
     public static function getDispData()

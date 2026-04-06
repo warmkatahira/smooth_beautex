@@ -23,6 +23,7 @@
                     <th class="font-thin py-1 px-2 text-center">配送方法</th>
                     <th class="font-thin py-1 px-2 text-center">配送希望日</th>
                     <th class="font-thin py-1 px-2 text-center">配送希望時間</th>
+                    <th class="font-thin py-1 px-2 text-center">再発送</th>
                 </tr>
                 <tr class="filter-row sticky top-[28px] bg-white z-10">
                     <th></th>
@@ -45,6 +46,7 @@
                     <x-filter.select-delivery-company id="filter_shipping_method_id" name="filter_shipping_method_id" :deliveryCompanies="$deliveryCompanies" />
                     <x-filter.input type="date" id="filter_desired_delivery_date" name="filter_desired_delivery_date" />
                     <x-filter.input type="tel" id="filter_desired_delivery_time" name="filter_desired_delivery_time" />
+                    <x-filter.select-boolean id="filter_is_redelivery" name="filter_is_redelivery" label1="対象" label0="対象外" />
                 </tr>
             </thead>
             <tbody class="bg-white">
@@ -98,6 +100,9 @@
                             @endif
                         </td>
                         <td class="py-1 px-2 border">{{ $order->desired_delivery_time }}</td>
+                        <td class="py-1 px-2 border text-center">
+                            <x-list.status :value="$order->is_redelivery" label1="対象" label0="対象外" />
+                        </td>
                     </tr>
                 @endforeach
             </tbody>

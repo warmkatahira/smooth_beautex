@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedInteger('target_count');
             $table->boolean('is_successful');
             $table->string('message', 255)->nullable();
+            $table->string('error_file_name')->nullable();
             $table->timestamps();
         });
     }

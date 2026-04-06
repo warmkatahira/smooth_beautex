@@ -116,12 +116,16 @@ class Order extends Model
     // 出荷完了対象の受注を取得
     public static function getShippingWorkEndTarget()
     {
-        // 注文ステータスが「作業中」かつ、出荷検品が完了している
+        // 注文ステータスが「作業中」かつ、出荷検品が完了している or 出荷検品スキップ対象
+        // かつ、出荷グループの出荷予定日が今日を含む過去
         return self::where('order_status_id', OrderStatusEnum::SAGYO_CHU)
-                        ->where('is_shipping_inspection_complete', 1)
-                        ->whereHas('shipping_group', function ($query) {
-                            $query->whereDate('estimated_shipping_date', '<=', now()->toDateString());
-                        });
+                    ->where(function($query){
+                        $query->where('is_shipping_inspection_complete', 1)
+                              ->orWhere('is_shipping_inspection_skipped', 1);
+                    })
+                    ->whereHas('shipping_group', function ($query) {
+                        $query->whereDate('estimated_shipping_date', '<=', now()->toDateString());
+                    });
     }
     // 完全な配送先住所を返すアクセサ
     public function getFullShipAddressAttribute(): string

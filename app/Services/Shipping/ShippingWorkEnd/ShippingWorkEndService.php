@@ -31,15 +31,15 @@ class ShippingWorkEndService
     {
         // 出荷完了対象が存在しない場合
         if($orders->isEmpty()){
-            throw new ShippingWorkEndException('出荷完了対象が存在しないため、出荷完了を中断しました。', $orders->count(), 0);
+            throw new ShippingWorkEndException('出荷完了対象が存在しないため、出荷完了を中断しました。', $orders->count(), 0, null);
         }
         // 配送伝票番号がNullの受注がある場合
         if($orders->contains('tracking_no', null)){
-            throw new ShippingWorkEndException('出荷完了対象に配送伝票番号が未更新の受注が存在するため、出荷完了を中断しました。', $orders->count(), 0);
+            throw new ShippingWorkEndException('出荷完了対象に配送伝票番号が未更新の受注が存在するため、出荷完了を中断しました。', $orders->count(), 0, null);
         }
-        // 出荷検品が未完了の受注がある場合
-        if($orders->contains(fn($order) => !$order->is_shipping_inspection_complete)){
-            throw new ShippingWorkEndException('出荷完了対象に出荷検品が未完了の受注が存在するため、出荷完了を中断しました。', $orders->count(), 0);
+        // 出荷検品が未完了の受注がある場合（出荷検品スキップ対象を除く）
+        if($orders->contains(fn($order) => !$order->is_shipping_inspection_complete && !$order->is_shipping_inspection_skipped)){
+            throw new ShippingWorkEndException('出荷完了対象に出荷検品が未完了の受注が存在するため、出荷完了を中断しました。', $orders->count(), 0, null);
         }
         // 受注管理IDを取得
         return $orders->pluck('order_control_id');
@@ -55,6 +55,7 @@ class ShippingWorkEndService
                                 ->join('bases', 'bases.base_id', 'orders.shipping_base_id')
                                 ->whereIn('orders.order_control_id', $order_control_ids)
                                 ->where('items.is_stock_managed', 1)
+                                ->where('orders.is_stock_allocation_skipped', 0)
                                 ->select(
                                     'items.item_id',
                                     'items.item_code',
@@ -76,6 +77,7 @@ class ShippingWorkEndService
                                 ->get();
         // 更新に必要な情報を格納する配列を初期化
         $stocks = [];
+        $errors = [];
         // 検品結果の分だけループ処理
         foreach($order_item_lots as $order_item_lot){
             // item_id + base_id + lot + exp で在庫を取得
@@ -86,14 +88,15 @@ class ShippingWorkEndService
                             ->first();
             // 在庫が取得できなかった場合エラー
             if(is_null($stock)){
-                throw new ShippingWorkEndException(
-                    "在庫が取得できない商品があったため、出荷完了を中断しました。\n".
-                    "出荷倉庫：".$order_item_lot->base_name."\n".
-                    "商品コード：".$order_item_lot->item_code."\n".
-                    "LOT：".$order_item_lot->lot."\n".
-                    "EXP：".formatExp($order_item_lot->exp),
-                    $order_control_ids->count(), 0
-                );
+                $errors[] = [
+                    'エラー内容' => '存在しないLOT×EXPの在庫が出荷検品でスキャンされています。',
+                    '出荷倉庫'   => $order_item_lot->base_name,
+                    '商品コード' => $order_item_lot->item_code,
+                    'LOT'        => $order_item_lot->lot,
+                    'EXP'        => "'".formatExp($order_item_lot->exp),
+                    '出荷数'     => '',
+                ];
+                continue;
             }
             // 配列に情報を格納
             $stocks[] = [
@@ -115,18 +118,29 @@ class ShippingWorkEndService
             $locked_stock = $locked_stocks->where('stock_id', $stock['stock_id'])->first();
             // 在庫数より出荷数の方が大きければエラーを返す
             if($locked_stock->total_stock < abs($stock['quantity'])){
-                throw new ShippingWorkEndException(
-                        "在庫数がマイナスになる在庫があるため、出荷完了を中断しました。\n".
-                        "出荷倉庫：".$stock['base_name']."\n".
-                        "商品コード：".$stock['item_code']."\n".
-                        "LOT：".$stock['lot']."\n".
-                        "EXP：".formatExp($stock['exp'])."\n".
-                        "出荷数：".$stock['quantity'],
-                        $order_control_ids->count(), 0
-                    );
+                $errors[] = [
+                    'エラー内容' => '在庫数がマイナスになります。',
+                    '出荷倉庫'   => $stock['base_name'],
+                    '商品コード' => $stock['item_code'],
+                    'LOT'        => $stock['lot'],
+                    'EXP'        => "'".formatExp($stock['exp']),
+                    '出荷数'     => abs($stock['quantity']),
+                ];
+                continue;
             }
             // 在庫数から出荷数を引く（マイナス符号がついているので、incrementにしている）
             $locked_stock->increment('total_stock', $stock['quantity']);
+        }
+        // エラーがある場合
+        if(!empty($errors)){
+            // エラーファイルを作成
+            $error_file_name = $this->createErrorFile($errors);
+            throw new ShippingWorkEndException(
+                "エラーがあったため、出荷完了を中断しました。\nエラーファイルを確認して下さい。",
+                $order_control_ids->count(),
+                0,
+                $error_file_name
+            );
         }
         return $stocks;
     }
@@ -150,13 +164,36 @@ class ShippingWorkEndService
     }
 
     // 出荷完了履歴に追加
-    public function createShippingWorkEndHistory($target_count, $is_successful, $message)
+    public function createShippingWorkEndHistory($target_count, $is_successful, $message, $error_file_name)
     {
         // レコードを追加
         ShippingWorkEndHistory::create([
-            'target_count'  => $target_count,
-            'is_successful' => $is_successful,
-            'message'       => $message,
+            'target_count'      => $target_count,
+            'is_successful'     => $is_successful,
+            'message'           => $message,
+            'error_file_name'   => $error_file_name,
         ]);
+    }
+
+    // エラーファイルを作成
+    public function createErrorFile($errors)
+    {
+        $error_file_name = '出荷完了エラー_' . CarbonImmutable::now()->format('Y-m-d_H-i-s') . '.csv';
+        $file_path = storage_path('app/public/export/shipping_work_end_error/' . $error_file_name);
+        $header = ['エラー内容', '出荷倉庫', '商品コード', 'LOT', 'EXP', '出荷数'];
+        $csv_content = "\xEF\xBB\xBF" . implode(',', $header) . "\n";
+        foreach($errors as $error){
+            $row = [
+                $error['エラー内容'],
+                $error['出荷倉庫'],
+                $error['商品コード'],
+                $error['LOT'],
+                $error['EXP'],
+                $error['出荷数'],
+            ];
+            $csv_content .= implode(',', $row) . "\n";
+        }
+        file_put_contents($file_path, $csv_content);
+        return $error_file_name;
     }
 }

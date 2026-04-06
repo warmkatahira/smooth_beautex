@@ -186,6 +186,15 @@ class OrderAllocateService
             'is_stock_allocated'    => 1,
             'unallocated_quantity'  => 0,
         ]);
+        // 仮引当数を管理する一時テーブルを作成
+        DB::statement('
+            CREATE TEMPORARY TABLE IF NOT EXISTS temp_allocated_quantity (
+                item_id INT,
+                base_id VARCHAR(10) COLLATE utf8mb4_unicode_ci,
+                allocated_quantity INT DEFAULT 0,
+                PRIMARY KEY (item_id, base_id)
+            );
+        ');
         // 在庫引当の条件を満たしていて在庫管理している商品のレコードを取得(取込日時+注文番号で昇順をかけている)
         $stock_allocate_orders = Order::join('order_items', 'order_items.order_control_id', 'orders.order_control_id')
                                     ->join('items', 'items.item_code', '=', 'order_items.order_item_code')
@@ -211,22 +220,41 @@ class OrderAllocateService
                                         ->where('orders.shipping_base_id', $stock_allocate_order->shipping_base_id)
                                         ->where('items.item_id', $stock_allocate_order->item_id)
                                         ->where('orders.order_status_id', '<', OrderStatusEnum::SHUKKA_ZUMI)
+                                        ->where('orders.is_stock_allocation_skipped', 0)
                                         ->whereNotIn('orders.order_control_id', $allocate_orders)
                                         ->whereRaw('order_items.shipping_quantity - order_items.unallocated_quantity > 0')
                                         ->selectRaw('SUM(order_items.shipping_quantity - order_items.unallocated_quantity) as allocated_quantity')
                                         ->value('allocated_quantity') ?? 0;
+            // 一時テーブルから仮引当数を取得
+            $temp_allocated = DB::table('temp_allocated_quantity')
+                                ->where('item_id', $stock_allocate_order->item_id)
+                                ->where('base_id', $stock_allocate_order->shipping_base_id)
+                                ->value('allocated_quantity') ?? 0;
             // 引当可能残数を計算
-            $available_quantity = $total_stock - $already_allocated;
+            $available_quantity = $total_stock - $already_allocated - $temp_allocated;
             // 引当可能残数が今回引き当てたい数量以上の場合
             if($available_quantity >= $order_item->unallocated_quantity){
-                // 全数引当OK
+                // update前に引当数を保持
+                $allocate_quantity = $order_item->unallocated_quantity;
                 $order_item->update([
                     'is_stock_allocated'   => 1,
                     'unallocated_quantity' => 0,
                 ]);
+                // 保持した値で加算
+                DB::statement('
+                    INSERT INTO temp_allocated_quantity (item_id, base_id, allocated_quantity)
+                    VALUES (?, ?, ?)
+                    ON DUPLICATE KEY UPDATE allocated_quantity = allocated_quantity + VALUES(allocated_quantity)
+                ', [$stock_allocate_order->item_id, $stock_allocate_order->shipping_base_id, $allocate_quantity]);
             }elseif($available_quantity > 0){
                 // 一部だけ引当OKなので、引当残を引当可能残数だけ減らす
                 $order_item->decrement('unallocated_quantity', $available_quantity);
+                // 一時テーブルに仮引当数を加算
+                DB::statement('
+                    INSERT INTO temp_allocated_quantity (item_id, base_id, allocated_quantity)
+                    VALUES (?, ?, ?)
+                    ON DUPLICATE KEY UPDATE allocated_quantity = allocated_quantity + VALUES(allocated_quantity)
+                ', [$stock_allocate_order->item_id, $stock_allocate_order->shipping_base_id, $available_quantity]);
             }
         }
     }
@@ -248,7 +276,7 @@ class OrderAllocateService
             if($item_allocated_ng_count >= 1 || $is_shipping_method_id_null){
                 $is_allocated = 0;
                 $order_status_id = OrderStatusEnum::KAKUNIN_MACHI;
-            }elseif($stock_allocated_ng_count >= 1){
+            }elseif($stock_allocated_ng_count >= 1 && !$order->is_stock_allocation_skipped){
                 $is_allocated = 0;
                 $order_status_id = OrderStatusEnum::HIKIATE_MACHI;
             }else{

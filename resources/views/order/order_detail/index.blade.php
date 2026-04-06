@@ -13,7 +13,9 @@
         <x-order.order-detail.order-info :order="$order" />
         <x-order.order-detail.ship-info :order="$order" />
         <x-order.order-detail.shipping-info :order="$order" />
-        <x-order.order-detail.inspection-info :order="$order" />
+        @if(auth()->user()->can('warm_check') && $order->order_status_id > OrderStatusEnum::SHUKKA_MACHI)
+            <x-order.order-detail.inspection-info :order="$order" />
+        @endif
         <x-order.order-detail.other-info :order="$order" />
         <x-order.order-detail.item-info :order="$order" />
     </div>

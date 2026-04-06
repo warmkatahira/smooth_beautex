@@ -18,6 +18,10 @@ class OrderControlIdCheckService
         if(!$order){
             return '受注が存在しません。';
         }
+        // 出荷検品スキップ対象である場合
+        if($order->is_shipping_inspection_skipped){
+            return '出荷検品を実施しない受注です。';
+        }
         // 出荷検品が未実施であるか
         if($order->is_shipping_inspection_complete === 1){
             return '出荷検品が完了しています。';

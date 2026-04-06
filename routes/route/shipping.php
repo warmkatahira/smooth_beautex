@@ -89,9 +89,10 @@ Route::middleware('common')->group(function (){
             Route::get('', 'index')->name('index');
             Route::post('enter', 'enter')->name('enter');
         });
-        // +-+-+-+-+-+-+-+- 出荷完了 +-+-+-+-+-+-+-+-
+        // +-+-+-+-+-+-+-+- 出荷完了履歴 +-+-+-+-+-+-+-+-
         Route::controller(ShippingWorkEndHistoryController::class)->prefix('shipping_work_end_history')->name('shipping_work_end_history.')->group(function(){
             Route::get('', 'index')->name('index');
+            Route::get('error_download', 'error_download')->name('error_download');
         });
         // +-+-+-+-+-+-+-+- 出荷履歴 +-+-+-+-+-+-+-+-
         Route::controller(ShippingHistoryController::class)->prefix('shipping_history')->name('shipping_history.')->group(function(){

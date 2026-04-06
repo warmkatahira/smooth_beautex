@@ -151,7 +151,8 @@ class StockSearchService
                 'item_base.item_category_1',
                 'item_base.item_category_2',
                 'item_base.item_image_file_name',
-            )->orderBy('item_base.item_sort_order', 'asc');
+            )->orderBy('item_base.item_sort_order', 'asc')
+            ->orderBy('item_base.item_code', 'asc');
         }
         // 在庫単位表示の場合
         if($route_name === RouteNameEnum::STOCK_BY_STOCK || $route_name === RouteNameEnum::INPUT_STOCK_OPERATION){
@@ -184,7 +185,9 @@ class StockSearchService
             );
             // グループ化
             $query = $query->orderBy('item_base.base_sort_order', 'asc')
-                        ->orderBy('item_base.item_sort_order', 'asc');
+                        ->orderBy('item_base.item_sort_order', 'asc')
+                        ->orderBy('stocks.exp', 'asc')
+                        ->orderBy('stocks.lot', 'asc');
         }
         
         return with([
