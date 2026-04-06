@@ -43,6 +43,7 @@ return new class extends Migration
             // ここまで受注データの内容
             $table->unsignedInteger('unallocated_quantity');
             $table->unsignedInteger('order_category_id');
+            $table->boolean('is_redelivery');
             $table->timestamps();
         });
         // 文字セット・照合順序を変更

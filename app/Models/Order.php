@@ -50,6 +50,7 @@ class Order extends Model
         'supplement',
         'order_category_id',
         'order_mark',
+        'is_redelivery',
     ];
     // 指定したレコードを取得
     public static function getSpecifyByOrderControlId($order_control_id)

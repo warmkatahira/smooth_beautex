@@ -186,6 +186,10 @@ class ItemIdCodeCheckService
         }
         // LOT1の設定で取得(-1しているのは、0から数え始める為)
         $lot_1 = substr($item_id_code, $progress[$key]['lot_1_start_position'] - 1, $progress[$key]['lot_1_length']);
+        if($lot_1 === ''){
+            session(['exp_lot_check_result' => 'LOT1が取得できませんでした。<br>' . $item_id_code]);
+            return null;
+        }
         // LOT2の設定で取得(-1しているのは、0から数え始める為)
         // 設定がnullではない場合
         if(!is_null($progress[$key]['lot_2_start_position'])){

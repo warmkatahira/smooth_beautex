@@ -58,6 +58,7 @@ class OrderImportForQoo10Service
                 'order_item_unit_price'     => str_replace([","], "", $line['販売価格']),   // 4桁以上だと「,」が付いてくるので、取り除く
                 'unallocated_quantity'      => $line['数量'],
                 'order_category_id'         => $order_category_id,
+                'is_redelivery'             => $is_redelivery,
             ];
             // 値が空であればnull、先頭の「'」を除去
             $param = array_map(function ($value) {

@@ -49,6 +49,7 @@ return new class extends Migration
             $table->text('supplement')->nullable();
             $table->unsignedInteger('order_category_id');
             $table->string('order_mark', 10)->nullable();
+            $table->boolean('is_redelivery');
             $table->timestamps();
             // 外部キー
             $table->foreign('shipping_group_id')->references('shipping_group_id')->on('shipping_groups')->cascadeOnUpdate()->onDelete('set null');

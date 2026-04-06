@@ -100,6 +100,7 @@ class OrderImportForShopifyService
                 'order_item_unit_price'     => $line['Lineitem price'],
                 'unallocated_quantity'      => $line['Lineitem quantity'],
                 'order_category_id'         => $order_category_id,
+                'is_redelivery'             => $is_redelivery,
             ];
             // シンガポールの都市名を英語に置換
             if($param['ship_country_code'] === 'SG' && $param['ship_city'] === 'シンガポール'){
@@ -150,6 +151,7 @@ class OrderImportForShopifyService
             'order_item_unit_price'     => 'required|integer|min:0',
             'unallocated_quantity'      => 'required|integer|min:1',
             'order_category_id'         => 'required|exists:order_categories,order_category_id',
+            'is_redelivery'             => 'required|boolean',
         ];
         // バリデーションエラーメッセージを定義
         $messages = [
@@ -188,6 +190,7 @@ class OrderImportForShopifyService
             'order_item_unit_price'     => '商品単価',
             'unallocated_quantity'      => '引当残',
             'order_category_id'         => '受注区分',
+            'is_redelivery'             => '再発送',
         ];
         // バリデーション実施
         $validator = Validator::make($param, $rules, $messages, $attributes);

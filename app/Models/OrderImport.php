@@ -41,6 +41,7 @@ class OrderImport extends Model
         'order_item_unit_price',
         'unallocated_quantity',
         'order_category_id',
+        'is_redelivery',
     ];
     // 指定したレコードを取得
     public static function getSpecifyByOrderNo($order_no)
@@ -133,6 +134,7 @@ class OrderImport extends Model
             'subtotal',
             'total_payment',
             'order_category_id',
+            'is_redelivery',
         ]);
     }
     // order_itemsテーブルに追加する情報を取得
