@@ -68,7 +68,7 @@
                             {{ $order->order_control_id }}
                             <x-clipboard-copy-btn :value="$order->order_control_id" label="受注管理ID" />
                         </td>
-                        <td class="py-1 px-2 border text-center">{{ $order->order_category->order_category_name_and_mall_name }}</td>
+                        <td class="py-1 px-2 border text-center">{{ $order->order_category->order_category_name }}</td>
                         <td class="py-1 px-2 border text-center">
                             <img src="{{ asset('image/'.$order->order_category->mall->mall_image_file_name) }}" class="w-12 inline-block">
                         </td>

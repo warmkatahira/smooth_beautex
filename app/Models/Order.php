@@ -105,7 +105,10 @@ class Order extends Model
     {
         // 注文ステータスが「作業中」かつ、出荷検品が完了している
         return self::where('order_status_id', OrderStatusEnum::SAGYO_CHU)
-                        ->where('is_shipping_inspection_complete', 1);
+                        ->where('is_shipping_inspection_complete', 1)
+                        ->whereHas('shipping_group', function ($query) {
+                            $query->whereDate('estimated_shipping_date', '<=', now()->toDateString());
+                        });
     }
     // 完全な配送先住所を返すアクセサ
     public function getFullShipAddressAttribute(): string

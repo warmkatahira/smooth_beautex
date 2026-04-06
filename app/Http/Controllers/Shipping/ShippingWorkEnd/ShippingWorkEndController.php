@@ -25,27 +25,27 @@ class ShippingWorkEndController extends Controller
     {
         // ページヘッダーをセッションに格納
         session(['page_header' => '出荷完了']);
-        // 出荷完了対象と出荷完了対象外を出荷倉庫毎で取得
+        // 出荷完了対象と出荷完了対象外を出荷倉庫・出荷予定日毎で取得
         $shipping_work_end_info = Order::where('order_status_id', OrderStatusEnum::SAGYO_CHU)
-                                        ->selectRaw('shipping_base_id, is_shipping_inspection_complete, COUNT(*) as count')
-                                        ->groupBy('shipping_base_id', 'is_shipping_inspection_complete')
+                                        ->selectRaw('shipping_groups.shipping_base_id, is_shipping_inspection_complete, COUNT(*) as count')
+                                        ->selectRaw('DATE(shipping_groups.estimated_shipping_date) as estimated_shipping_date')
+                                        ->leftJoin('shipping_groups', 'shipping_groups.shipping_group_id', '=', 'orders.shipping_group_id')
+                                        ->groupBy('shipping_groups.shipping_base_id', 'is_shipping_inspection_complete', 'estimated_shipping_date')
                                         ->with('base')
                                         ->get();
         // 配列を初期化
         $shipping_work_end_info_arr = [];
         // 倉庫を取得
         $bases = Base::getAll()->get();
-        // 倉庫の分だけループ処理
-        foreach($bases as $base){
-            $shipping_work_end_info_arr[$base->base_name] = [0 => 0, 1 => 0];
-        }
         // レコードの分だけループ処理
         foreach ($shipping_work_end_info as $row) {
-            // 倉庫名と出荷検品状態を取得
             $base_name = $row->base->base_name;
+            $estimated_shipping_date = $row->estimated_shipping_date ?? '未設定';
             $is_shipping_inspection_complete = $row->is_shipping_inspection_complete;
-            // 出荷検品状態の件数を格納
-            $shipping_work_end_info_arr[$base_name][$is_shipping_inspection_complete] = $row->count;
+            if(!isset($shipping_work_end_info_arr[$base_name][$estimated_shipping_date])){
+                $shipping_work_end_info_arr[$base_name][$estimated_shipping_date] = [0 => 0, 1 => 0];
+            }
+            $shipping_work_end_info_arr[$base_name][$estimated_shipping_date][$is_shipping_inspection_complete] = $row->count;
         }
         return view('shipping.shipping_work_end.index')->with([
             'shipping_work_end_info_arr' => $shipping_work_end_info_arr,
