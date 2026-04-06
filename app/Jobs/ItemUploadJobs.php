@@ -13,8 +13,10 @@ use App\Models\Item;
 use App\Models\ItemImport;
 use App\Models\Job;
 use App\Models\ItemUploadHistory;
+use App\Models\OrderItem;
 // 列挙
 use App\Enums\ItemUploadEnum;
+use App\Enums\OrderStatusEnum;
 // 例外
 use App\Exceptions\ItemUploadException;
 // その他
@@ -94,20 +96,28 @@ class ItemUploadJobs implements ShouldQueue
         // テーブルをクリア
         $this->clearItemImport();
         try {
-            $proc_count = DB::transaction(function () use ($headers, $upload_type, $file_type, $chunk_size, $chunks, $nowDate, $item_upload_history){
-                // チャンク毎のループ処理
-                foreach ($chunks as $chunk_index => $chunk){
-                    // 追加するデータを配列に格納（同時にバリデーションも実施）
-                    $data = $this->setArrayImportData($chunk, $headers, $chunk_size, $chunk_index, $file_type);
-                    // バリデーションエラーがある場合
-                    if(count(array_filter($data['validation_error'])) != 0){
-                        throw new ItemUploadException('データが正しくない為、アップロードできませんでした。', $data['validation_error'], $nowDate, $item_upload_history);
-                    }
-                    // item_importsテーブルへ追加
-                    $this->createArrayImportData($data['create_data']);
+            // 先に全チャンク分バリデーションを実施
+            $all_errors = [];
+            $all_data = [];
+            foreach ($chunks as $chunk_index => $chunk){
+                $data = $this->setArrayImportData($chunk, $headers, $chunk_size, $chunk_index, $file_type);
+                if(count(array_filter($data['validation_error'])) != 0){
+                    $all_errors = array_merge($all_errors, $data['validation_error']);
+                } else {
+                    $all_data[] = $data['create_data'];
+                }
+            }
+            // エラーがあれば終了
+            if(!empty($all_errors)){
+                throw new ItemUploadException('データが正しくない為、アップロードできませんでした。', $all_errors, $nowDate, $item_upload_history);
+            }
+            // エラーがなければDB書き込み
+            $proc_count = DB::transaction(function () use ($headers, $upload_type, $all_data, $nowDate, $item_upload_history){
+                foreach ($all_data as $create_data){
+                    $this->createArrayImportData($create_data);
                 }
                 // itemsテーブルへ追加と更新処理
-                return $this->procCreateAndUpdate($headers, $upload_type);
+                return $this->procCreateAndUpdate($headers, $upload_type, $item_upload_history);
             });
         } catch (ItemUploadException $e){
             // 渡された内容を取得
@@ -176,10 +186,6 @@ class ItemUploadJobs implements ShouldQueue
         }
         // バリデーション（共通）
         $validation_error = $this->commonValidation($create_data, $headers, $chunk_size, $chunk_index, $file_type);
-        // エラーメッセージがあればバリデーションエラーを配列に格納
-        if(!empty($validation_error)){
-            return compact('validation_error');
-        }
         return compact('create_data', 'validation_error');
     }
 
@@ -222,10 +228,10 @@ class ItemUploadJobs implements ShouldQueue
         foreach($headers as $column){
             switch ($column){
                 case 'item_jan_code':
-                    $rules += ['*.'.$column => 'required|max:13'];
+                    $rules += ['*.'.$column => 'required|string|max:13'];
                     break;
                 case 'item_name':
-                    $rules += ['*.'.$column => 'required|max:255'];
+                    $rules += ['*.'.$column => 'required|string|max:255'];
                     break;
                 case 'item_category_1':
                 case 'item_category_2':
@@ -234,47 +240,47 @@ class ItemUploadJobs implements ShouldQueue
                 case 'color_id':
                 case 'manufacturer':
                 case 'supplier':
-                    $rules += ['*.'.$column => 'nullable|max:20'];
+                    $rules += ['*.'.$column => 'nullable|string|max:20'];
                     break;
                 case 'brand':
-                    $rules += ['*.'.$column => 'nullable|max:50'];
+                    $rules += ['*.'.$column => 'nullable|string|max:50'];
                     break;
                 case 'color_row':
-                    $rules += ['*.'.$column => 'nullable|integer|min:1|max:255'];
+                    $rules += ['*.'.$column => 'nullable|integer|min:0|max:255'];
                     break;
                 case 'is_inspection_lot_required':
                     $rules += ['*.'.$column => 'required|boolean'];
                     break;
                 case 'model_jan_code':
-                    $rules += ['*.'.$column => 'nullable|max:13'];
+                    $rules += ['*.'.$column => 'nullable|string|max:13'];
                     break;
                 case 'exp_start_position':
-                    $rules += ['*.'.$column => 'nullable|integer|min:1'];
+                    $rules += ['*.'.$column => 'nullable|integer|between:1,255'];
                     break;
                 case 'lot_1_start_position':
-                    $rules += ['*.'.$column => 'required_if:*.is_inspection_lot_required,1|required_with:*.lot_1_length|nullable|integer|min:1'];
+                    $rules += ['*.'.$column => 'required_if:*.is_inspection_lot_required,1|required_with:*.lot_1_length|nullable|integer|between:1,255'];
                     break;
                 case 'lot_1_length':
-                    $rules += ['*.'.$column => 'required_if:*.is_inspection_lot_required,1|required_with:*.lot_1_start_position|nullable|integer|min:1'];
+                    $rules += ['*.'.$column => 'required_if:*.is_inspection_lot_required,1|required_with:*.lot_1_start_position|nullable|integer|between:1,255'];
                     break;
                 case 'lot_2_start_position':
-                    $rules += ['*.'.$column => 'required_with:*.lot_2_length|nullable|integer|min:1'];
+                    $rules += ['*.'.$column => 'required_with:*.lot_2_length|nullable|integer|between:1,255'];
                     break;
                 case 'lot_2_length':
-                    $rules += ['*.'.$column => 'required_with:*.lot_2_start_position|nullable|integer|min:1'];
+                    $rules += ['*.'.$column => 'required_with:*.lot_2_start_position|nullable|integer|between:1,255'];
                     break;
                 case 's_power_code':
-                    $rules += ['*.'.$column => 'required_with:*.model_jan_code|nullable|integer|min:1'];
+                    $rules += ['*.'.$column => 'required_with:*.model_jan_code|nullable|integer|between:200,240'];
                     break;
                 case 's_power_code_start_position':
-                    $rules += ['*.'.$column => 'required_with:*.model_jan_code|nullable|integer|min:1'];
+                    $rules += ['*.'.$column => 'required_with:*.model_jan_code|nullable|integer|between:1,255'];
                     break;
                 case 'is_stock_managed':
                     $rules += ['*.'.$column => 'required|boolean'];
                     break;
                 case 'country_of_origin':
                 case 'hs_code':
-                    $rules += ['*.'.$column => 'nullable|max:10'];
+                    $rules += ['*.'.$column => 'nullable|string|max:10'];
                     break;
                 case 'sort_order':
                     $rules += ['*.'.$column => 'required|integer|min:1'];
@@ -289,11 +295,13 @@ class ItemUploadJobs implements ShouldQueue
         // バリデーションエラーメッセージを定義
         $messages = [
             'required'                                      => ':attributeは必須です。',
+            'string'                                        => ":attributeは文字列で入力して下さい。",
             'max'                                           => ':attribute（:input）は:max文字以内で入力して下さい。',
             'boolean'                                       => ':attribute（:input）が正しくありません。',
             'exists'                                        => ':attribute（:input）はシステムに存在しません。',
             'min'                                           => ':attribute（:input）は:min以上で入力して下さい。',
             'integer'                                       => ':attribute（:input）は数値で入力して下さい。',
+            'between'                                       => ":attributeは:minから:maxの間で入力して下さい。",
             '*.lot_1_start_position.required_if'            => '検品ロットが必要の場合、:attributeは必須です。',
             '*.lot_1_length.required_if'                    => '検品ロットが必要の場合、:attributeは必須です。',
             '*.lot_1_start_position.required_with'          => 'LOT1桁数が入力されている場合、:attributeは必須です。',
@@ -328,6 +336,7 @@ class ItemUploadJobs implements ShouldQueue
             '*.color_row'                   => 'カラーROW',
             '*.manufacturer'                => 'メーカー',
             '*.supplier'                    => '仕入先',
+            '*.item_weight_g'               => '商品重量',
             '*.sort_order'                  => '並び順',
         ];
         // バリデーション実施
@@ -346,7 +355,7 @@ class ItemUploadJobs implements ShouldQueue
             $key_explode = explode('.', $key);
             // メッセージを格納
             $validation_error[] = [
-                'エラー行数' => ($key_explode[0] + 2) + ($chunk_size * $chunk_index) . '行目',
+                '商品コード' => $params[$key_explode[0]]['item_code'] ?? '-',
                 'エラー内容' => $value[0],
             ];
         }
@@ -359,7 +368,7 @@ class ItemUploadJobs implements ShouldQueue
         ItemImport::insert($create_data);
     }
 
-    public function procCreateAndUpdate($headers, $upload_type)
+    public function procCreateAndUpdate($headers, $upload_type, $item_upload_history)
     {
         // +-+-+-+-+-+-+-+-+-   商品コードがitemsテーブルに存在しない場合は、追加処理を行う   +-+-+-+-+-+-+-+-+-
         // item_importsテーブルにしか存在していないレコードを取得(商品マスタに追加するカラムだけ取得)
@@ -415,9 +424,16 @@ class ItemUploadJobs implements ShouldQueue
                         ->exists();
                     // 含まれている場合
                     if($exists){
+                        // エラー内容を商品コード毎に配列化
+                        $error_data = $conflicting_item_codes->map(function($item_code){
+                            return [
+                                '商品コード' => $item_code,
+                                'エラー内容' => '在庫管理フラグが変更される商品が出荷完了前の受注に含まれているため、アップロードできませんでした。',
+                            ];
+                        })->toArray();
                         throw new ItemUploadException(
                             '在庫管理フラグが変更される商品が出荷完了前の受注に含まれているため、アップロードできませんでした。',
-                            [],
+                            $error_data,
                             CarbonImmutable::now(),
                             $item_upload_history
                         );
@@ -495,14 +511,11 @@ class ItemUploadJobs implements ShouldQueue
             'message' => $message,
         ]);
         // ヘッダ行を書き込む
-        $header = ['エラー行数', 'エラー内容'];
+        $header = ['商品コード', 'エラー内容'];
         $csvContent = "\xEF\xBB\xBF" . implode(',', $header) . "\n";
-        // チャンク毎のループ処理
         foreach ($chunks as $chunk){
-            // レコード毎のループ処理
             foreach ($chunk as $item){
-                // CSV形式で内容をセット
-                $row = [$item['エラー行数'], $item['エラー内容']];
+                $row = [$item['商品コード'], $item['エラー内容']];
                 $csvContent .= implode(',', $row) . "\n";
             }
         }

@@ -44,25 +44,27 @@ class ItemUpdateRequest extends BaseRequest
             'supplier'                      => 'nullable|string|max:20',
             'is_inspection_lot_required'    => 'required|boolean',
             'model_jan_code'                => 'nullable|string|max:13',
-            'exp_start_position'            => 'nullable|integer|min:1',
-            'lot_1_start_position'          => 'nullable|integer|min:1',
-            'lot_1_length'                  => 'nullable|integer|min:1',
-            'lot_2_start_position'          => 'required_with:lot_2_length|nullable|integer|min:1',
-            'lot_2_length'                  => 'required_with:lot_2_start_position|nullable|integer|min:1',
-            's_power_code'                  => 'required_with:model_jan_code|nullable|integer|min:1',
-            's_power_code_start_position'   => 'required_with:model_jan_code|nullable|integer|min:1',
+            'exp_start_position'            => 'nullable|integer|between:1,255',
+            'lot_1_start_position'          => 'required_if:is_inspection_lot_required,1|required_with:lot_1_length|nullable|integer|between:1,255',
+            'lot_1_length'                  => 'required_if:is_inspection_lot_required,1|required_with:lot_1_start_position|nullable|integer|between:1,255',
+            'lot_2_start_position'          => 'required_with:lot_2_length|nullable|integer|between:1,255',
+            'lot_2_length'                  => 'required_with:lot_2_start_position|nullable|integer|between:1,255',
+            's_power_code'                  => 'required_with:model_jan_code|nullable|integer|between:200,240',
+            's_power_code_start_position'   => 'required_with:model_jan_code|nullable|integer|between:1,255',
             'is_stock_managed'              => 'required|boolean',
             'image_file'                    => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'country_of_origin'             => 'nullable|string|max:10',
             'hs_code'                       => 'nullable|string|max:10',
             'item_weight_g'                 => 'nullable|integer|min:1',
-            'sort_order'                    => 'nullable|integer|min:1',
+            'sort_order'                    => 'required|integer|min:1',
         ];
     }
 
     public function messages()
     {
         return array_merge(parent::messages(), [
+            'lot_1_start_position.required_if'          => '検品ロットが必要な場合、:attributeは必須です。',
+            'lot_1_length.required_if'                  => '検品ロットが必要な場合、:attributeは必須です。',
             'lot_2_start_position.required_with'        => 'LOT2桁数が入力されている場合、:attributeは必須です。',
             'lot_2_length.required_with'                => 'LOT2開始位置が入力されている場合、:attributeは必須です。',
             's_power_code.required_with'                => '代表JANコードが入力されている場合、:attributeは必須です。',

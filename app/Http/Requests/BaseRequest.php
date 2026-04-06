@@ -78,6 +78,7 @@ class BaseRequest extends FormRequest
             'country_of_origin'             => '原産国',
             'hs_code'                       => 'HSコード',
             'item_weight_g'                 => '商品重量',
+            'is_inspection_lot_required'    => '検品ロット',
             // 在庫
             'stock_id'                  => '在庫',
             'lot'                       => 'LOT',

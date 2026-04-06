@@ -25,7 +25,7 @@ return new class extends Migration
             $table->unsignedTinyInteger('lot_1_length')->nullable();
             $table->unsignedTinyInteger('lot_2_start_position')->nullable();
             $table->unsignedTinyInteger('lot_2_length')->nullable();
-            $table->unsignedInteger('s_power_code')->nullable();
+            $table->unsignedTinyInteger('s_power_code')->nullable();
             $table->unsignedTinyInteger('s_power_code_start_position')->nullable();
             $table->boolean('is_stock_managed')->nullable();
             $table->string('country_of_origin', 10)->nullable();
