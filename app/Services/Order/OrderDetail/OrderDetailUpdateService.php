@@ -195,4 +195,48 @@ class OrderDetailUpdateService
             'desired_delivery_date' => $request->desired_delivery_date,
         ]);
     }
+
+    // 在庫引当処理を更新できるか確認
+    public function checkUpdatableIsStockAllocationSkipped($order)
+    {
+        // 注文ステータスが「出荷待ち」よりも大きい場合
+        if($order->order_status_id > OrderStatusEnum::SHUKKA_MACHI){
+            throw new \RuntimeException('在庫引当処理を更新できない注文ステータスです。');
+        }
+        // 再発送ではない場合
+        if(!$order->is_redelivery){
+            throw new \RuntimeException('再発送の受注ではないため、更新できません。');
+        }
+    }
+
+    // 在庫引当処理を更新
+    public function updateIsStockAllocationSkipped($request, $order)
+    {
+        // 在庫引当処理を更新
+        $order->update([
+            'is_stock_allocation_skipped' => $request->is_stock_allocation_skipped,
+        ]);
+    }
+
+    // 出荷検品処理を更新できるか確認
+    public function checkUpdatableIsShippingInspectionSkipped($order)
+    {
+        // 注文ステータスが「出荷待ち」よりも大きい場合
+        if($order->order_status_id > OrderStatusEnum::SHUKKA_MACHI){
+            throw new \RuntimeException('出荷検品処理を更新できない注文ステータスです。');
+        }
+        // 再発送ではない場合
+        if(!$order->is_redelivery){
+            throw new \RuntimeException('再発送の受注ではないため、更新できません。');
+        }
+    }
+
+    // 出荷検品処理を更新
+    public function updateIsShippingInspectionSkipped($request, $order)
+    {
+        // 出荷検品処理を更新
+        $order->update([
+            'is_shipping_inspection_skipped' => $request->is_shipping_inspection_skipped,
+        ]);
+    }
 }

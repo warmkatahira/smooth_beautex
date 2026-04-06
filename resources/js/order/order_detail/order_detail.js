@@ -103,6 +103,24 @@ $(document).on('click', function(e){
         $('#desired_delivery_date').val($('#current_desired_delivery_date').val());
         $('#desired_delivery_date_update_modal').removeClass('hidden');
     }
+    // クリックされた要素にモーダルを閉じるクラス名が設定されていれば、モーダルを閉じる
+    if(e.target.classList.contains('is_stock_allocation_skipped_update_modal_close') === true){
+        $('#is_stock_allocation_skipped_update_modal').addClass('hidden');
+    }
+    // クリックした要素のIDがモーダルを開くものであれば、モーダルを開く
+    if(e.target.id === 'is_stock_allocation_skipped_update_modal_open'){
+        // テキストボックスを現在の値に変更
+        $('#is_stock_allocation_skipped_update_modal').removeClass('hidden');
+    }
+    // クリックされた要素にモーダルを閉じるクラス名が設定されていれば、モーダルを閉じる
+    if(e.target.classList.contains('is_shipping_inspection_skipped_update_modal_close') === true){
+        $('#is_shipping_inspection_skipped_update_modal').addClass('hidden');
+    }
+    // クリックした要素のIDがモーダルを開くものであれば、モーダルを開く
+    if(e.target.id === 'is_shipping_inspection_skipped_update_modal_open'){
+        // テキストボックスを現在の値に変更
+        $('#is_shipping_inspection_skipped_update_modal').removeClass('hidden');
+    }
 });
 
 // 出荷倉庫の更新ボタンを押下した場合
@@ -204,6 +222,28 @@ $('#desired_delivery_date_update_enter').on("click",function(){
     }
 });
 
+// 在庫引当処理の更新ボタンを押下した場合
+$('#is_stock_allocation_skipped_update_enter').on("click",function(){
+    // 処理を実行するか確認
+    const result = window.confirm("在庫引当処理の更新を実行しますか？");
+    // 「はい」が押下されたらsubmit、「いいえ」が押下されたら処理キャンセル
+    if(result === true){
+        start_loading();
+        $("#is_stock_allocation_skipped_update_form").submit();
+    }
+});
+
+// 出荷検品処理の更新ボタンを押下した場合
+$('#is_shipping_inspection_skipped_update_enter').on("click",function(){
+    // 処理を実行するか確認
+    const result = window.confirm("出荷検品処理の更新を実行しますか？");
+    // 「はい」が押下されたらsubmit、「いいえ」が押下されたら処理キャンセル
+    if(result === true){
+        start_loading();
+        $("#is_shipping_inspection_skipped_update_form").submit();
+    }
+});
+
 // 出荷倉庫更新モーダルのツールチップ
 tippy('.tippy_shipping_base_update', {
     content: "出荷倉庫を更新する場合は、<br>こちらをクリックして下さい",
@@ -285,6 +325,24 @@ tippy('.tippy_desired_delivery_date_update', {
     theme: 'tippy_main_theme',
 });
 
+// 在庫引当処理更新モーダルのツールチップ
+tippy('.tippy_is_stock_allocation_skipped_update', {
+    content: "在庫引当処理を更新する場合は、<br>こちらをクリックして下さい",
+    duration: 500,
+    allowHTML: true,
+    placement: 'right',
+    theme: 'tippy_main_theme',
+});
+
+// 出荷検品処理更新モーダルのツールチップ
+tippy('.tippy_is_shipping_inspection_skipped_update', {
+    content: "出荷検品処理を更新する場合は、<br>こちらをクリックして下さい",
+    duration: 500,
+    allowHTML: true,
+    placement: 'right',
+    theme: 'tippy_main_theme',
+});
+
 // 配送伝票番号のツールチップ
 tippy('.tippy_tracking_no_url', {
     content: "クリックすると運送会社の追跡ページが開きます。",
@@ -324,6 +382,24 @@ tippy('.tippy_shipping_work_memo', {
 // 補足事項のツールチップ
 tippy('.tippy_supplement', {
     content: "倉庫側への補足事項を入力する項目です。",
+    duration: 500,
+    allowHTML: true,
+    placement: 'right',
+    theme: 'tippy_main_theme',
+});
+
+// 在庫引当処理のツールチップ
+tippy('.tippy_is_stock_allocation_skipped', {
+    content: "在庫引当処理を行うかを管理する項目です。",
+    duration: 500,
+    allowHTML: true,
+    placement: 'right',
+    theme: 'tippy_main_theme',
+});
+
+// 出荷検品処理のツールチップ
+tippy('.tippy_is_shipping_inspection_skipped', {
+    content: "出荷検品処理を行うかを管理する項目です。",
     duration: 500,
     allowHTML: true,
     placement: 'right',

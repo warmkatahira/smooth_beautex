@@ -51,6 +51,8 @@ Route::middleware('common')->group(function (){
             Route::post('ship_address', 'ship_address')->name('ship_address');
             Route::post('supplement', 'supplement')->name('supplement');
             Route::post('desired_delivery_date', 'desired_delivery_date')->name('desired_delivery_date');
+            Route::post('is_stock_allocation_skipped', 'is_stock_allocation_skipped')->name('is_stock_allocation_skipped');
+            Route::post('is_shipping_inspection_skipped', 'is_shipping_inspection_skipped')->name('is_shipping_inspection_skipped');
         });
         // +-+-+-+-+-+-+-+- 受注商品追加 +-+-+-+-+-+-+-+-
         Route::controller(OrderItemCreateController::class)->prefix('order_item_create')->name('order_item_create.')->group(function(){

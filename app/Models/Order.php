@@ -103,6 +103,16 @@ class Order extends Model
     {
         return $this->is_shipping_inspection_complete ? '実施済' : '未実施';
     }
+    // 在庫引当スキップの文字列を返すアクセサ
+    public function getIsStockAllocationSkippedTextAttribute()
+    {
+        return $this->is_stock_allocation_skipped ? '実施しない' : '実施する';
+    }
+    // 出荷検品スキップの文字列を返すアクセサ
+    public function getIsShippingInspectionSkippedTextAttribute()
+    {
+        return $this->is_shipping_inspection_skipped ? '実施しない' : '実施する';
+    }
     // 出荷完了対象の受注を取得
     public static function getShippingWorkEndTarget()
     {

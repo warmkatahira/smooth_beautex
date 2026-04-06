@@ -46,6 +46,14 @@
     if($openModalId === 'ship_address_update_modal_open' && $order->order_status_id < OrderStatusEnum::SHUKKA_ZUMI){
         $is_modal_icon_disp = true;
     }
+    // 在庫引当処理
+    if($openModalId === 'is_stock_allocation_skipped_update_modal_open' && $order->order_status_id < OrderStatusEnum::SAGYO_CHU){
+        $is_modal_icon_disp = true;
+    }
+    // 出荷検品処理
+    if($openModalId === 'is_shipping_inspection_skipped_update_modal_open' && $order->order_status_id < OrderStatusEnum::SAGYO_CHU){
+        $is_modal_icon_disp = true;
+    }
 @endphp
 
 <div class="flex flex-row border-b border-gray-300 text-xs">

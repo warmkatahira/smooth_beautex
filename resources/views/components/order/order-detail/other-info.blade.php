@@ -12,6 +12,10 @@
                     <x-order.order-detail.info-div label="受注マーク" :value="$order->order_mark" :order="$order" openModalId="order_mark_update_modal_open" infoTippy="tippy_order_mark" modalTippy="tippy_order_mark_update" />
                     <x-order.order-detail.info-div label="受注メモ" :value="$order->order_memo" :order="$order" openModalId="order_memo_update_modal_open" infoTippy="tippy_order_memo" modalTippy="tippy_order_memo_update" />
                     <x-order.order-detail.info-div label="出荷作業メモ" :value="$order->shipping_work_memo" :order="$order" openModalId="shipping_work_memo_update_modal_open" infoTippy="tippy_shipping_work_memo" modalTippy="tippy_shipping_work_memo_update" />
+                    @if($order->is_redelivery)
+                        <x-order.order-detail.info-div label="在庫引当" :value="$order->is_stock_allocation_skipped_text" :order="$order" openModalId="is_stock_allocation_skipped_update_modal_open" infoTippy="tippy_is_stock_allocation_skipped" modalTippy="tippy_is_stock_allocation_skipped_update" />
+                        <x-order.order-detail.info-div label="出荷検品" :value="$order->is_shipping_inspection_skipped_text" :order="$order" openModalId="is_shipping_inspection_skipped_update_modal_open" infoTippy="tippy_is_shipping_inspection_skipped" modalTippy="tippy_is_shipping_inspection_skipped_update" />
+                    @endif
                 @endcan
             </div>
         </div>

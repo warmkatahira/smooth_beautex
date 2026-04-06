@@ -18,6 +18,8 @@ use App\Http\Requests\Order\OrderDetail\ShipAddressUpdateRequest;
 use App\Http\Requests\Order\OrderDetail\ShippingWorkMemoUpdateRequest;
 use App\Http\Requests\Order\OrderDetail\SupplementUpdateRequest;
 use App\Http\Requests\Order\OrderDetail\DesiredDeliveryDateUpdateRequest;
+use App\Http\Requests\Order\OrderDetail\IsStockAllocationSkippedUpdateRequest;
+use App\Http\Requests\Order\OrderDetail\IsShippingInspectionSkippedUpdateRequest;
 // その他
 use Illuminate\Support\Facades\DB;
 
@@ -254,6 +256,56 @@ class OrderDetailUpdateController extends Controller
         return redirect()->back()->with([
             'alert_type' => 'success',
             'alert_message' => '配送希望日を更新しました。',
+        ]);
+    }
+
+    public function is_stock_allocation_skipped(IsStockAllocationSkippedUpdateRequest $request)
+    {
+        try{
+            DB::transaction(function () use ($request){
+                // インスタンス化
+                $OrderDetailUpdateService = new OrderDetailUpdateService;
+                // 受注をロックして取得
+                $order = $OrderDetailUpdateService->getOrder($request);
+                // 在庫引当処理を更新できるか確認
+                $OrderDetailUpdateService->checkUpdatableIsStockAllocationSkipped($order);
+                // 在庫引当処理を更新
+                $OrderDetailUpdateService->updateIsStockAllocationSkipped($request, $order);
+            });
+        }catch (\Exception $e){
+            return redirect()->back()->with([
+                'alert_type' => 'error',
+                'alert_message' => $e->getMessage(),
+            ]);
+        }
+        return redirect()->back()->with([
+            'alert_type' => 'success',
+            'alert_message' => '在庫引当処理を更新しました。',
+        ]);
+    }
+
+    public function is_shipping_inspection_skipped(IsShippingInspectionSkippedUpdateRequest $request)
+    {
+        try{
+            DB::transaction(function () use ($request){
+                // インスタンス化
+                $OrderDetailUpdateService = new OrderDetailUpdateService;
+                // 受注をロックして取得
+                $order = $OrderDetailUpdateService->getOrder($request);
+                // 出荷検品処理を更新できるか確認
+                $OrderDetailUpdateService->checkUpdatableIsShippingInspectionSkipped($order);
+                // 出荷検品処理を更新
+                $OrderDetailUpdateService->updateIsShippingInspectionSkipped($request, $order);
+            });
+        }catch (\Exception $e){
+            return redirect()->back()->with([
+                'alert_type' => 'error',
+                'alert_message' => $e->getMessage(),
+            ]);
+        }
+        return redirect()->back()->with([
+            'alert_type' => 'success',
+            'alert_message' => '出荷検品処理を更新しました。',
         ]);
     }
 }
