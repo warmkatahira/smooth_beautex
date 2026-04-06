@@ -191,6 +191,13 @@ $(document).on('click', function(e) {
         // スキャン前の準備
         set_item_id_code();
     }
+    // クリックされた要素にモーダルを閉じるクラス名が設定されていれば、モーダルを閉じる
+    if(e.target.classList.contains('lot_exp_input_modal_close') == true){
+        // モーダルを閉じる
+        $('#lot_exp_input_modal').addClass('hidden');
+        // スキャン前の準備
+        set_item_id_code();
+    }
 });
 
 // 入庫検品確定が押下されたら

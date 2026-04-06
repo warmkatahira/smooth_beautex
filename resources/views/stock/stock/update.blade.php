@@ -18,7 +18,7 @@
         <div class="bg-white border border-black self-start">
             <p class="bg-black text-white text-center py-3">商品画像</p>
             <div class="p-5">
-                <img class="w-40 h-40" src="{{ asset('storage/item_images/'.$stock->item_image_file_name) }}">
+                <img class="w-40 h-40" src="{{ asset('storage/item_images/'.$stock->item->item_image_file_name) }}">
             </div>
         </div>
     </div>
