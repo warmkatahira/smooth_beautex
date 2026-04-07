@@ -1,0 +1,1 @@
+import{s as r}from"./loading-CLXJ3Lsj.js";$(".order_item_lot_update_enter").on("click",function(){if(window.confirm("出荷検品ロットの更新を実行しますか？")===!0){const t=$(this).data("order-item-id");r(),$(`#order_item_lot_update_form_${t}`).submit()}});

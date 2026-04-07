@@ -32,6 +32,7 @@ class ShippingWorkEndController extends Controller
                                     ->selectRaw('CASE WHEN is_shipping_inspection_complete = 1 OR is_shipping_inspection_skipped = 1 THEN 1 ELSE 0 END as is_target')
                                     ->leftJoin('shipping_groups', 'shipping_groups.shipping_group_id', '=', 'orders.shipping_group_id')
                                     ->groupBy('shipping_groups.shipping_base_id', 'is_target', 'estimated_shipping_date')
+                                    ->orderBy('estimated_shipping_date', 'asc')
                                     ->with('base')
                                     ->get();
         // 配列を初期化

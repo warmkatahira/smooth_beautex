@@ -3,6 +3,8 @@
     $has_lots = $order->order_items->contains(fn($item) => $item->order_item_lots->isNotEmpty());
     // LOT照合を表示するか（出荷済みは非表示）
     $show_shipping_inspection_lot = $has_lots && $order->order_status_id < OrderStatusEnum::SHUKKA_ZUMI;
+    // 出荷検品で取得したロット×EXPを編集できるかを取得
+    $editable_lots = $order->is_shipping_inspection_complete === 1 && $order->order_status_id === OrderStatusEnum::SAGYO_CHU;
 @endphp
 
 <div>
@@ -94,7 +96,12 @@
                         @if($order_item->order_item_lots->isNotEmpty())
                             <tr id="lot_detail_{{ $order_item->order_item_id }}" class="hidden bg-gray-50">
                                 <td colspan="{{ $show_shipping_inspection_lot ? 12 : 11 }}" class="py-2 px-4 border">
-                                    <table class="text-xs border ">
+                                    {{-- $editable_lots のときだけ form で囲む --}}
+                                    @if($editable_lots && $order_item->item?->is_lot_managed)
+                                        <form method="POST" action="{{ route('order_item_lot_update.update') }}" id="order_item_lot_update_form_{{ $order_item->order_item_id }}">
+                                            @csrf
+                                    @endif
+                                    <table class="text-xs border">
                                         <thead>
                                             <tr class="text-left text-white bg-gray-600">
                                                 <th class="font-thin py-1 px-2">LOT</th>
@@ -108,9 +115,22 @@
                                         <tbody>
                                             @foreach($order_item->order_item_lots as $lot)
                                                 <tr>
-                                                    <td class="py-1 px-2 border">{{ $lot->lot }}</td>
-                                                    <td class="py-1 px-2 border">{{ formatExp($lot->exp) }}</td>
-                                                    <td class="py-1 px-2 border text-right">{{ number_format($lot->quantity) }}</td>
+                                                    @if($editable_lots && $order_item->item?->is_lot_managed)
+                                                        <input type="hidden" name="lots[{{ $loop->index }}][order_item_lot_id]" value="{{ $lot->order_item_lot_id }}">
+                                                        <td class="py-1 px-2 border">
+                                                            <input type="tel" name="lots[{{ $loop->index }}][lot]" class="py-0.5 px-2 text-xs" value="{{ $lot->lot }}" autocomplete="off">
+                                                        </td>
+                                                        <td class="py-1 px-2 border">
+                                                            <input type="tel" name="lots[{{ $loop->index }}][exp]" class="py-0.5 px-2 text-xs" value="{{ $lot->exp }}" autocomplete="off">
+                                                        </td>
+                                                        <td class="py-1 px-2 border text-right">
+                                                            <input type="number" name="lots[{{ $loop->index }}][quantity]" class="py-0.5 px-2 text-xs text-right w-20" value="{{ $lot->quantity }}" min="1" autocomplete="off">
+                                                        </td>
+                                                    @else
+                                                        <td class="py-1 px-2 border text-center">{{ $lot->lot }}</td>
+                                                        <td class="py-1 px-2 border text-center">{{ formatExp($lot->exp) }}</td>
+                                                        <td class="py-1 px-2 border text-right">{{ number_format($lot->quantity) }}</td>
+                                                    @endif
                                                     @if($show_shipping_inspection_lot)
                                                         <td class="py-1 px-2 border text-center">
                                                             @if(is_null($lot->lot))
@@ -126,6 +146,12 @@
                                             @endforeach
                                         </tbody>
                                     </table>
+                                    @if($editable_lots && $order_item->item?->is_lot_managed)
+                                        <div class="flex justify-start mt-2">
+                                            <button type="button" class="btn order_item_lot_update_enter bg-btn-enter text-white px-4 py-1 rounded-md text-xs" data-order-item-id="{{ $order_item->order_item_id }}">保存</button>
+                                        </div>
+                                        </form>
+                                    @endif
                                 </td>
                             </tr>
                         @endif

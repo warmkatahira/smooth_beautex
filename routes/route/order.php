@@ -15,6 +15,8 @@ use App\Http\Controllers\Order\OrderItem\OrderItemCreateController;
 use App\Http\Controllers\Order\OrderItem\OrderItemDeleteController;
 // +-+-+-+-+-+-+-+- 受注商品削除 +-+-+-+-+-+-+-+-
 use App\Http\Controllers\Order\OrderItem\PastOrderItemController;
+// +-+-+-+-+-+-+-+- 出荷検品ロット更新 +-+-+-+-+-+-+-+-
+use App\Http\Controllers\Order\OrderItemLot\OrderItemLotUpdateController;
 // +-+-+-+-+-+-+-+- 受注削除 +-+-+-+-+-+-+-+-
 use App\Http\Controllers\Order\OrderDelete\OrderDeleteController;
 // +-+-+-+-+-+-+-+- 出荷作業開始 +-+-+-+-+-+-+-+-
@@ -67,6 +69,10 @@ Route::middleware('common')->group(function (){
         Route::controller(PastOrderItemController::class)->prefix('past_order_item')->name('past_order_item.')->group(function(){
             Route::get('search', 'search')->name('search');
             Route::post('reference', 'reference')->name('reference');
+        });
+        // +-+-+-+-+-+-+-+- 出荷検品ロット更新 +-+-+-+-+-+-+-+-
+        Route::controller(OrderItemLotUpdateController::class)->prefix('order_item_lot_update')->name('order_item_lot_update.')->group(function(){
+            Route::post('update', 'update')->name('update');
         });
         // +-+-+-+-+-+-+-+- 受注削除 +-+-+-+-+-+-+-+-
         Route::controller(OrderDeleteController::class)->prefix('order_delete')->name('order_delete.')->group(function(){

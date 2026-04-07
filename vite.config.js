@@ -37,6 +37,7 @@ export default defineConfig({
                 'resources/js/order/order_detail/order_detail.js',
                 'resources/js/order/order_item/order_item_update.js',
                 'resources/js/order/order_item/past_order_reference.js',
+                'resources/js/order/order_item_lot/order_item_lot_update.js',
                 // 出荷
                 'resources/js/shipping/shipping_mgt/shipping_mgt.js',
                 'resources/js/shipping/shipping_inspection/shipping_inspection.js',

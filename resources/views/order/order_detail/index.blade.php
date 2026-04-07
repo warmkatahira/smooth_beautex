@@ -33,4 +33,9 @@
 <x-order.order-detail.modal.is-shipping-inspection-skipped-update-modal :order="$order" />
 <x-order.order-detail.modal.order-item-create-modal :order="$order" />
 <x-order.order-detail.modal.past-order-reference-modal :order="$order" />
-@vite(['resources/js/order/order_detail/order_detail.js', 'resources/js/order/order_item/order_item_update.js', 'resources/js/order/order_item/past_order_reference.js'])
+@vite([
+    'resources/js/order/order_detail/order_detail.js',
+    'resources/js/order/order_item/order_item_update.js',
+    'resources/js/order/order_item/past_order_reference.js',
+    'resources/js/order/order_item_lot/order_item_lot_update.js'
+])
