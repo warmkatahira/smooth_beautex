@@ -24,7 +24,7 @@ class ShippingActualDownloadService
     public function makeDirectory($nowDate)
     {
         // 保存先のディレクトリ名を決める
-        $directory_name = "【" . SystemEnum::CUSTOMER_NAME_JP . "】出荷報告_" . $nowDate->format('Y年m月d日H時i分s秒');
+        $directory_name = "【" . SystemEnum::CUSTOMER_NAME_JP . "様】出荷実績データ_" . $nowDate->format('Y年m月d日H時i分s秒');
         // ディレクトリのパスを取得
         $directory_path = 'export/' . $directory_name;
         // 既に存在しているディレクトリではない場合
