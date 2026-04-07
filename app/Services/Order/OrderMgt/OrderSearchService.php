@@ -102,6 +102,16 @@ class OrderSearchService extends BaseFilterService
     protected function specialKeys(): array
     {
         return [
+            // 取込日
+            'filter_order_import_date_from' => function ($query, $value) {
+                $query->whereDate('order_import_date', '>=', session('filter_order_import_date_from'))
+                    ->whereDate('order_import_date', '<=', session('filter_order_import_date_to'));
+            },
+            // 注文日
+            'filter_order_date_from' => function ($query, $value) {
+                $query->whereDate('order_date', '>=', session('filter_order_date_from'))
+                    ->whereDate('order_date', '<=', session('filter_order_date_to'));
+            },
             // モール
             'filter_mall_id' => function ($query, $value) {
                 $query->whereHas('order_category.mall', function ($q) use ($value) {
@@ -126,6 +136,11 @@ class OrderSearchService extends BaseFilterService
             'filter_shipping_date_from' => function ($query, $value) {
                 $query->whereDate('shipping_date', '>=', session('filter_shipping_date_from'))
                     ->whereDate('shipping_date', '<=', session('filter_shipping_date_to'));
+            },
+            // 配送希望日
+            'filter_desired_delivery_date_from' => function ($query, $value) {
+                $query->whereDate('desired_delivery_date', '>=', session('filter_desired_delivery_date_from'))
+                    ->whereDate('desired_delivery_date', '<=', session('filter_desired_delivery_date_to'));
             },
             // 出荷個口No
             'filter_package_count' => function ($query, $value) {
@@ -156,7 +171,10 @@ class OrderSearchService extends BaseFilterService
     protected function ignoreKeys(): array
     {
         return [
+            'filter_order_import_date_to',
+            'filter_order_date_to',
             'filter_shipping_date_to',
+            'filter_desired_delivery_date_to',
         ];
     }
 

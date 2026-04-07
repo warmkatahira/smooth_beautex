@@ -84,8 +84,8 @@ $(document).on('click', '.filter_clear', function () {
     // 今日の日付を取得
     const today = new Date().toISOString().split('T')[0];
     // 取得できていれば空にする
-    if (fromId) $('#' + fromId).val(today);
-    if (toId) $('#' + toId).val(today);
+    if (fromId) $('#' + fromId).val($(this).data('reset-today') ? today : '');
+    if (toId) $('#' + toId).val($(this).data('reset-today') ? today : '');
     // 押された要素のdata-targetの値を取得
     const id = $(this).data('target');
     // 対象inputを空にする

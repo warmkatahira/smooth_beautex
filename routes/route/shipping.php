@@ -37,8 +37,18 @@ Route::middleware('common')->group(function (){
     Route::controller(ShippingMgtController::class)->prefix('shipping_mgt')->name('shipping_mgt.')->group(function(){
         Route::get('', 'index')->name('index');
     });
+    // +-+-+-+-+-+-+-+- 出荷履歴 +-+-+-+-+-+-+-+-
+    Route::controller(ShippingHistoryController::class)->prefix('shipping_history')->name('shipping_history.')->group(function(){
+        Route::get('', 'index')->name('index');
+    });
+    Route::controller(ShippingHistoryDownloadController::class)->prefix('shipping_history_download')->name('shipping_history_download.')->group(function(){
+        Route::get('download', 'download')->name('download');
+    });
+    Route::controller(ShippingActualDownloadController::class)->prefix('shipping_actual_download')->name('shipping_actual_download.')->group(function(){
+        Route::get('download', 'download')->name('download');
+    });
     Route::middleware(['warm_check'])->group(function () {
-        // +-+-+-+-+-+-+-+- 出荷管理 +-+-+-+-+-+-+-+-
+        // +-+-+-+-+-+-+-+- 配送伝票番号取込 +-+-+-+-+-+-+-+-
         Route::controller(TrackingNoImportController::class)->prefix('tracking_no_import')->name('tracking_no_import.')->group(function(){
             Route::post('import', 'import')->name('import');
         });
@@ -93,16 +103,6 @@ Route::middleware('common')->group(function (){
         Route::controller(ShippingWorkEndHistoryController::class)->prefix('shipping_work_end_history')->name('shipping_work_end_history.')->group(function(){
             Route::get('', 'index')->name('index');
             Route::get('error_download', 'error_download')->name('error_download');
-        });
-        // +-+-+-+-+-+-+-+- 出荷履歴 +-+-+-+-+-+-+-+-
-        Route::controller(ShippingHistoryController::class)->prefix('shipping_history')->name('shipping_history.')->group(function(){
-            Route::get('', 'index')->name('index');
-        });
-        Route::controller(ShippingHistoryDownloadController::class)->prefix('shipping_history_download')->name('shipping_history_download.')->group(function(){
-            Route::get('download', 'download')->name('download');
-        });
-        Route::controller(ShippingActualDownloadController::class)->prefix('shipping_actual_download')->name('shipping_actual_download.')->group(function(){
-            Route::get('download', 'download')->name('download');
         });
     });
 });

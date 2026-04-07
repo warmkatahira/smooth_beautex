@@ -18,46 +18,44 @@ use App\Http\Controllers\SystemAdmin\Holiday\HolidayController;
 use App\Http\Controllers\SystemAdmin\Holiday\NationalHolidayController;
 
 Route::middleware('common')->group(function (){
-    Route::middleware(['warm_check'])->group(function () {
+    Route::middleware(['admin_check'])->group(function () {
+        // +-+-+-+-+-+-+-+- 倉庫 +-+-+-+-+-+-+-+-
+        Route::controller(BaseController::class)->prefix('base')->name('base.')->group(function(){
+            Route::get('', 'index')->name('index');
+        });
+        Route::controller(BaseCreateController::class)->prefix('base_create')->name('base_create.')->group(function(){
+            Route::get('', 'index')->name('index');
+            Route::post('create', 'create')->name('create');
+        });
+        Route::controller(BaseUpdateController::class)->prefix('base_update')->name('base_update.')->group(function(){
+            Route::get('', 'index')->name('index');
+            Route::post('update', 'update')->name('update');
+        });
+        // +-+-+-+-+-+-+-+- ユーザー +-+-+-+-+-+-+-+-
+        Route::controller(UserController::class)->prefix('user')->name('user.')->group(function(){
+            Route::get('', 'index')->name('index');
+        });
+        Route::controller(UserCreateController::class)->prefix('user_create')->name('user_create.')->group(function(){
+            Route::get('', 'index')->name('index');
+            Route::post('create', 'create')->name('create');
+        });
+        Route::controller(UserUpdateController::class)->prefix('user_update')->name('user_update.')->group(function(){
+            Route::get('', 'index')->name('index');
+            Route::post('update', 'update')->name('update');
+        });
+        // +-+-+-+-+-+-+-+- 操作ログ +-+-+-+-+-+-+-+-
+        Route::controller(OperationLogController::class)->prefix('operation_log')->name('operation_log.')->group(function(){
+            Route::get('', 'index')->name('index');
+        });
+        Route::controller(OperationLogDownloadController::class)->prefix('operation_log_download')->name('operation_log_download.')->group(function(){
+            Route::get('download', 'download')->name('download');
+        });
         // +-+-+-+-+-+-+-+- 祝日 +-+-+-+-+-+-+-+-
         Route::controller(HolidayController::class)->prefix('holiday')->name('holiday.')->group(function(){
             Route::get('', 'index')->name('index');
         });
         Route::controller(NationalHolidayController::class)->prefix('national_holiday')->name('national_holiday.')->group(function(){
             Route::post('get_api', 'get_api')->name('get_api');
-        });
-        Route::middleware(['admin_check'])->group(function () {
-            // +-+-+-+-+-+-+-+- 倉庫 +-+-+-+-+-+-+-+-
-            Route::controller(BaseController::class)->prefix('base')->name('base.')->group(function(){
-                Route::get('', 'index')->name('index');
-            });
-            Route::controller(BaseCreateController::class)->prefix('base_create')->name('base_create.')->group(function(){
-                Route::get('', 'index')->name('index');
-                Route::post('create', 'create')->name('create');
-            });
-            Route::controller(BaseUpdateController::class)->prefix('base_update')->name('base_update.')->group(function(){
-                Route::get('', 'index')->name('index');
-                Route::post('update', 'update')->name('update');
-            });
-            // +-+-+-+-+-+-+-+- ユーザー +-+-+-+-+-+-+-+-
-            Route::controller(UserController::class)->prefix('user')->name('user.')->group(function(){
-                Route::get('', 'index')->name('index');
-            });
-            Route::controller(UserCreateController::class)->prefix('user_create')->name('user_create.')->group(function(){
-                Route::get('', 'index')->name('index');
-                Route::post('create', 'create')->name('create');
-            });
-            Route::controller(UserUpdateController::class)->prefix('user_update')->name('user_update.')->group(function(){
-                Route::get('', 'index')->name('index');
-                Route::post('update', 'update')->name('update');
-            });
-            // +-+-+-+-+-+-+-+- 操作ログ +-+-+-+-+-+-+-+-
-            Route::controller(OperationLogController::class)->prefix('operation_log')->name('operation_log.')->group(function(){
-                Route::get('', 'index')->name('index');
-            });
-            Route::controller(OperationLogDownloadController::class)->prefix('operation_log_download')->name('operation_log_download.')->group(function(){
-                Route::get('download', 'download')->name('download');
-            });
         });
     });
 });

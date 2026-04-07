@@ -4,6 +4,7 @@
     'fromName',
     'toId',
     'toName',
+    'resetToday' => false,
 ])
 
 <th class="px-3">
@@ -13,6 +14,6 @@
             <span class="text-xs text-gray-400">〜</span>
             <input type="date" id="{{ $toId }}" name="{{ $toName }}" class="search_element date_to font-thin py-1 border-none outline-none text-xs bg-transparent w-28" value="{{ session($toName) }}" autocomplete="off"/>
         </div>
-        <button type="button" class="filter_clear btn hidden flex-shrink-0" data-target-from="{{ $fromId }}" data-target-to="{{ $toId }}"><i class="las la-times la-lg text-red-500"></i></button>
+        <button type="button" class="filter_clear btn hidden flex-shrink-0" data-target-from="{{ $fromId }}" data-target-to="{{ $toId }}" data-reset-today="{{ $resetToday }}"><i class="las la-times la-lg text-red-500"></i></button>
     </div>
 </th>

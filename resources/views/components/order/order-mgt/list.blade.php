@@ -29,10 +29,10 @@
                     <th></th>
                     <th></th>
                     <th></th>
-                    <x-filter.input type="date" id="filter_order_import_date" name="filter_order_import_date" />
+                    <x-filter.date-period type="date" fromId="filter_order_import_date_from" fromName="filter_order_import_date_from" toId="filter_order_import_date_to" toName="filter_order_import_date_to" />
                     <x-filter.input type="tel" id="filter_order_import_time" name="filter_order_import_time" />
                     <x-filter.input type="tel" id="filter_order_no" name="filter_order_no" />
-                    <x-filter.input type="date" id="filter_order_date" name="filter_order_date" />
+                    <x-filter.date-period type="date" fromId="filter_order_date_from" fromName="filter_order_date_from" toId="filter_order_date_to" toName="filter_order_date_to" />
                     <x-filter.input type="tel" id="filter_order_time" name="filter_order_time" />
                     <x-filter.input type="tel" id="filter_order_control_id" name="filter_order_control_id" />
                     <x-filter.datalist listId="order_mark" id="filter_order_mark" name="filter_order_mark" :selectItems="$orderMarks" optionValue="order_mark" />
@@ -44,7 +44,7 @@
                     <x-filter.select id="filter_ship_province_name" name="filter_ship_province_name" :selectItems="$prefectures" optionValue="prefecture_name" optionText="prefecture_name" />
                     <x-filter.select id="filter_shipping_delivery_company_id" name="filter_shipping_delivery_company_id" :selectItems="$deliveryCompanies" optionValue="delivery_company_id" optionText="delivery_company" />
                     <x-filter.select-delivery-company id="filter_shipping_method_id" name="filter_shipping_method_id" :deliveryCompanies="$deliveryCompanies" />
-                    <x-filter.input type="date" id="filter_desired_delivery_date" name="filter_desired_delivery_date" />
+                    <x-filter.date-period type="date" fromId="filter_desired_delivery_date_from" fromName="filter_desired_delivery_date_from" toId="filter_desired_delivery_date_to" toName="filter_desired_delivery_date_to" />
                     <x-filter.input type="tel" id="filter_desired_delivery_time" name="filter_desired_delivery_time" />
                     <x-filter.select-boolean id="filter_is_redelivery" name="filter_is_redelivery" label1="対象" label0="対象外" />
                 </tr>

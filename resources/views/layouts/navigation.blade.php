@@ -14,7 +14,9 @@
         <div class="flex flex-col gap-0.5">
             <x-navigation-btn label="受注" icon="las la-shopping-cart" openCloseKey="order" />
              <div class="navigation-content hidden">
-                <x-navigation-btn route="order_import.index" label="受注取込" isLeftMargin="true" isRightMargin="true" />
+                @can('warm_check')
+                    <x-navigation-btn route="order_import.index" label="受注取込" isLeftMargin="true" isRightMargin="true" />
+                @endcan
                 <x-navigation-btn route="order_mgt.index" label="受注管理" isLeftMargin="true" isRightMargin="true" />
             </div>
         </div>
@@ -23,9 +25,11 @@
             <x-navigation-btn label="出荷" icon="las la-truck" openCloseKey="shipping" />
              <div class="navigation-content hidden">
                 <x-navigation-btn route="shipping_mgt.index" label="出荷管理" isLeftMargin="true" isRightMargin="true" />
-                <x-navigation-btn route="shipping_inspection.index" label="出荷検品" isLeftMargin="true" isRightMargin="true" />
-                <x-navigation-btn route="shipping_work_end.index" label="出荷完了" isLeftMargin="true" isRightMargin="true" />
-                <x-navigation-btn route="shipping_work_end_history.index" label="出荷完了履歴" isLeftMargin="true" isRightMargin="true" />
+                @can('warm_check')
+                    <x-navigation-btn route="shipping_inspection.index" label="出荷検品" isLeftMargin="true" isRightMargin="true" />
+                    <x-navigation-btn route="shipping_work_end.index" label="出荷完了" isLeftMargin="true" isRightMargin="true" />
+                    <x-navigation-btn route="shipping_work_end_history.index" label="出荷完了履歴" isLeftMargin="true" isRightMargin="true" />
+                @endcan
                 <x-navigation-btn route="shipping_history.index" label="出荷履歴" isLeftMargin="true" isRightMargin="true" />
             </div>
         </div>
@@ -34,7 +38,9 @@
             <x-navigation-btn label="商品" icon="las la-tshirt" openCloseKey="item" />
              <div class="navigation-content hidden">
                 <x-navigation-btn route="item.index" label="商品" isLeftMargin="true" isRightMargin="true" />
-                <x-navigation-btn route="item_upload.index" label="商品アップロード" isLeftMargin="true" isRightMargin="true" />
+                @can('warm_check')
+                    <x-navigation-btn route="item_upload.index" label="商品アップロード" isLeftMargin="true" isRightMargin="true" />
+                @endcan
             </div>
         </div>
         <!-- 在庫 -->
@@ -42,22 +48,26 @@
             <x-navigation-btn label="在庫" icon="las la-boxes" openCloseKey="stock" />
              <div class="navigation-content hidden">
                 <x-navigation-btn route="stock.index_by_item" label="在庫" isLeftMargin="true" isRightMargin="true" />
-                <x-navigation-btn route="receiving_inspection.index" label="入庫検品" isLeftMargin="true" isRightMargin="true" />
-                <x-navigation-btn route="input_stock_operation.index" label="入力在庫数操作" isLeftMargin="true" isRightMargin="true" />
-                <x-navigation-btn route="stock_history.index" label="在庫履歴" isLeftMargin="true" isRightMargin="true" />
+                @can('warm_check')
+                    <x-navigation-btn route="receiving_inspection.index" label="入庫検品" isLeftMargin="true" isRightMargin="true" />
+                    <x-navigation-btn route="input_stock_operation.index" label="入力在庫数操作" isLeftMargin="true" isRightMargin="true" />
+                    <x-navigation-btn route="stock_history.index" label="在庫履歴" isLeftMargin="true" isRightMargin="true" />
+                @endcan
             </div>
         </div>
-        <!-- 設定 -->
-        <div class="flex flex-col gap-0.5">
-            <x-navigation-btn label="設定" icon="las la-cog" openCloseKey="setting" />
-            <div class="navigation-content hidden">
-                <x-navigation-btn route="shipping_base.index" label="出荷倉庫" isLeftMargin="true" isRightMargin="true" />
-                <x-navigation-btn route="base_shipping_method.index" label="倉庫別配送方法" isLeftMargin="true" isRightMargin="true" />
-                <x-navigation-btn route="shipper.index" label="荷送人" isLeftMargin="true" isRightMargin="true" />
-                <x-navigation-btn route="order_category.index" label="受注区分" isLeftMargin="true" isRightMargin="true" />
-                <x-navigation-btn route="auto_process.index" label="自動処理" isLeftMargin="true" isRightMargin="true" />
+        @can('warm_check')
+            <!-- 設定 -->
+            <div class="flex flex-col gap-0.5">
+                <x-navigation-btn label="設定" icon="las la-cog" openCloseKey="setting" />
+                <div class="navigation-content hidden">
+                    <x-navigation-btn route="shipping_base.index" label="出荷倉庫" isLeftMargin="true" isRightMargin="true" />
+                    <x-navigation-btn route="base_shipping_method.index" label="倉庫別配送方法" isLeftMargin="true" isRightMargin="true" />
+                    <x-navigation-btn route="shipper.index" label="荷送人" isLeftMargin="true" isRightMargin="true" />
+                    <x-navigation-btn route="order_category.index" label="受注区分" isLeftMargin="true" isRightMargin="true" />
+                    <x-navigation-btn route="auto_process.index" label="自動処理" isLeftMargin="true" isRightMargin="true" />
+                </div>
             </div>
-        </div>
+        @endcan
         @can('admin_check')
             <!-- システム管理 -->
              <div class="flex flex-col gap-0.5">

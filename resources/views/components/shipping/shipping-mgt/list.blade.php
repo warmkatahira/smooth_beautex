@@ -32,10 +32,10 @@
                 <tr class="filter-row sticky top-[28px] bg-white z-10">
                     <th></th>
                     <th></th>
-                    <x-filter.input type="date" id="filter_order_import_date" name="filter_order_import_date" />
+                    <x-filter.date-period type="date" fromId="filter_order_import_date_from" fromName="filter_order_import_date_from" toId="filter_order_import_date_to" toName="filter_order_import_date_to" />
                     <x-filter.input type="tel" id="filter_order_import_time" name="filter_order_import_time" />
                     <x-filter.input type="tel" id="filter_order_no" name="filter_order_no" />
-                    <x-filter.input type="date" id="filter_order_date" name="filter_order_date" />
+                    <x-filter.date-period type="date" fromId="filter_order_date_from" fromName="filter_order_date_from" toId="filter_order_date_to" toName="filter_order_date_to" />
                     <x-filter.input type="tel" id="filter_order_time" name="filter_order_time" />
                     <x-filter.input type="tel" id="filter_order_control_id" name="filter_order_control_id" />
                     <x-filter.select-mall id="filter_order_category_id" name="filter_order_category_id" :malls="$malls" />
@@ -46,13 +46,15 @@
                     <x-filter.select id="filter_ship_province_name" name="filter_ship_province_name" :selectItems="$prefectures" optionValue="prefecture_name" optionText="prefecture_name" />
                     <x-filter.select id="filter_shipping_delivery_company_id" name="filter_shipping_delivery_company_id" :selectItems="$deliveryCompanies" optionValue="delivery_company_id" optionText="delivery_company" />
                     <x-filter.select-delivery-company id="filter_shipping_method_id" name="filter_shipping_method_id" :deliveryCompanies="$deliveryCompanies" />
-                    <x-filter.input type="date" id="filter_desired_delivery_date" name="filter_desired_delivery_date" />
+                    <x-filter.date-period type="date" fromId="filter_desired_delivery_date_from" fromName="filter_desired_delivery_date_from" toId="filter_desired_delivery_date_to" toName="filter_desired_delivery_date_to" />
                     <x-filter.input type="tel" id="filter_desired_delivery_time" name="filter_desired_delivery_time" />
                     <x-filter.input type="tel" id="filter_package_count" name="filter_package_count" />
                     <x-filter.input type="tel" id="filter_tracking_no" name="filter_tracking_no" />
-                    <x-filter.select-boolean id="filter_is_shipping_inspection_complete" name="filter_is_shipping_inspection_complete" label1="実施済" label0="未実施" />
-                    <th></th>
-                    <x-filter.select-boolean id="filter_shipping_inspection_lot" name="filter_shipping_inspection_lot" label1="NG" label0="OK" />
+                    @can('warm_check')
+                        <x-filter.select-boolean id="filter_is_shipping_inspection_complete" name="filter_is_shipping_inspection_complete" label1="実施済" label0="未実施" />
+                        <th></th>
+                        <x-filter.select-boolean id="filter_shipping_inspection_lot" name="filter_shipping_inspection_lot" label1="NG" label0="OK" />
+                    @endcan
                 </tr>
             </thead>
             <tbody class="bg-white">
