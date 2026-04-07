@@ -134,8 +134,8 @@
             </table>
         </div>
     </div>
+    <form method="POST" action="{{ route('order_item_delete.delete') }}" id="order_item_delete_form">
+        @csrf
+        <input type="hidden" id="order_item_id" name="order_item_id">
+    </form>
 </div>
-<form method="POST" action="{{ route('order_item_delete.delete') }}" id="order_item_delete_form">
-    @csrf
-    <input type="hidden" id="order_item_id" name="order_item_id">
-</form>
