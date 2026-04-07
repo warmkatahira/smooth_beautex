@@ -4,7 +4,7 @@
             <tr class="text-left text-white bg-black whitespace-nowrap sticky top-0">
                 <th class="font-thin py-1 px-2 text-center">操作</th>
                 <th class="font-thin py-1 px-2 text-center">受注区分</th>
-                <th class="font-thin py-1 px-2 text-center">受注区分画像</th>
+                <th class="font-thin py-1 px-2 text-center">モール</th>
                 <th class="font-thin py-1 px-2 text-center">荷送人名</th>
                 <th class="font-thin py-1 px-2 text-center">並び順</th>
             </tr>
@@ -19,9 +19,9 @@
                     </td>
                     <td class="py-1 px-2 border">{{ $order_category->order_category_name }}</td>
                     <td class="py-1 px-2 border text-center align-middle">
-                        <img src="{{ asset('storage/order_category_images/'.$order_category->order_category_image_file_name) }}" class="w-12 inline-block">
+                        <img src="{{ asset('image/'.$order_category->mall->mall_image_file_name) }}" class="w-12 inline-block">
                     </td>
-                    <td class="py-1 px-2 border text-right">{{ $order_category->shipper->shipper_name }}</td>
+                    <td class="py-1 px-2 border">{{ $order_category->shipper->shipper_name }}</td>
                     <td class="py-1 px-2 border text-right">{{ $order_category->sort_order }}</td>
                 </tr>
             @endforeach

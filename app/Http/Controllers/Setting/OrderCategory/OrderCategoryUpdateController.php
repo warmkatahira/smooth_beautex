@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 // モデル
 use App\Models\OrderCategory;
 use App\Models\Mall;
+use App\Models\Shipper;
 // サービス
 use App\Services\Setting\OrderCategory\OrderCategoryUpdateService;
 // リクエスト
@@ -24,9 +25,12 @@ class OrderCategoryUpdateController extends Controller
         $order_category = OrderCategory::getSpecify($request->order_category_id)->first();
         // モールを取得
         $malls = Mall::getAll()->get();
+        // 荷送人を取得
+        $shippers = Shipper::getAll()->get();
         return view('setting.order_category.update')->with([
             'order_category' => $order_category,
             'malls' => $malls,
+            'shippers' => $shippers,
         ]);
     }
 
@@ -37,11 +41,7 @@ class OrderCategoryUpdateController extends Controller
                 // インスタンス化
                 $OrderCategoryUpdateService = new OrderCategoryUpdateService;
                 // 受注区分を更新
-                $order_category = $OrderCategoryUpdateService->updateOrderCategory($request);
-                // 受注区分画像を削除
-                $OrderCategoryUpdateService->deleteOrderCategoryImage($request, $order_category);
-                // 受注区分画像を保存
-                $OrderCategoryUpdateService->saveOrderCategoryImage($request, $order_category);
+                $OrderCategoryUpdateService->updateOrderCategory($request);
             });
         }catch (\Exception $e){
             return redirect()->back()->with([

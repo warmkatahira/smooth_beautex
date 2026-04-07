@@ -24,17 +24,16 @@ class OrderCategoryUpdateRequest extends BaseRequest
     {
         return [
             'order_category_id'                 => 'required|exists:order_categories,order_category_id',
-            'order_category_name'               => 'required|string|max:10',
-            'image_file'                        => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'order_category_name'               => 'required|string|max:20',
+            'mall_id'                           => 'required|exists:malls,mall_id',
+            'shipper_id'                        => 'required|exists:shippers,shipper_id',
             'sort_order'                        => 'required|integer|min:1',
         ];
     }
 
     public function messages()
     {
-        return array_merge(parent::messages(), [
-            'image_file.max'                            => ":attributeは:max KB以下の画像を選択してください。",
-        ]);
+        return parent::messages();
     }
 
     public function attributes()

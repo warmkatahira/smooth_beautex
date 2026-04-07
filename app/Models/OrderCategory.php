@@ -11,7 +11,7 @@ class OrderCategory extends Model
     // 操作可能なカラムを定義
     protected $fillable = [
         'order_category_name',
-        'order_category_image_file_name',
+        'mall_id',
         'shipper_id',
         'sort_order',
     ];

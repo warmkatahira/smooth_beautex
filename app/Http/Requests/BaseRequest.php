@@ -136,7 +136,8 @@ class BaseRequest extends FormRequest
             'order_category_name'               => '受注区分名',
             'order_item_code'                   => '商品コード',
             'order_item_name'                   => '商品名',
-            'shipping_quantity'                    => '出荷数',
+            'shipping_quantity'                 => '出荷数',
+            'mall_id'                           => 'モール',
         ];
     }
 }
