@@ -155,7 +155,7 @@ class Item extends Model
     // 「is_lot_managed」に基づいて、○を返すアクセサ
     public function getIsLotManagedTextAttribute(): string
     {
-        return $this->is_lot_managed ? '必要' : '不要';
+        return $this->is_lot_managed ? '有効' : '無効';
     }
     // 商品コードから商品IDを取得
     public static function getItemIdByItemCode($item_code)

@@ -201,8 +201,8 @@ class ItemUploadJobs implements ShouldQueue
                 $adjustment_value = str_replace(array(" ", "　", "'"), "", $value);
                 break;
             case 'ロット管理':
-                // 不要を「0」、必要を「1」に変換
-                $adjustment_value = $value === '不要' ? 0 : ($value === '必要' ? 1 : $value);
+                // 無効を「0」、有効を「1」に変換
+                $adjustment_value = $value === '無効' ? 0 : ($value === '有効' ? 1 : $value);
                 break;
             case '在庫管理':
                 // 無効を「0」、有効を「1」に変換
@@ -302,8 +302,8 @@ class ItemUploadJobs implements ShouldQueue
             'min'                                           => ':attribute（:input）は:min以上で入力して下さい。',
             'integer'                                       => ':attribute（:input）は数値で入力して下さい。',
             'between'                                       => ":attributeは:minから:maxの間で入力して下さい。",
-            '*.lot_1_start_position.required_if'            => 'ロット管理が必要の場合、:attributeは必須です。',
-            '*.lot_1_length.required_if'                    => 'ロット管理が必要の場合、:attributeは必須です。',
+            '*.lot_1_start_position.required_if'            => 'ロット管理が有効の場合、:attributeは必須です。',
+            '*.lot_1_length.required_if'                    => 'ロット管理が有効の場合、:attributeは必須です。',
             '*.lot_1_start_position.required_with'          => 'LOT1桁数が入力されている場合、:attributeは必須です。',
             '*.lot_1_length.required_with'                  => 'LOT1開始位置が入力されている場合、:attributeは必須です。',
             '*.lot_2_start_position.required_with'          => 'LOT2桁数が入力されている場合、:attributeは必須です。',

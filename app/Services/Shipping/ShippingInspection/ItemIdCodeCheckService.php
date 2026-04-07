@@ -80,7 +80,7 @@ class ItemIdCodeCheckService
     public function checkJanCode($progress, $item_id_code, $order_control_id, $LotUpdateService)
     {
         $this->findItemByJanCode($progress, $item_id_code);
-        // ロット管理が「不要」の場合
+        // ロット管理が「無効」の場合
         if(session('order_item_id') && !$progress[session('order_item_id')]['is_lot_managed']){
             $LotUpdateService->updateLotResult(null, null);
             $this->updateInspectionQuantity($progress, session('order_item_id'));

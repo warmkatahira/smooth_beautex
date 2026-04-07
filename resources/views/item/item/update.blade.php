@@ -17,7 +17,7 @@
                 <x-form.input type="text" label="入数" id="quantity_per_box" name="quantity_per_box" :value="$item->quantity_per_box" />
                 <x-form.input type="text" label="メーカー" id="manufacturer" name="manufacturer" :value="$item->manufacturer" />
                 <x-form.input type="text" label="仕入先" id="supplier" name="supplier" :value="$item->supplier" />
-                <x-form.switch-boolean label="ロット管理" id="is_lot_managed" name="is_lot_managed" label0="不要" label1="必要" :value="$item->is_lot_managed" required="true" />
+                <x-form.switch-boolean label="ロット管理" id="is_lot_managed" name="is_lot_managed" label0="無効" label1="有効" :value="$item->is_lot_managed" required="true" />
                 <x-form.input type="text" label="代表JANコード" id="model_jan_code" name="model_jan_code" :value="$item->model_jan_code" />
                 <x-form.input type="tel" label="EXP開始位置" id="exp_start_position" name="exp_start_position" :value="$item->exp_start_position" />
                 <x-form.input type="tel" label="LOT1開始位置" id="lot_1_start_position" name="lot_1_start_position" :value="$item->lot_1_start_position" />

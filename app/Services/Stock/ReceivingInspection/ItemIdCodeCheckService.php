@@ -32,7 +32,7 @@ class ItemIdCodeCheckService
             session(['item_id_type' => 'JAN']);
             // JANコードを使って商品マスタからレコードを取得
             $this->getItemFromJanCode($request->item_id_code);
-            // ロット管理が不要の場合
+            // ロット管理が無効の場合
             if(session('found') && !session('item')->is_lot_managed){
                 session(['lot' => null]);
                 session(['exp' => null]);

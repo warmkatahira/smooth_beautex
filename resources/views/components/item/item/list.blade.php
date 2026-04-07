@@ -39,7 +39,7 @@
                     <x-filter.input type="text" id="filter_quantity_per_box" name="filter_quantity_per_box" />
                     <x-filter.input type="text" id="filter_manufacturer" name="filter_manufacturer" />
                     <x-filter.input type="text" id="filter_supplier" name="filter_supplier" />
-                    <x-filter.select-boolean id="filter_is_lot_managed" name="filter_is_lot_managed" label1="必要" label0="不要" />
+                    <x-filter.select-boolean id="filter_is_lot_managed" name="filter_is_lot_managed" label1="有効" label0="無効" />
                     <x-filter.select-boolean id="filter_is_stock_managed" name="filter_is_stock_managed" label1="有効" label0="無効" />
                     <x-filter.input type="tel" id="filter_sort_order" name="filter_sort_order" />
                     <th></th>
@@ -108,7 +108,7 @@
                             <x-clipboard-copy-btn :value="$item->supplier" label="仕入先" />
                         </td>
                         <td class="py-1 px-2 border text-center">
-                            <x-list.status :value="$item->is_lot_managed" label1="必要" label0="不要" />
+                            <x-list.status :value="$item->is_lot_managed" label1="有効" label0="無効" />
                         </td>
                         <td class="py-1 px-2 border text-center">
                             <x-list.status :value="$item->is_stock_managed" label1="有効" label0="無効" />

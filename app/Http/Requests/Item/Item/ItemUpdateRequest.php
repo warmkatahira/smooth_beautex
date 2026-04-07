@@ -18,8 +18,8 @@ class ItemUpdateRequest extends BaseRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'is_stock_managed' => $this->boolean('is_stock_managed'),
-            'is_lot_managed' => $this->boolean('is_lot_managed'),
+            'is_stock_managed'  => $this->boolean('is_stock_managed'),
+            'is_lot_managed'    => $this->boolean('is_lot_managed'),
         ]);
     }
 
@@ -63,8 +63,8 @@ class ItemUpdateRequest extends BaseRequest
     public function messages()
     {
         return array_merge(parent::messages(), [
-            'lot_1_start_position.required_if'          => 'ロット管理が必要な場合、:attributeは必須です。',
-            'lot_1_length.required_if'                  => 'ロット管理が必要な場合、:attributeは必須です。',
+            'lot_1_start_position.required_if'          => 'ロット管理が有効な場合、:attributeは必須です。',
+            'lot_1_length.required_if'                  => 'ロット管理が有効な場合、:attributeは必須です。',
             'lot_2_start_position.required_with'        => 'LOT2桁数が入力されている場合、:attributeは必須です。',
             'lot_2_length.required_with'                => 'LOT2開始位置が入力されている場合、:attributeは必須です。',
             's_power_code.required_with'                => '代表JANコードが入力されている場合、:attributeは必須です。',
