@@ -57,6 +57,5 @@ class ProfileImageUpdateService
         $user->update([
             'profile_image_file_name' => $profile_image_file_name,
         ]);
-        return;
     }
 }

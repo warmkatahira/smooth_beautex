@@ -49,7 +49,7 @@ class BackupFileDelete extends Command
     public function deleteEnter($disk, $files)
     {
         // ファイルの分だけループ処理
-        foreach ($files as $file) {
+        foreach($files as $file){
             // ファイル名を取得
             $file_name = basename($file);
             // ファイル名から正規表現パターンで日付部分を抽出
@@ -58,7 +58,7 @@ class BackupFileDelete extends Command
                 // 日付をDateTimeオブジェクトへ変換
                 $date_time = \DateTime::createFromFormat('Y-m-d', $date);
                 // 現在の日付よりも60日以上前であれば削除
-                if ($date_time < (new \DateTime())->sub(new \DateInterval('P60D'))) {
+                if($date_time < (new \DateTime())->sub(new \DateInterval('P60D'))){
                     // ログを出力（削除する前でないとダメなのでここ）
                     Log::channel('cron')->info('Backup File Delete', ['file_name' => $file_name]);
                     // 削除処理
@@ -66,6 +66,5 @@ class BackupFileDelete extends Command
                 }
             }
         }
-        return;
     }
 }

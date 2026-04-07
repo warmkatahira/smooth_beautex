@@ -22,6 +22,5 @@ class ShippingGroupUpdateService
             'shipping_group_name'      => $request->shipping_group_name,
             'estimated_shipping_date'  => $request->estimated_shipping_date,
         ]);
-        return;
     }
 }

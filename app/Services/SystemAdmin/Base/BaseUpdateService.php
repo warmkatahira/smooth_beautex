@@ -19,6 +19,5 @@ class BaseUpdateService
             'mieru_customer_code' => $request->mieru_customer_code,
             'sort_order' => $request->sort_order,
         ]);
-        return;
     }
 }

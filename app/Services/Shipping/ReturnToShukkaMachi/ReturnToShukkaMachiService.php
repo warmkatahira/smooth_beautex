@@ -37,6 +37,5 @@ class ReturnToShukkaMachiService
         ]);
         // 受注が紐付いていない出荷グループがあれば削除
         ShippingGroup::doesntHave('orders')->delete();
-        return;
     }
 }

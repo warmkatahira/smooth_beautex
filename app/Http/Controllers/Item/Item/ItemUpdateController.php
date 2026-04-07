@@ -28,25 +28,25 @@ class ItemUpdateController extends Controller
 
     public function update(ItemUpdateRequest $request)
     {
-        /* try{
-            DB::transaction(function () use ($request){ */
+        try{
+            DB::transaction(function () use ($request){
                 // インスタンス化
                 $ItemUpdateService = new ItemUpdateService;
                 // 更新できる商品であるか確認
-                $ItemUpdateService->checkUpdatableItem($request);
+                $item = $ItemUpdateService->checkUpdatableItem($request);
                 // 商品を更新
-                $item = $ItemUpdateService->updateItem($request);
+                $item = $ItemUpdateService->updateItem($request, $item);
                 // 商品画像を削除
                 $ItemUpdateService->deleteItemImage($request, $item);
                 // 商品画像を保存
                 $ItemUpdateService->saveItemImage($request, $item);
-            /* });
+            });
         }catch (\Exception $e){
             return redirect()->back()->with([
                 'alert_type' => 'error',
                 'alert_message' => $e->getMessage(),
             ]);
-        } */
+        }
         return redirect(session('back_url_1'))->with([
             'alert_type' => 'success',
             'alert_message' => '商品を更新しました。',

@@ -18,26 +18,42 @@ class ItemUpdateService
     {
         // 商品を取得
         $item = Item::getSpecify($request->item_id)->lockForUpdate()->first();
-        // 在庫管理が更新されようとしている場合
-        if($item->is_stock_managed != $request->is_stock_managed){
-            // 出荷完了前で今回の商品が含まれている受注を取得
-            $exists = OrderItem::where('order_item_code', $item->item_code)
-                        ->whereHas('order', function ($query) {
-                            $query->where('order_status_id', '!=', OrderStatusEnum::SHUKKA_ZUMI);
-                        })
-                        ->exists();
-            // レコードが取得できている場合
-            if($exists){
-                throw new \RuntimeException('今回の商品が出荷完了前の受注に含まれているため、在庫管理を更新できません。');
+        // 在庫管理とロット管理が更新されようとしているか取得
+        $isStockManagedChanging = $item->is_stock_managed != $request->is_stock_managed;
+        $isLotManagedChanging   = $item->is_lot_managed   != $request->is_lot_managed;
+        // 在庫管理またはロット管理が更新されようとしている場合
+        if($isStockManagedChanging || $isLotManagedChanging){
+            // エラーメッセージ用のターゲット名を生成
+            $targets = array_filter([
+                $isStockManagedChanging ? '在庫管理' : null,
+                $isLotManagedChanging   ? 'ロット管理' : null,
+            ]);
+            $target = implode('・', $targets);
+            // 出荷完了前で今回の商品が含まれている受注が存在するか確認
+            $orderExists = OrderItem::where('order_item_code', $item->item_code)
+                                    ->whereHas('order', function ($query) {
+                                        $query->where('order_status_id', '!=', OrderStatusEnum::SHUKKA_ZUMI);
+                                    })
+                                    ->exists();
+            // 受注が存在する場合
+            if($orderExists){
+                throw new \RuntimeException("今回の商品が出荷完了前の受注に含まれているため、{$target}を更新できません。");
+            }
+            // 在庫が残っているか確認
+            $stockExists = Stock::where('item_id', $item->item_id)
+                                    ->where('quantity', '>', 0)
+                                    ->exists();
+            // 在庫が残っている場合
+            if($stockExists){
+                throw new \RuntimeException("在庫が残っているため、{$target}を更新できません。");
             }
         }
+        return $item;
     }
 
     // 商品を更新
-    public function updateItem($request)
+    public function updateItem($request, $item)
     {
-        // 商品を取得
-        $item = Item::getSpecify($request->item_id)->lockForUpdate()->first();
         // 商品を更新
         $item->update([
             'item_jan_code'                 => $request->item_jan_code,
@@ -109,6 +125,5 @@ class ItemUpdateService
         $item->update([
             'item_image_file_name' => $item_image_file_name,
         ]);
-        return;
     }
 }

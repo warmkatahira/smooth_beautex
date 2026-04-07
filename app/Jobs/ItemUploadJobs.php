@@ -10,6 +10,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 // モデル
 use App\Models\Item;
+use App\Models\Stock;
 use App\Models\ItemImport;
 use App\Models\Job;
 use App\Models\ItemUploadHistory;
@@ -394,45 +395,104 @@ class ItemUploadJobs implements ShouldQueue
                 }, 'item_import_id');
             return $proc_count;
         }
-        
-        
-        /* if($upload_type === ItemUploadEnum::UPLOAD_TYPE_CREATE){
-            // itemsに存在しないレコードを取得
-            $create_item = ItemImport::doesntHave('item')->select(array_map(function ($column){
-                return $column;
-            }, $headers))->get()->toArray();
-            // itemsテーブルに追加
-            Item::upsert($create_item, 'item_id');
-            return count($create_item);
-        } */
         // +-+-+-+-+-+-+-+-+-   商品コードがitemsテーブルに存在する場合は、更新処理を行う   +-+-+-+-+-+-+-+-+-
         // itemsテーブルとitem_importsテーブルを結合して更新に必要なカラムを取得（結合した結果、どっちのテーブルにも存在しているデータ）
         if($upload_type === ItemUploadEnum::UPLOAD_TYPE_UPDATE){
             // is_stock_managedが含まれている場合のみチェック
             if(in_array('is_stock_managed', $headers)){
-                // 在庫管理フラグが変わる商品コードを特定
+                // 在庫管理が更新されようとしている商品コードを取得
                 $conflicting_item_codes = Item::join('item_imports', 'item_imports.item_code', 'items.item_code')
                                                 ->whereColumn('items.is_stock_managed', '!=', 'item_imports.is_stock_managed')
                                                 ->pluck('items.item_code');
-                // 在庫管理が変わる商品がある場合
+                // 更新されようとしている商品コードがある場合
                 if($conflicting_item_codes->isNotEmpty()){
-                    // 出荷完了前の受注に含まれているか確認
+                    // 出荷完了前で今回の商品が含まれている受注が存在するか確認
                     $exists = OrderItem::whereIn('order_item_code', $conflicting_item_codes)
-                        ->whereHas('order', function ($query) {
-                            $query->where('order_status_id', '!=', OrderStatusEnum::SHUKKA_ZUMI);
-                        })
-                        ->exists();
-                    // 含まれている場合
+                                    ->whereHas('order', function ($query) {
+                                        $query->where('order_status_id', '!=', OrderStatusEnum::SHUKKA_ZUMI);
+                                    })
+                                    ->exists();
+                    // 受注が存在する場合
                     if($exists){
-                        // エラー内容を商品コード毎に配列化
                         $error_data = $conflicting_item_codes->map(function($item_code){
                             return [
                                 '商品コード' => $item_code,
-                                'エラー内容' => '在庫管理フラグが変更される商品が出荷完了前の受注に含まれているため、アップロードできませんでした。',
+                                'エラー内容' => '在庫管理が変更される商品が出荷完了前の受注に含まれているため、アップロードできませんでした。',
                             ];
                         })->toArray();
                         throw new ItemUploadException(
-                            '在庫管理フラグが変更される商品が出荷完了前の受注に含まれているため、アップロードできませんでした。',
+                            '在庫管理が変更される商品が出荷完了前の受注に含まれているため、アップロードできませんでした。',
+                            $error_data,
+                            CarbonImmutable::now(),
+                            $item_upload_history
+                        );
+                    }
+                    // 在庫が残っているか確認
+                    $stock_exists_codes = Stock::join('items', 'items.item_id', 'stocks.item_id')
+                                                ->whereIn('items.item_code', $conflicting_item_codes)
+                                                ->where('stocks.quantity', '>', 0)
+                                                ->pluck('items.item_code');
+                    // 在庫が残っている場合
+                    if($stock_exists_codes->isNotEmpty()){
+                        $error_data = $stock_exists_codes->map(function($item_code){
+                            return [
+                                '商品コード' => $item_code,
+                                'エラー内容' => '在庫が残っているため、在庫管理を変更できませんでした。',
+                            ];
+                        })->toArray();
+                        throw new ItemUploadException(
+                            '在庫が残っているため、在庫管理を変更できませんでした。',
+                            $error_data,
+                            CarbonImmutable::now(),
+                            $item_upload_history
+                        );
+                    }
+                }
+            }
+            // is_lot_managedが含まれている場合のみチェック
+            if(in_array('is_lot_managed', $headers)){
+                // ロット管理が更新されようとしている商品コードを取得
+                $conflicting_item_codes = Item::join('item_imports', 'item_imports.item_code', 'items.item_code')
+                                                ->whereColumn('items.is_lot_managed', '!=', 'item_imports.is_lot_managed')
+                                                ->pluck('items.item_code');
+                // 更新されようとしている商品コードがある場合
+                if($conflicting_item_codes->isNotEmpty()){
+                    // 出荷完了前で今回の商品が含まれている受注が存在するか確認
+                    $exists = OrderItem::whereIn('order_item_code', $conflicting_item_codes)
+                                    ->whereHas('order', function ($query) {
+                                        $query->where('order_status_id', '!=', OrderStatusEnum::SHUKKA_ZUMI);
+                                    })
+                                    ->exists();
+                    // 受注が存在する場合
+                    if($exists){
+                        $error_data = $conflicting_item_codes->map(function($item_code){
+                            return [
+                                '商品コード' => $item_code,
+                                'エラー内容' => 'ロット管理フラグが変更される商品が出荷完了前の受注に含まれているため、アップロードできませんでした。',
+                            ];
+                        })->toArray();
+                        throw new ItemUploadException(
+                            'ロット管理フラグが変更される商品が出荷完了前の受注に含まれているため、アップロードできませんでした。',
+                            $error_data,
+                            CarbonImmutable::now(),
+                            $item_upload_history
+                        );
+                    }
+                    // 在庫が残っているか確認
+                    $stock_exists_codes = Stock::join('items', 'items.item_id', 'stocks.item_id')
+                                            ->whereIn('items.item_code', $conflicting_item_codes)
+                                            ->where('stocks.quantity', '>', 0)
+                                            ->pluck('items.item_code');
+                    // 在庫が残っている場合
+                    if($stock_exists_codes->isNotEmpty()){
+                        $error_data = $stock_exists_codes->map(function($item_code){
+                            return [
+                                '商品コード' => $item_code,
+                                'エラー内容' => '在庫が残っているため、ロット管理フラグを変更できませんでした。',
+                            ];
+                        })->toArray();
+                        throw new ItemUploadException(
+                            '在庫が残っているため、ロット管理フラグを変更できませんでした。',
                             $error_data,
                             CarbonImmutable::now(),
                             $item_upload_history
@@ -468,30 +528,6 @@ class ItemUploadJobs implements ShouldQueue
                     }, 'item_id');
             return $proc_count;
         }
-
-
-        /* if($upload_type === ItemUploadEnum::UPLOAD_TYPE_UPDATE){
-            // itemsにするレコードを取得
-            $update_item = Item::join('item_imports', 'item_imports.item_code', 'items.item_code')->select(array_map(function ($column){
-                return 'item_imports.' . $column;
-            }, $headers))->lockForUpdate()->get()->toArray();
-            // レコードの分だけループ処理
-            foreach($update_item as $item){
-                // パラメータを格納する配列を初期化
-                $param = [];
-                // パラメータの分だけループ処理
-                foreach($item as $key => $value){
-                    // キーがセット商品コード以外の場合
-                    if($key != 'item_code'){
-                        // 配列にパラメータを格納
-                        $param[$key] = $value;
-                    }
-                }
-                // 商品コードを指定して更新
-                Item::getSpecifyByItemCode($item['item_code'])->update($param);
-            }
-            return count($update_item);
-        } */
     }
 
     public function item_upload_error_export($validation_error, $nowDate, $item_upload_history, $message)

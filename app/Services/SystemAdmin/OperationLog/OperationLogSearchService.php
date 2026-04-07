@@ -22,7 +22,6 @@ class OperationLogSearchService
             'search_operation_date_from',
             'search_operation_date_to',
         ]);
-        return;
     }
 
     // セッションに検索条件を格納
@@ -38,7 +37,6 @@ class OperationLogSearchService
             session(['search_operation_date_from' => $request->search_operation_date_from]);
             session(['search_operation_date_to' => $request->search_operation_date_to]);
         }
-        return;
     }
 
     // ログ情報を取得
