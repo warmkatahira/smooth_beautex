@@ -15,6 +15,8 @@ use App\Models\Prefecture;
 use App\Services\Order\OrderMgt\OrderMgtService;
 use App\Services\Order\OrderMgt\OrderSearchService;
 use App\Services\Order\OrderAllocate\OrderAllocateService;
+// リクエスト
+use App\Http\Requests\Order\OrderMgt\OrderSearchRequest;
 // 列挙
 use App\Enums\ShipRegionTypeEnum;
 // トレイト
@@ -24,7 +26,7 @@ class OrderMgtController extends Controller
 {
     use PaginatesResultsTrait;
     
-    public function index(Request $request)
+    public function index(OrderSearchRequest $request)
     {
         // ページヘッダーをセッションに格納
         session(['page_header' => '受注管理']);

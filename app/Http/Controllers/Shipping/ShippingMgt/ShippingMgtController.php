@@ -14,6 +14,8 @@ use App\Models\Mall;
 // サービス
 use App\Services\Shipping\ShippingMgt\ShippingMgtService;
 use App\Services\Order\OrderMgt\OrderSearchService;
+// リクエスト
+use App\Http\Requests\Order\OrderMgt\OrderSearchRequest;
 // 列挙
 use App\Enums\OrderStatusEnum;
 use App\Enums\ShipRegionTypeEnum;
@@ -24,7 +26,7 @@ class ShippingMgtController extends Controller
 {
     use PaginatesResultsTrait;
 
-    public function index(Request $request)
+    public function index(OrderSearchRequest $request)
     {
         // ページヘッダーをセッションに格納
         session(['page_header' => '出荷管理']);
