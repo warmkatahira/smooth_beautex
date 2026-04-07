@@ -15,7 +15,7 @@ class ItemImport extends Model
         'item_name',
         'item_category_1',
         'item_category_2',
-        'is_inspection_lot_required',
+        'is_lot_managed',
         'model_jan_code',
         'exp_start_position',
         'lot_1_start_position',

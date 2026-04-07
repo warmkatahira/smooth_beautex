@@ -200,7 +200,7 @@ class ItemUploadJobs implements ShouldQueue
                 // 半角・全角スペースを取り除いている
                 $adjustment_value = str_replace(array(" ", "　", "'"), "", $value);
                 break;
-            case '検品ロット':
+            case 'ロット管理':
                 // 不要を「0」、必要を「1」に変換
                 $adjustment_value = $value === '不要' ? 0 : ($value === '必要' ? 1 : $value);
                 break;
@@ -248,7 +248,7 @@ class ItemUploadJobs implements ShouldQueue
                 case 'color_row':
                     $rules += ['*.'.$column => 'nullable|integer|min:0|max:255'];
                     break;
-                case 'is_inspection_lot_required':
+                case 'is_lot_managed':
                     $rules += ['*.'.$column => 'required|boolean'];
                     break;
                 case 'model_jan_code':
@@ -258,10 +258,10 @@ class ItemUploadJobs implements ShouldQueue
                     $rules += ['*.'.$column => 'nullable|integer|between:1,255'];
                     break;
                 case 'lot_1_start_position':
-                    $rules += ['*.'.$column => 'required_if:*.is_inspection_lot_required,1|required_with:*.lot_1_length|nullable|integer|between:1,255'];
+                    $rules += ['*.'.$column => 'required_if:*.is_lot_managed,1|required_with:*.lot_1_length|nullable|integer|between:1,255'];
                     break;
                 case 'lot_1_length':
-                    $rules += ['*.'.$column => 'required_if:*.is_inspection_lot_required,1|required_with:*.lot_1_start_position|nullable|integer|between:1,255'];
+                    $rules += ['*.'.$column => 'required_if:*.is_lot_managed,1|required_with:*.lot_1_start_position|nullable|integer|between:1,255'];
                     break;
                 case 'lot_2_start_position':
                     $rules += ['*.'.$column => 'required_with:*.lot_2_length|nullable|integer|between:1,255'];
@@ -302,8 +302,8 @@ class ItemUploadJobs implements ShouldQueue
             'min'                                           => ':attribute（:input）は:min以上で入力して下さい。',
             'integer'                                       => ':attribute（:input）は数値で入力して下さい。',
             'between'                                       => ":attributeは:minから:maxの間で入力して下さい。",
-            '*.lot_1_start_position.required_if'            => '検品ロットが必要の場合、:attributeは必須です。',
-            '*.lot_1_length.required_if'                    => '検品ロットが必要の場合、:attributeは必須です。',
+            '*.lot_1_start_position.required_if'            => 'ロット管理が必要の場合、:attributeは必須です。',
+            '*.lot_1_length.required_if'                    => 'ロット管理が必要の場合、:attributeは必須です。',
             '*.lot_1_start_position.required_with'          => 'LOT1桁数が入力されている場合、:attributeは必須です。',
             '*.lot_1_length.required_with'                  => 'LOT1開始位置が入力されている場合、:attributeは必須です。',
             '*.lot_2_start_position.required_with'          => 'LOT2桁数が入力されている場合、:attributeは必須です。',
@@ -317,7 +317,7 @@ class ItemUploadJobs implements ShouldQueue
             '*.item_name'                   => '商品名',
             '*.item_category_1'             => '商品カテゴリ1',
             '*.item_category_2'             => '商品カテゴリ2',
-            '*.is_inspection_lot_required'  => '検品ロット',
+            '*.is_lot_managed'              => 'ロット管理',
             '*.model_jan_code'              => '代表JANコード',
             '*.exp_start_position'          => 'EXP開始位置',
             '*.lot_1_start_position'        => 'LOT1開始位置',

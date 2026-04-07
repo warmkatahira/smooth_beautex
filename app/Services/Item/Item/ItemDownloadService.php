@@ -43,7 +43,7 @@ class ItemDownloadService
                         $item->quantity_per_box,
                         $item->manufacturer,
                         $item->supplier,
-                        $item->is_inspection_lot_required_text,
+                        $item->is_lot_managed_text,
                         $item->model_jan_code,
                         $item->exp_start_position,
                         $item->lot_1_start_position,

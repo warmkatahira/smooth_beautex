@@ -19,7 +19,7 @@ class ItemUpdateRequest extends BaseRequest
     {
         $this->merge([
             'is_stock_managed' => $this->boolean('is_stock_managed'),
-            'is_inspection_lot_required' => $this->boolean('is_inspection_lot_required'),
+            'is_lot_managed' => $this->boolean('is_lot_managed'),
         ]);
     }
 
@@ -42,11 +42,11 @@ class ItemUpdateRequest extends BaseRequest
             'quantity_per_box'              => 'nullable|string|max:20',
             'manufacturer'                  => 'nullable|string|max:20',
             'supplier'                      => 'nullable|string|max:20',
-            'is_inspection_lot_required'    => 'required|boolean',
+            'is_lot_managed'                => 'required|boolean',
             'model_jan_code'                => 'nullable|string|max:13',
             'exp_start_position'            => 'nullable|integer|between:1,255',
-            'lot_1_start_position'          => 'required_if:is_inspection_lot_required,1|required_with:lot_1_length|nullable|integer|between:1,255',
-            'lot_1_length'                  => 'required_if:is_inspection_lot_required,1|required_with:lot_1_start_position|nullable|integer|between:1,255',
+            'lot_1_start_position'          => 'required_if:is_lot_managed,1|required_with:lot_1_length|nullable|integer|between:1,255',
+            'lot_1_length'                  => 'required_if:is_lot_managed,1|required_with:lot_1_start_position|nullable|integer|between:1,255',
             'lot_2_start_position'          => 'required_with:lot_2_length|nullable|integer|between:1,255',
             'lot_2_length'                  => 'required_with:lot_2_start_position|nullable|integer|between:1,255',
             's_power_code'                  => 'required_with:model_jan_code|nullable|integer|between:200,240',
@@ -63,8 +63,8 @@ class ItemUpdateRequest extends BaseRequest
     public function messages()
     {
         return array_merge(parent::messages(), [
-            'lot_1_start_position.required_if'          => '検品ロットが必要な場合、:attributeは必須です。',
-            'lot_1_length.required_if'                  => '検品ロットが必要な場合、:attributeは必須です。',
+            'lot_1_start_position.required_if'          => 'ロット管理が必要な場合、:attributeは必須です。',
+            'lot_1_length.required_if'                  => 'ロット管理が必要な場合、:attributeは必須です。',
             'lot_2_start_position.required_with'        => 'LOT2桁数が入力されている場合、:attributeは必須です。',
             'lot_2_length.required_with'                => 'LOT2開始位置が入力されている場合、:attributeは必須です。',
             's_power_code.required_with'                => '代表JANコードが入力されている場合、:attributeは必須です。',

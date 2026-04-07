@@ -51,7 +51,7 @@ class ItemUpdateService
             'quantity_per_box'              => $request->quantity_per_box,
             'manufacturer'                  => $request->manufacturer,
             'supplier'                      => $request->supplier,
-            'is_inspection_lot_required'    => $request->is_inspection_lot_required,
+            'is_lot_managed'                => $request->is_lot_managed,
             'model_jan_code'                => $request->model_jan_code,
             'exp_start_position'            => $request->exp_start_position,
             'lot_1_start_position'          => $request->lot_1_start_position,

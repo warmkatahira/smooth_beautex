@@ -35,9 +35,9 @@ $('#item_id_code').on("change",function(){
                         // エラーを返す
                         throw new Error(data['exp_lot_check_result']);
                     }
-                    console.log(data['item_id_type'] === 'JAN' && !data['item']['is_inspection_lot_required']);
-                    // JANコードで検品されているかつ、is_inspection_lot_requiredがtrueの場合
-                    if(data['item_id_type'] === 'JAN' && data['item']['is_inspection_lot_required']){
+                    console.log(data['item_id_type'] === 'JAN' && !data['item']['is_lot_managed']);
+                    // JANコードで検品されているかつ、is_lot_managedがtrueの場合
+                    if(data['item_id_type'] === 'JAN' && data['item']['is_lot_managed']){
                         // LOT入力モーダルを表示
                         $('#lot_exp_input_modal').removeClass('hidden');
                         $('#lot').val(null);

@@ -15,7 +15,7 @@ class Item extends Model
         'item_name',
         'item_category_1',
         'item_category_2',
-        'is_inspection_lot_required',
+        'is_lot_managed',
         'model_jan_code',
         'exp_start_position',
         'lot_1_start_position',
@@ -84,7 +84,7 @@ class Item extends Model
             '入数',
             'メーカー',
             '仕入先',
-            '検品ロット',
+            'ロット管理',
             '代表JANコード',
             'EXP開始位置',
             'LOT1開始位置',
@@ -117,7 +117,7 @@ class Item extends Model
         '入数'                  => 'quantity_per_box',
         'メーカー'              => 'manufacturer',
         '仕入先'                => 'supplier',
-        '検品ロット'            => 'is_inspection_lot_required',
+        'ロット管理'            => 'is_lot_managed',
         '代表JANコード'         => 'model_jan_code',
         'EXP開始位置'           => 'exp_start_position',
         'LOT1開始位置'          => 'lot_1_start_position',
@@ -152,10 +152,10 @@ class Item extends Model
     {
         return $this->is_stock_managed ? '有効' : '無効';
     }
-    // 「is_inspection_lot_required」に基づいて、○を返すアクセサ
-    public function getIsInspectionLotRequiredTextAttribute(): string
+    // 「is_lot_managed」に基づいて、○を返すアクセサ
+    public function getIsLotManagedTextAttribute(): string
     {
-        return $this->is_inspection_lot_required ? '必要' : '不要';
+        return $this->is_lot_managed ? '必要' : '不要';
     }
     // 商品コードから商品IDを取得
     public static function getItemIdByItemCode($item_code)
