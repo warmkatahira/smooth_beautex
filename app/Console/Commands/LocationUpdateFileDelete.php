@@ -39,8 +39,8 @@ class LocationUpdateFileDelete extends Command
                 $date = $matches[1];
                 // 日付をDateTimeオブジェクトへ変換
                 $date_time = \DateTime::createFromFormat('Y-m-d', $date);
-                // 現在の日付よりも10日以上前であれば削除
-                if($date_time < (new \DateTime())->sub(new \DateInterval('P10D'))){
+                // 現在の日付よりも2日以上前であれば削除
+                if($date_time < (new \DateTime())->sub(new \DateInterval('P2D'))){
                     // 削除処理
                     File::delete($file);
                 }
