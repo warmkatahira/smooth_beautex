@@ -23,7 +23,7 @@ class UserCreateRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'user_id'       => "required|string|max:20|regex:/^[a-zA-Z0-9]+$/|unique:users,user_id",
+            'user_id'       => "required|string|max:50|regex:/^[a-zA-Z0-9.\-_@]+$/|unique:users,user_id",
             'last_name'     => "required|string|max:20",
             'first_name'    => "required|string|max:20",
             'email'         => "required|string|lowercase|email|max:255|unique:users,email",

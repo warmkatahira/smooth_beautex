@@ -26,6 +26,17 @@ class UserSeeder extends Seeder
             'is_must_change_password' => false,
         ]);
         User::create([
+            'user_id' => 'oizumi046',
+            'last_name' => '大泉',
+            'first_name' => '一弘',
+            'email' => 'ooizumi@warm.co.jp',
+            'password' => bcrypt('kjq12zbv'),
+            'status' => 1,
+            'role_id' => 'user',
+            'company_id' => 'warm',
+            'is_must_change_password' => true,
+        ]);
+        User::create([
             'user_id' => 'shim@eleanor.co.jp',
             'last_name' => '清水',
             'first_name' => '厚芳',
