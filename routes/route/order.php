@@ -51,7 +51,6 @@ Route::middleware('common')->group(function (){
             Route::post('order_memo', 'order_memo')->name('order_memo');
             Route::post('shipping_work_memo', 'shipping_work_memo')->name('shipping_work_memo');
             Route::post('ship_address', 'ship_address')->name('ship_address');
-            Route::post('supplement', 'supplement')->name('supplement');
             Route::post('desired_delivery_date', 'desired_delivery_date')->name('desired_delivery_date');
             Route::post('is_stock_allocation_skipped', 'is_stock_allocation_skipped')->name('is_stock_allocation_skipped');
             Route::post('is_shipping_inspection_skipped', 'is_shipping_inspection_skipped')->name('is_shipping_inspection_skipped');
@@ -82,6 +81,9 @@ Route::middleware('common')->group(function (){
         Route::controller(ShippingWorkStartController::class)->prefix('shipping_work_start')->name('shipping_work_start.')->group(function(){
             Route::post('enter', 'enter')->name('enter');
         });
+    });
+    Route::controller(OrderDetailUpdateController::class)->prefix('order_detail_update')->name('order_detail_update.')->group(function(){
+        Route::post('supplement', 'supplement')->name('supplement');
     });
     // +-+-+-+-+-+-+-+- 引当残ダウンロード +-+-+-+-+-+-+-+-
     Route::controller(HikiatezanDownloadController::class)->prefix('hikiatezan_download')->name('hikiatezan_download.')->group(function(){

@@ -6,13 +6,8 @@
                 @if($order->order_status_id == OrderStatusEnum::SHUKKA_ZUMI)
                     <x-order.order-detail.info-div label="出荷日" :value="CarbonImmutable::parse($order->shipping_date)->isoFormat('Y年MM月DD日(ddd)')" />
                 @endif
-                @can('warm_check')
-                    <x-order.order-detail.info-div label="出荷倉庫" :value="$order->base?->base_name" :order="$order" openModalId="shipping_base_update_modal_open" modalTippy="tippy_shipping_base_update" />
-                    <x-order.order-detail.info-div label="配送方法" :value="$order->delivery_company_and_shipping_method" :order="$order" openModalId="shipping_method_update_modal_open" modalTippy="tippy_shipping_method_update" />
-                @else
-                    <x-order.order-detail.info-div label="出荷倉庫" :value="$order->base?->base_name" />
-                    <x-order.order-detail.info-div label="配送方法" :value="$order->delivery_company_and_shipping_method" />
-                @endcan
+                <x-order.order-detail.info-div label="出荷倉庫" :value="$order->base?->base_name" :order="$order" openModalId="shipping_base_update_modal_open" modalTippy="tippy_shipping_base_update" />
+                <x-order.order-detail.info-div label="配送方法" :value="$order->delivery_company_and_shipping_method" :order="$order" openModalId="shipping_method_update_modal_open" modalTippy="tippy_shipping_method_update" />
             </div>
         </div>
         <div class="w-1/2">

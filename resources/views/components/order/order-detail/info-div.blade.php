@@ -11,16 +11,22 @@
     // 変数を初期化
     $is_modal_icon_disp = false;
     // 出荷倉庫
-    if($openModalId === 'shipping_base_update_modal_open' && $order->order_status_id < OrderStatusEnum::SAGYO_CHU){
-        $is_modal_icon_disp = true;
+    if($openModalId === 'shipping_base_update_modal_open'
+        && $order->order_status_id < OrderStatusEnum::SAGYO_CHU
+        && Auth::user()->can('warm_check')){
+            $is_modal_icon_disp = true;
     }
     // 配送方法
-    if($openModalId === 'shipping_method_update_modal_open' && $order->order_status_id < OrderStatusEnum::SHUKKA_ZUMI){
-        $is_modal_icon_disp = true;
+    if($openModalId === 'shipping_method_update_modal_open'
+        && $order->order_status_id < OrderStatusEnum::SHUKKA_ZUMI
+        && Auth::user()->can('warm_check')){
+            $is_modal_icon_disp = true;
     }
     // 配送希望日
-    if($openModalId === 'desired_delivery_date_update_modal_open' && $order->order_status_id < OrderStatusEnum::SHUKKA_ZUMI){
-        $is_modal_icon_disp = true;
+    if($openModalId === 'desired_delivery_date_update_modal_open'
+        && $order->order_status_id < OrderStatusEnum::SHUKKA_ZUMI
+        && Auth::user()->can('warm_check')){
+            $is_modal_icon_disp = true;
     }
     // 受注マーク
     if($openModalId === 'order_mark_update_modal_open' && $order->order_status_id < OrderStatusEnum::SHUKKA_ZUMI){
@@ -39,8 +45,10 @@
         $is_modal_icon_disp = true;
     }
     // 配送先住所
-    if($openModalId === 'ship_address_update_modal_open' && $order->order_status_id < OrderStatusEnum::SHUKKA_ZUMI){
-        $is_modal_icon_disp = true;
+    if($openModalId === 'ship_address_update_modal_open'
+        && $order->order_status_id < OrderStatusEnum::SHUKKA_ZUMI
+        && Auth::user()->can('warm_check')){
+            $is_modal_icon_disp = true;
     }
     // 在庫引当処理
     if($openModalId === 'is_stock_allocation_skipped_update_modal_open' && $order->order_status_id < OrderStatusEnum::SAGYO_CHU){
