@@ -20,6 +20,6 @@ Schedule::command('location_update_file_delete')->dailyAt('02:00');
 // 荷札データ発行ディレクトリと履歴レコードの削除を毎日「02:00」に実行
 Schedule::command('nifuda_issue_delete')->dailyAt('02:00');
 // DBバックアップの削除を毎日「03:00」に実行
-Schedule::command('backup_db_delete')->dailyAt('03:00');
+Schedule::command('backup_db_delete')->everyMinute();
 // DBバックアップを毎日「03:30」に実行
 Schedule::command('backup:run --disable-notifications --only-db --only-to-disk=db_backup_normal')->dailyAt('03:30');
