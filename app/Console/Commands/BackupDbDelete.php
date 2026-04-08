@@ -37,6 +37,7 @@ class BackupDbDelete extends Command
         $this->deleteEnter($disk, $files);
     }
 
+    // 60日以上前のファイルを削除
     private function deleteEnter($disk, $files)
     {
         // バックアップファイルの分だけループ処理
