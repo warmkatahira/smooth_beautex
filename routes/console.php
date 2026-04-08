@@ -18,7 +18,7 @@ Schedule::command('item_upload_error_file_delete')->dailyAt('02:00');
 // 商品ロケーション更新の削除を毎日「02:00」に実行
 Schedule::command('location_update_file_delete')->dailyAt('02:00');
 // 荷札データ発行ディレクトリと履歴レコードの削除を毎日「02:00」に実行
-Schedule::command('nifuda_issue_delete')->everyMinute();
+Schedule::command('nifuda_issue_delete')->dailyAt('02:00');
 // 出荷完了エラーの削除を毎日「02:00」に実行
 Schedule::command('shipping_work_end_error_file_delete')->dailyAt('02:00');
 // DBバックアップの削除を毎日「03:00」に実行
