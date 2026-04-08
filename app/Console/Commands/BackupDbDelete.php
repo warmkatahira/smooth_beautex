@@ -44,13 +44,13 @@ class BackupDbDelete extends Command
             // ファイル名を取得
             $file_name = basename($file);
             // ファイル名から正規表現パターンで日付部分を抽出（yyyy-mm-dd-hh-mm-ss形式）
-            if (preg_match('/(\d{4}-\d{2}-\d{2})-(\d{2}-\d{2}-\d{2})/', $file_name, $matches)) {
+            if(preg_match('/(\d{4}-\d{2}-\d{2})-(\d{2}-\d{2}-\d{2})/', $file_name, $matches)){
                 // 正規表現の1番目のキャプチャグループ（yyyy-mm-dd）を取得
                 $date = $matches[1];
                 // 日付文字列をDateTimeオブジェクトへ変換
                 $date_time = \DateTime::createFromFormat('Y-m-d', $date);
                 // 現在日時から60日を引いた日付よりも古いファイルを削除対象とする
-                if ($date_time < (new \DateTime())->sub(new \DateInterval('P60D'))) {
+                if($date_time < (new \DateTime())->sub(new \DateInterval('P60D'))->setTime(0, 0, 0)){
                     // 削除前にログを出力
                     Log::channel('cron')->info('Backup File Delete', ['file_name' => $file_name]);
                     // ファイルを削除
