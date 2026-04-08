@@ -21,11 +21,13 @@ class HikiatezanDownloadService
                     'order_items.order_item_code',
                     'items.item_jan_code',
                     'items.item_name',
+                    'items.manufacturer',
+                    'items.supplier',
                     DB::raw('SUM(order_items.unallocated_quantity) as total_unallocated_quantity')
                 )
                 ->join('items', 'items.item_code', '=', 'order_items.order_item_code')
                 ->whereIn('order_items.order_control_id', $chk)
-                ->groupBy('order_items.order_item_code', 'items.item_jan_code', 'items.item_name')
+                ->groupBy('order_items.order_item_code', 'items.item_jan_code', 'items.item_name', 'items.manufacturer', 'items.supplier')
                 ->having('total_unallocated_quantity', '>=', 1)
                 ->orderBy('order_items.order_item_code');
     }
@@ -41,7 +43,7 @@ class HikiatezanDownloadService
             // BOMを書き込む
             fwrite($handle, "\xEF\xBB\xBF");
             // ヘッダーを書き込む
-            $header = ['商品コード', '商品JANコード', '商品名', '引当残'];
+            $header = ['商品コード', '商品JANコード', '商品名', 'メーカー', '仕入先', '引当残'];
             fputcsv($handle, $header);
             // レコードをチャンクごとに書き込む
             $hikiatezan->chunk($chunk_size, function ($hikiatezan) use ($handle){
@@ -52,6 +54,8 @@ class HikiatezanDownloadService
                         $item->order_item_code,
                         $item->item_jan_code,
                         $item->item_name,
+                        $item->manufacturer,
+                        $item->supplier,
                         $item->total_unallocated_quantity,
                     ];
                     // 書き込む
