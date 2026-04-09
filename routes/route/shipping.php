@@ -44,9 +44,6 @@ Route::middleware('common')->group(function (){
     Route::controller(ShippingHistoryDownloadController::class)->prefix('shipping_history_download')->name('shipping_history_download.')->group(function(){
         Route::get('download', 'download')->name('download');
     });
-    Route::controller(ShippingActualDownloadController::class)->prefix('shipping_actual_download')->name('shipping_actual_download.')->group(function(){
-        Route::get('download', 'download')->name('download');
-    });
     Route::middleware(['warm_check'])->group(function () {
         // +-+-+-+-+-+-+-+- 配送伝票番号取込 +-+-+-+-+-+-+-+-
         Route::controller(TrackingNoImportController::class)->prefix('tracking_no_import')->name('tracking_no_import.')->group(function(){
@@ -98,6 +95,10 @@ Route::middleware('common')->group(function (){
         Route::controller(ShippingWorkEndController::class)->prefix('shipping_work_end')->name('shipping_work_end.')->group(function(){
             Route::get('', 'index')->name('index');
             Route::post('enter', 'enter')->name('enter');
+        });
+        // +-+-+-+-+-+-+-+- 出荷履歴 +-+-+-+-+-+-+-+-
+        Route::controller(ShippingActualDownloadController::class)->prefix('shipping_actual_download')->name('shipping_actual_download.')->group(function(){
+            Route::get('download', 'download')->name('download');
         });
         // +-+-+-+-+-+-+-+- 出荷完了履歴 +-+-+-+-+-+-+-+-
         Route::controller(ShippingWorkEndHistoryController::class)->prefix('shipping_work_end_history')->name('shipping_work_end_history.')->group(function(){

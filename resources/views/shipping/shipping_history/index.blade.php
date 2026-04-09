@@ -1,8 +1,6 @@
 <x-app-layout>
     <div class="flex flex-row my-3">
-        @can('warm_check')
-            <x-shipping.shipping-history.operation-div />
-        @endcan
+        <x-shipping.shipping-history.operation-div />
         <x-pagination :pages="$orders" />
     </div>
     <div class="flex flex-row gap-x-5 items-start">

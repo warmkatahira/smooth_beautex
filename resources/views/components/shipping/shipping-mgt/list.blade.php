@@ -3,7 +3,9 @@
         <table id="filter_table" class="text-xs" data-search-url="/shipping_mgt" data-scroll-target=".shipping_mgt_list" data-extra-params='{"filter_order_status_id": ""}'>
             <thead>
                 <tr class="text-left text-white bg-black whitespace-nowrap sticky top-0 h-7 z-10">
-                    <th id="all_check" class="font-thin py-1 px-2"><i class="las la-check-square la-lg"></i></th>
+                    @can('warm_check')
+                        <th id="all_check" class="font-thin py-1 px-2"><i class="las la-check-square la-lg"></i></th>
+                    @endcan
                     <th class="font-thin py-1 px-2 text-center">操作</th>
                     <th class="font-thin py-1 px-2 text-center">取込日</th>
                     <th class="font-thin py-1 px-2 text-center">取込時間</th>
@@ -30,7 +32,9 @@
                     @endcan
                 </tr>
                 <tr class="filter-row sticky top-[28px] bg-white z-10">
-                    <th></th>
+                    @can('warm_check')
+                        <th></th>
+                    @endcan
                     <th></th>
                     <x-filter.date-period type="date" fromId="filter_order_import_date_from" fromName="filter_order_import_date_from" toId="filter_order_import_date_to" toName="filter_order_import_date_to" />
                     <x-filter.input type="tel" id="filter_order_import_time" name="filter_order_import_time" />
@@ -60,9 +64,11 @@
             <tbody class="bg-white">
                 @foreach($orders as $order)
                     <tr class="text-left cursor-default whitespace-nowrap">
-                        <td class="py-1 px-2 border">
-                            <input type="checkbox" name="chk[]" value="{{ $order->order_control_id }}" form="operation_div_form">
-                        </td>
+                        @can('warm_check')
+                            <td class="py-1 px-2 border">
+                                <input type="checkbox" name="chk[]" value="{{ $order->order_control_id }}" form="operation_div_form">
+                            </td>
+                        @endcan
                         <td class="py-1 px-2 border">
                             <div class="flex flex-row gap-5">
                                 <a href="{{ route('order_detail.index', ['order_control_id' => $order->order_control_id]) }}" class="btn rounded bg-btn-enter text-white py-1 px-2">詳細</a>

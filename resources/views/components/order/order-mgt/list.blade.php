@@ -3,7 +3,9 @@
         <table id="filter_table" class="text-xs" data-search-url="/order_mgt" data-scroll-target=".order_mgt_list" data-extra-params='{"filter_order_status_id": ""}'>
             <thead>
                 <tr class="text-left text-white bg-black whitespace-nowrap sticky top-0 h-7 z-10">
-                    <th id="all_check" class="font-thin py-1 px-2"><i class="las la-check-square la-lg"></i></th>
+                    @can('warm_check')
+                        <th id="all_check" class="font-thin py-1 px-2"><i class="las la-check-square la-lg"></i></th>
+                    @endcan
                     <th class="font-thin py-1 px-2 text-center">操作</th>
                     <th class="font-thin py-1 px-2 text-center">注文ステータス</th>
                     <th class="font-thin py-1 px-2 text-center">取込日</th>
@@ -12,7 +14,9 @@
                     <th class="font-thin py-1 px-2 text-center">注文日</th>
                     <th class="font-thin py-1 px-2 text-center">注文時間</th>
                     <th class="font-thin py-1 px-2 text-center">受注管理ID</th>
-                    <th class="font-thin py-1 px-2 text-center">受注マーク</th>
+                    @can('warm_check')
+                        <th class="font-thin py-1 px-2 text-center">受注マーク</th>
+                    @endcan
                     <th class="font-thin py-1 px-2 text-center">受注区分</th>
                     <th class="font-thin py-1 px-2 text-center">モール</th>
                     <th class="font-thin py-1 px-2 text-center">出荷倉庫</th>
@@ -26,7 +30,9 @@
                     <th class="font-thin py-1 px-2 text-center">再発送</th>
                 </tr>
                 <tr class="filter-row sticky top-[28px] bg-white z-10">
-                    <th></th>
+                    @can('warm_check')
+                        <th></th>
+                    @endcan
                     <th></th>
                     <th></th>
                     <x-filter.date-period type="date" fromId="filter_order_import_date_from" fromName="filter_order_import_date_from" toId="filter_order_import_date_to" toName="filter_order_import_date_to" />
@@ -35,7 +41,9 @@
                     <x-filter.date-period type="date" fromId="filter_order_date_from" fromName="filter_order_date_from" toId="filter_order_date_to" toName="filter_order_date_to" />
                     <x-filter.input type="tel" id="filter_order_time" name="filter_order_time" />
                     <x-filter.input type="tel" id="filter_order_control_id" name="filter_order_control_id" />
-                    <x-filter.datalist listId="order_mark" id="filter_order_mark" name="filter_order_mark" :selectItems="$orderMarks" optionValue="order_mark" />
+                    @can('warm_check')
+                        <x-filter.datalist listId="order_mark" id="filter_order_mark" name="filter_order_mark" :selectItems="$orderMarks" optionValue="order_mark" />
+                    @endcan
                     <x-filter.select-mall id="filter_order_category_id" name="filter_order_category_id" :malls="$malls" />
                     <x-filter.select id="filter_mall_id" name="filter_mall_id" :selectItems="$malls" optionValue="mall_id" optionText="mall_name" />
                     <x-filter.select id="filter_shipping_base_id" name="filter_shipping_base_id" :selectItems="$bases" optionValue="base_id" optionText="base_name" />
@@ -52,9 +60,11 @@
             <tbody class="bg-white">
                 @foreach($orders as $order)
                     <tr class="text-left cursor-default whitespace-nowrap">
-                        <td class="py-1 px-2 border">
-                            <input type="checkbox" name="chk[]" value="{{ $order->order_control_id }}" form="operation_div_form">
-                        </td>
+                        @can('warm_check')
+                            <td class="py-1 px-2 border">
+                                <input type="checkbox" name="chk[]" value="{{ $order->order_control_id }}" form="operation_div_form">
+                            </td>
+                        @endcan
                         <td class="py-1 px-2 border">
                             <div class="flex flex-row gap-5">
                                 <a href="{{ route('order_detail.index', ['order_control_id' => $order->order_control_id]) }}" class="btn rounded bg-btn-enter text-white py-1 px-2">詳細</a>
@@ -73,10 +83,12 @@
                             {{ $order->order_control_id }}
                             <x-clipboard-copy-btn :value="$order->order_control_id" label="受注管理ID" />
                         </td>
-                        <td class="py-1 px-2 border text-center relative group/clipboard">
-                            {{ $order->order_mark }}
-                            <x-clipboard-copy-btn :value="$order->order_mark" label="受注マーク" />
-                        </td>
+                        @can('warm_check')
+                            <td class="py-1 px-2 border text-center relative group/clipboard">
+                                {{ $order->order_mark }}
+                                <x-clipboard-copy-btn :value="$order->order_mark" label="受注マーク" />
+                            </td>
+                        @endcan
                         <td class="py-1 px-2 border text-center">{{ $order->order_category->order_category_name }}</td>
                         <td class="py-1 px-2 border text-center">
                             <img src="{{ asset('image/'.$order->order_category->mall->mall_image_file_name) }}" class="w-12 inline-block">
