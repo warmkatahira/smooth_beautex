@@ -30,6 +30,8 @@ enum OperationLogEnum
         'auto_process_create',
         'auto_process_update',
         'auto_process_condition_update/ajax_validation',
+        'base_shipping_method',
+        'base_shipping_method_update',
         // システム管理
         'base',
         'base_create',
@@ -84,6 +86,7 @@ enum OperationLogEnum
         'auto_process_create/create'                        => '自動処理追加',
         'auto_process_update/update'                        => '自動処理更新',
         'auto_process_condition_update/update'              => '自動処理条件設定',
+        'base_shipping_method_update/update'                => '倉庫別配送方法更新',
         // システム管理
         'base_update/update'                                => '倉庫更新',
         'base_create/create'                                => '倉庫追加',
