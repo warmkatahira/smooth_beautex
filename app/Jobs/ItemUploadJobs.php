@@ -430,7 +430,7 @@ class ItemUploadJobs implements ShouldQueue
                     // 在庫が残っているか確認
                     $stock_exists_codes = Stock::join('items', 'items.item_id', 'stocks.item_id')
                                                 ->whereIn('items.item_code', $conflicting_item_codes)
-                                                ->where('stocks.quantity', '>', 0)
+                                                ->where('stocks.total_stock', '>', 0)
                                                 ->pluck('items.item_code');
                     // 在庫が残っている場合
                     if($stock_exists_codes->isNotEmpty()){
@@ -481,7 +481,7 @@ class ItemUploadJobs implements ShouldQueue
                     // 在庫が残っているか確認
                     $stock_exists_codes = Stock::join('items', 'items.item_id', 'stocks.item_id')
                                             ->whereIn('items.item_code', $conflicting_item_codes)
-                                            ->where('stocks.quantity', '>', 0)
+                                            ->where('stocks.total_stock', '>', 0)
                                             ->pluck('items.item_code');
                     // 在庫が残っている場合
                     if($stock_exists_codes->isNotEmpty()){
