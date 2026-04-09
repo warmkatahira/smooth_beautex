@@ -32,6 +32,8 @@ class ItemUploadController extends Controller
 
     public function upload(Request $request)
     {
+        // 実行時間を延ばす(300秒に延長)
+        set_time_limit(300);
         try {
             DB::transaction(function () use ($request){
                 // インスタンス化

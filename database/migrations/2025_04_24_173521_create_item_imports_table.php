@@ -28,6 +28,7 @@ return new class extends Migration
             $table->unsignedTinyInteger('s_power_code')->nullable();
             $table->unsignedTinyInteger('s_power_code_start_position')->nullable();
             $table->boolean('is_stock_managed')->nullable();
+            $table->unsignedInteger('unit_cost')->nullable();
             $table->string('country_of_origin', 10)->nullable();
             $table->string('hs_code', 10)->nullable();
             $table->unsignedInteger('item_weight_g')->nullable();

@@ -53,6 +53,7 @@ class ItemDownloadService
                         $item->s_power_code,
                         $item->s_power_code_start_position,
                         $item->is_stock_managed_text,
+                        $item->unit_cost,
                         $item->country_of_origin,
                         $item->hs_code,
                         $item->item_weight_g,

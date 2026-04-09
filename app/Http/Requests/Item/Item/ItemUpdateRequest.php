@@ -53,6 +53,7 @@ class ItemUpdateRequest extends BaseRequest
             's_power_code_start_position'   => 'required_with:model_jan_code|nullable|integer|between:1,255',
             'is_stock_managed'              => 'required|boolean',
             'image_file'                    => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'unit_cost'                     => 'nullable|integer|min:1',
             'country_of_origin'             => 'nullable|string|max:10',
             'hs_code'                       => 'nullable|string|max:10',
             'item_weight_g'                 => 'nullable|integer|min:1',

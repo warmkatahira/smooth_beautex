@@ -287,7 +287,8 @@ class ItemUploadJobs implements ShouldQueue
                     $rules += ['*.'.$column => 'required|integer|min:1'];
                     break;
                 case 'item_weight_g':
-                    $rules += ['*.'.$column => 'nullable|integer|min:0'];
+                case 'unit_cost':
+                    $rules += ['*.'.$column => 'nullable|integer|min:1'];
                     break;
                 default:
                     break;
@@ -328,6 +329,7 @@ class ItemUploadJobs implements ShouldQueue
             '*.s_power_code'                => 'S-POWERコード',
             '*.s_power_code_start_position' => 'S-POWERコード開始位置',
             '*.is_stock_managed'            => '在庫管理',
+            '*.unit_cost'                   => '原価単価',
             '*.country_of_origin'           => '原産国',
             '*.hs_code'                     => 'HSコード',
             '*.brand'                       => 'ブランド',

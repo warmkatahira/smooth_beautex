@@ -77,6 +77,7 @@ class ItemUpdateService
             's_power_code'                  => $request->s_power_code,
             's_power_code_start_position'   => $request->s_power_code_start_position,
             'is_stock_managed'              => $request->is_stock_managed,
+            'unit_cost'                     => $request->unit_cost,
             'country_of_origin'             => $request->country_of_origin,
             'hs_code'                       => $request->hs_code,
             'item_weight_g'                 => $request->item_weight_g,

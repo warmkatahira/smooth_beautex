@@ -25,6 +25,7 @@ class ItemImport extends Model
         's_power_code',
         's_power_code_start_position',
         'is_stock_managed',
+        'unit_cost',
         'country_of_origin',
         'hs_code',
         'item_weight_g',

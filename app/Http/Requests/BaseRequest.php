@@ -77,6 +77,7 @@ class BaseRequest extends FormRequest
             's_power_code'                  => 'S-POWERコード',
             's_power_code_start_position'   => 'S-POWERコード開始位置',
             'is_stock_managed'              => '在庫管理',
+            'unit_cost'                     => '原価単価',
             'country_of_origin'             => '原産国',
             'hs_code'                       => 'HSコード',
             'item_weight_g'                 => '商品重量',
