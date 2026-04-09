@@ -104,11 +104,17 @@ class ItemUploadService
                             ->filter()
                             ->values()
                             ->toArray();
-        // DBに既に存在するJANコードを取得（item_codeが違う行のみ）
-        $conflicting = Item::whereIn('item_jan_code', $jan_codes)
-                        ->whereNotIn('item_code', $item_codes)
-                        ->pluck('item_jan_code')
+        // チャンクに分けてDBチェック
+        $chunk_size = 1000;
+        $conflicting = [];
+        foreach(array_chunk($jan_codes, $chunk_size) as $chunk_jan_codes){
+            $found = Item::whereIn('item_jan_code', $chunk_jan_codes)
+                        ->pluck('item_jan_code', 'item_code') // item_code => item_jan_code の形で取得
+                        ->reject(fn($jan_code, $item_code) => in_array($item_code, $item_codes)) // PHP側で除外
+                        ->values()
                         ->toArray();
+            $conflicting = array_merge($conflicting, $found);
+        }
         if(!empty($conflicting)){
             throw new \RuntimeException('商品JANコード（'.implode('、', $conflicting).'）は別の商品コードで既に登録されています。');
         }

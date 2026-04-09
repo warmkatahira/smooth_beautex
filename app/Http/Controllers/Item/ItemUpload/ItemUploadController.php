@@ -32,8 +32,8 @@ class ItemUploadController extends Controller
 
     public function upload(Request $request)
     {
-        try {
-            DB::transaction(function () use ($request){
+        /* try {
+            DB::transaction(function () use ($request){ */
                 // インスタンス化
                 $ItemUploadService = new ItemUploadService;
                 // 選択したデータをストレージにインポート
@@ -49,13 +49,13 @@ class ItemUploadController extends Controller
                 // ジョブを溜める
                 ItemUploadJobs::dispatch($user_no, $import['save_file_full_path'], $import['upload_original_file_name'], $request->upload_type, $file_type)->onQueue('item_upload');
                 
-            });
+            /* });
         } catch (\Exception $e){
             return redirect()->back()->with([
                 'alert_type' => 'error',
                 'alert_message' => $e->getMessage(),
             ]);
-        }
+        } */
         return redirect()->back()->with([
             'alert_type' => 'success',
             'alert_message' => '商品をアップロードしました。<br>処理が完了するまでお待ちください。',
