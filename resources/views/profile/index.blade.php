@@ -6,9 +6,11 @@
                 <button type="button" id="profile_image_update_modal_open" class="btn bg-theme-main text-sm p-3"><i class="las la-image la-lg mr-1"></i>プロフィール画像更新</button>
             </div>
         </div>
-        <div class="flex flex-col mt-5 gap-y-3">
-            <x-form.p label="ユーザーID" :value="$user->user_id" />
-            <x-form.p label="氏名" :value="$user->full_name" />
+        <div class="flex flex-row gap-10 my-5">
+            <div class="flex flex-col border border-gray-400 divide-y divide-gray-400 mt-5">
+                <x-form.p label="ユーザーID" :value="$user->user_id" />
+                <x-form.p label="氏名" :value="$user->full_name" />
+            </div>
         </div>
         <form method="POST" action="{{ route('logout') }}" class="mt-5">
             @csrf
