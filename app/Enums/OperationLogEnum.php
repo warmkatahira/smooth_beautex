@@ -35,10 +35,11 @@ enum OperationLogEnum
         'base_create',
         'base_update',
         'user',
+        'user_create',
         'user_update',
         'operation_log',
         'operation_log_download/download',
-        'billing_data',
+        'holiday',
     ];
 
     // パスの日本語変換用
@@ -88,7 +89,8 @@ enum OperationLogEnum
         'base_create/create'                                => '倉庫追加',
         'user_update/update'                                => 'ユーザー更新',
         'profile'                                           => 'プロフィール',
-        'billing_data_download/download'                    => '請求データダウンロード',
+        'user_create/create'                                => 'ユーザー追加',
+        'national_holiday/get_api'                          => '祝日取得',
     ];
 
     // パスの日本語を取得
