@@ -27,7 +27,9 @@
                     <th class="font-thin py-1 px-2 text-center">在庫数</th>
                 </tr>
                 <tr class="filter-row sticky top-[28px] bg-white z-10">
-                    <th></th>
+                    @can('warm_check')
+                        <th></th>
+                    @endcan
                     <th></th>
                     <x-filter.select id="filter_base_id" name="filter_base_id" :selectItems="$bases" optionValue="base_id" optionText="base_name" />
                     <x-filter.input type="tel" id="filter_item_code" name="filter_item_code" />
