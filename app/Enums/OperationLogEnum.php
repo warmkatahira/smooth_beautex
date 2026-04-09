@@ -32,6 +32,10 @@ enum OperationLogEnum
         'auto_process_condition_update/ajax_validation',
         'base_shipping_method',
         'base_shipping_method_update',
+        'order_category',
+        'order_category_update',
+        'shipper',
+        'shipper_update',
         // システム管理
         'base',
         'base_create',
