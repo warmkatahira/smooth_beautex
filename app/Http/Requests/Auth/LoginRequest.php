@@ -27,8 +27,8 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => "required|string|max:20|regex:/^[a-zA-Z0-9]+$/",
-            'password' => "required|string",
+            'user_id' => "required|string|max:20|regex:/^[a-zA-Z0-9.\-_@]+$/",
+            'password' => "required|string|min:8|max:20",
         ];
     }
 
@@ -86,9 +86,9 @@ class LoginRequest extends FormRequest
     public function messages()
     {
         return [
-            'required' => ":attributeは必須です。",
-            'max' => ":attributeは:max文字以内で入力して下さい。",
-            'regex' => ':attributeは英数字のみで入力して下さい。',
+            'required'  => ":attributeは必須です。",
+            'max'       => ":attributeは:max文字以内で入力して下さい。",
+            'regex'     => ':attributeは英数字のみで入力して下さい。',
         ];
     }
 
