@@ -7,8 +7,8 @@
             </div>
         </div>
         <div class="flex flex-col mt-5 gap-y-3">
+            <x-form.p label="ユーザーID" :value="$user->user_id" />
             <x-form.p label="氏名" :value="$user->full_name" />
-            <x-form.p label="メールアドレス" :value="$user->email" />
         </div>
         <form method="POST" action="{{ route('logout') }}" class="mt-5">
             @csrf
