@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('items', function (Blueprint $table){
             $table->increments('item_id');
             $table->string('item_code', 255)->unique();
-            $table->string('item_jan_code', 13);
+            $table->string('item_jan_code', 13)->unique();
             $table->string('item_name', 255);
             $table->string('item_category_1', 20)->nullable();
             $table->string('item_category_2', 20)->nullable();
@@ -42,8 +42,6 @@ return new class extends Migration
             $table->unsignedInteger('sort_order')->default(99999);
             $table->timestamps();
         });
-        // 文字セット・照合順序を変更
-        DB::statement("ALTER TABLE items MODIFY item_code VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin UNIQUE");
     }
 
     /**

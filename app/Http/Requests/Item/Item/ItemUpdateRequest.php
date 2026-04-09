@@ -31,7 +31,7 @@ class ItemUpdateRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'item_jan_code'                 => 'required|string|max:13',
+            'item_jan_code'                 => 'required|string|max:13|unique:items,item_jan_code,'.$this->item_id.',item_id',
             'color_id'                      => 'nullable|string|max:20',
             'color_row'                     => 'nullable|integer|between:0,255',
             'item_name'                     => 'required|string|max:255',

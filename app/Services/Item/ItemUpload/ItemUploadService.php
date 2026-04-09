@@ -62,6 +62,58 @@ class ItemUploadService
         return $file_type;
     }
 
+    // 商品コード・JANコードの重複をチェック
+    public function checkDuplicateCodes($save_file_full_path)
+    {
+        // 全データを取得
+        $all_line = (new FastExcel)->import($save_file_full_path);
+        // 商品コードの重複チェック
+        $item_codes = $all_line->pluck('商品コード')
+                            ->map(fn($v) => str_replace([" ", "　", "'"], "", $v))
+                            ->filter()
+                            ->values()
+                            ->toArray();
+        if(count($item_codes) !== count(array_unique($item_codes))){
+            throw new \RuntimeException('ファイル内に重複する商品コードがあります。');
+        }
+        // JANコードの重複チェック
+        $jan_codes = $all_line->pluck('商品JANコード')
+                            ->map(fn($v) => str_replace([" ", "　", "'"], "", $v))
+                            ->filter()
+                            ->values()
+                            ->toArray();
+        if(count($jan_codes) !== count(array_unique($jan_codes))){
+            throw new \RuntimeException('ファイル内に重複する商品JANコードがあります。');
+        }
+    }
+
+    // DBとの商品JANコード重複チェック
+    public function checkDuplicateJanCodeWithDb($save_file_full_path)
+    {
+        // 全データを取得
+        $all_line = (new FastExcel)->import($save_file_full_path);
+        // JANコードを全件取得（空除外）
+        $jan_codes = $all_line->pluck('商品JANコード')
+                            ->map(fn($v) => str_replace([" ", "　", "'"], "", $v))
+                            ->filter()
+                            ->values()
+                            ->toArray();
+        // 商品コードを全件取得（空除外）
+        $item_codes = $all_line->pluck('商品コード')
+                            ->map(fn($v) => str_replace([" ", "　", "'"], "", $v))
+                            ->filter()
+                            ->values()
+                            ->toArray();
+        // DBに既に存在するJANコードを取得（item_codeが違う行のみ）
+        $conflicting = Item::whereIn('item_jan_code', $jan_codes)
+                        ->whereNotIn('item_code', $item_codes)
+                        ->pluck('item_jan_code')
+                        ->toArray();
+        if(!empty($conflicting)){
+            throw new \RuntimeException('商品JANコード（'.implode('、', $conflicting).'）は別の商品コードで既に登録されています。');
+        }
+    }
+
     // 配列の値が存在しているか確認
     public function checkValueExists($array, $value){
         // 存在したら「true」、存在しなかったら「false」

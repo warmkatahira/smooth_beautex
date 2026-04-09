@@ -40,6 +40,10 @@ class ItemUploadController extends Controller
                 $import = $ItemUploadService->importData($request->file('select_file'));
                 // インポートしたデータのヘッダーを確認
                 $file_type = $ItemUploadService->checkHeader($import['save_file_full_path'], $request->upload_type);
+                // 商品コード・JANコードの重複をチェック
+                $ItemUploadService->checkDuplicateCodes($import['save_file_full_path']);
+                // DBとの商品JANコード重複チェック
+                $ItemUploadService->checkDuplicateJanCodeWithDb($import['save_file_full_path']);
                 // user_noを取得
                 $user_no = Auth::user()->user_no;
                 // ジョブを溜める
