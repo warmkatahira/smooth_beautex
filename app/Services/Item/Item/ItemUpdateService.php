@@ -41,7 +41,7 @@ class ItemUpdateService
             }
             // 在庫が残っているか確認
             $stockExists = Stock::where('item_id', $item->item_id)
-                                    ->where('quantity', '>', 0)
+                                    ->where('total_stock', '>', 0)
                                     ->exists();
             // 在庫が残っている場合
             if($stockExists){
