@@ -9,6 +9,16 @@
             </form>
         @endcan
     </div>
+    @if(!empty($kakunin_machi_reasons))
+        <div class="mt-3 p-4 bg-yellow-50 border border-orange-400 rounded-lg">
+            <p class="font-bold text-yellow-800 mb-2">⚠ 確認待ちの原因</p>
+            <ul class="list-disc list-inside text-yellow-700 text-sm">
+                @foreach($kakunin_machi_reasons as $reason)
+                    <li>{{ $reason }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <div class="flex flex-col gap-y-5 bg-white shadow-lg rounded-lg p-5 mt-3">
         <x-order.order-detail.order-info :order="$order" />
         <x-order.order-detail.ship-info :order="$order" />
