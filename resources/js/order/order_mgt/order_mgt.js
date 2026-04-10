@@ -44,6 +44,8 @@ $(document).on('click', function(e){
     // クリックされた要素にモーダルを閉じるクラス名が設定されていれば、モーダルを閉じる
     if(e.target.classList.contains('shipping_work_start_modal_close') === true){
         $('#shipping_work_start_modal').addClass('hidden');
+        // フォーカスをあてる
+        $('#shipping_group_name').focus();
     }
     // クリックした要素のIDがモーダルを開くものであれば、モーダルを開く
     if(e.target.id === 'shipping_work_start_modal_open'){
@@ -67,6 +69,14 @@ $(document).on('click', function(e){
         } catch (e) {
             alert(e.message);
         }
+    }
+});
+
+// 出荷作業開始モーダル内でEnterキーを押下したら
+$('#shipping_work_start_modal').on('keydown', function(e) {
+    if(e.key === 'Enter'){
+        e.preventDefault();
+        $('#shipping_work_start_enter').trigger('click');
     }
 });
 

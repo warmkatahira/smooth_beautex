@@ -57,7 +57,7 @@ class OrderSearchService extends BaseFilterService
     protected function baseQuery()
     {
         return Order::where('order_status_id', session('filter_order_status_id'))
-                    ->with(['order_items.item', 'order_category.mall', 'shipping_method.delivery_company'])
+                    ->with(['order_items.item', 'order_items.order_item_lots', 'order_category.mall', 'shipping_method.delivery_company'])
                     ->leftJoin('order_items', 'order_items.order_control_id', '=', 'orders.order_control_id')
                     ->groupBy('orders.order_control_id')
                     ->select([

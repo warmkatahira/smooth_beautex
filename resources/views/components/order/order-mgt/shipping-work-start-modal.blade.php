@@ -1,4 +1,4 @@
-<div id="shipping_work_start_modal" class="shipping_work_start_modal_close fixed hidden z-40 inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full">
+<div id="shipping_work_start_modal" class="shipping_work_start_modal_close fixed hidden z-40 inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full" tabindex="-1">
     <div class="relative top-32 mx-auto shadow-lg rounded-md w-modal-window">
         <div class="flex justify-between items-center bg-theme-main text-black rounded-t-md px-4 py-2">
             <p class="">出荷グループ情報を設定して下さい</p>

@@ -30,6 +30,7 @@ enum OperationLogEnum
         'auto_process_create',
         'auto_process_update',
         'auto_process_condition_update/ajax_validation',
+        'auto_process_condition_update',
         'base_shipping_method',
         'base_shipping_method_update',
         'order_category',
@@ -58,7 +59,8 @@ enum OperationLogEnum
         'order_detail_update/shipping_method'               => '配送方法更新',
         'order_import/error_download'                       => '受注取込エラーダウンロード',
         'order_delete/delete'                               => '受注削除',
-        'hikiatemachi_list/create'                          => '引当待ちリスト発行',
+        'hikiatezan_download/download'                      => '引当残データダウンロード',
+        'order_detail_update/supplement'                    => '補足事項更新',
         // 出荷
         'shipping_mgt'                                      => '出荷管理',
         'total_picking_list_create/create'                  => 'トータルピッキングリスト発行',

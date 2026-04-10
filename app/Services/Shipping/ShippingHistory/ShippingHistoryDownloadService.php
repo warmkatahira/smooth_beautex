@@ -31,33 +31,39 @@ class ShippingHistoryDownloadService
                 foreach($orders as $order){
                     // 商品の分だけループ処理
                     foreach($order->order_items as $order_item){
-                        // 変数に情報を格納
-                        $row = [
-                            $order->shipping_date,
-                            $order->order_import_date,
-                            $order->order_import_time,
-                            $order->order_no,
-                            $order->order_date,
-                            $order->order_time,
-                            $order->order_control_id,
-                            $order->order_category->order_category_name,
-                            $order->order_category->mall->mall_name,
-                            $order->base->base_name,
-                            $order->ship_name,
-                            $order->ship_region_type,
-                            $order->ship_province_name,
-                            $order->shipping_method->delivery_company->delivery_company,
-                            $order->shipping_method->shipping_method,
-                            $order->desired_delivery_date,
-                            $order->desired_delivery_time,
-                            $order->tracking_no,
-                            $order_item->order_item_code,
-                            $order_item->item->item_jan_code,
-                            $order_item->item->item_name,
-                            $order_item->shipping_quantity,
-                        ];
-                        // 書き込む
-                        fputcsv($handle, $row);
+                        // LOTの分だけループ処理
+                        foreach($order_item->order_item_lots as $order_item_lot){
+                            // 変数に情報を格納
+                            $row = [
+                                $order->shipping_date,
+                                $order->order_import_date,
+                                $order->order_import_time,
+                                $order->order_no,
+                                $order->order_date,
+                                $order->order_time,
+                                $order->order_control_id,
+                                $order->order_category->order_category_name,
+                                $order->order_category->mall->mall_name,
+                                $order->base->base_name,
+                                $order->ship_name,
+                                $order->ship_region_type,
+                                $order->ship_province_name,
+                                $order->shipping_method->delivery_company->delivery_company,
+                                $order->shipping_method->shipping_method,
+                                $order->desired_delivery_date,
+                                $order->desired_delivery_time,
+                                $order->package_count,
+                                $order->tracking_no,
+                                $order_item->order_item_code,
+                                $order_item->item->item_jan_code,
+                                $order_item->item->item_name,
+                                $order_item_lot->lot,
+                                $order_item_lot->exp,
+                                $order_item_lot->quantity,
+                            ];
+                            // 書き込む
+                            fputcsv($handle, $row);
+                        }
                     }
                 };
             });

@@ -10,7 +10,7 @@
 <div>
     <div class="flex flex-row items-start">
         <p class="text-base font-semibold pb-2 mb-4">商品情報</p>
-        @if($order->order_status_id <= OrderStatusEnum::SHUKKA_MACHI)
+        @if($order->order_status_id <= OrderStatusEnum::SHUKKA_MACHI && Auth::user()->can('warm_check'))
             @if($order->is_redelivery)
                 <button type="button" id="past_order_reference_modal_open" class="btn bg-green-600 text-white ml-auto mr-5 px-5 py-1 rounded-md">過去注文から商品情報を引用</button>
                 <button type="button" id="order_item_create_modal_open" class="btn bg-btn-enter text-white px-5 py-1 rounded-md">商品追加</button>
@@ -24,7 +24,7 @@
             <table class="text-xs">
                 <thead>
                     <tr class="text-left text-white bg-black whitespace-nowrap sticky top-0">
-                        @if($order->order_status_id <= OrderStatusEnum::SHUKKA_MACHI)
+                        @if($order->order_status_id <= OrderStatusEnum::SHUKKA_MACHI && Auth::user()->can('warm_check'))
                             <th class="font-thin py-1 px-2 text-center">操作</th>
                         @endif
                         <th class="font-thin py-1 px-2 text-center">商品画像</th>
@@ -47,7 +47,7 @@
                 <tbody class="bg-white">
                     @foreach($order->order_items as $order_item)
                         <tr class="text-left cursor-default whitespace-nowrap">
-                            @if($order->order_status_id <= OrderStatusEnum::SHUKKA_MACHI)
+                            @if($order->order_status_id <= OrderStatusEnum::SHUKKA_MACHI && Auth::user()->can('warm_check'))
                                 <td class="py-1 px-2 border">
                                     <button type="button" class="btn order_item_delete_enter rounded bg-btn-cancel text-white py-1 px-2" data-order-item-id="{{ $order_item->order_item_id }}">削除</a>
                                 </td>
@@ -96,7 +96,6 @@
                         @if($order_item->order_item_lots->isNotEmpty())
                             <tr id="lot_detail_{{ $order_item->order_item_id }}" class="hidden bg-gray-50">
                                 <td colspan="{{ $show_shipping_inspection_lot ? 12 : 11 }}" class="py-2 px-4 border">
-                                    {{-- $editable_lots のときだけ form で囲む --}}
                                     @if($editable_lots && $order_item->item?->is_lot_managed)
                                         <form method="POST" action="{{ route('order_item_lot_update.update') }}" id="order_item_lot_update_form_{{ $order_item->order_item_id }}">
                                             @csrf
