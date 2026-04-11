@@ -113,7 +113,7 @@ class ItemUploadJobs implements ShouldQueue
                 throw new ItemUploadException('データが正しくない為、アップロードできませんでした。', $all_errors, $nowDate, $item_upload_history);
             }
             // エラーがなければDB書き込み
-            $proc_count = DB::transaction(function () use ($headers, $upload_type, $all_data, $nowDate, $item_upload_history){
+            $result = DB::transaction(function () use ($headers, $upload_type, $all_data, $nowDate, $item_upload_history){
                 foreach ($all_data as $create_data){
                     $this->createArrayImportData($create_data);
                 }
@@ -129,10 +129,17 @@ class ItemUploadJobs implements ShouldQueue
             $this->item_upload_error_export($validation_error, $nowDate, $item_upload_history, $e->getMessage());
             return;
         }
+        // 返ってきた結果を変数に格納
+        $proc_count = $result['proc_count'];
+        $errors = $result['errors'];
+        // itemsに存在しない商品コードがあればエラーファイルを出力しつつ、完了ステータスも更新
+        if(!empty($errors)){
+            $this->item_upload_error_export($errors, $nowDate, $item_upload_history, '存在しない商品コードが含まれているため、一部更新できませんでした。');
+        }
         // 完了フラグを更新
         ItemUploadHistory::where('item_upload_history_id', $item_upload_history->item_upload_history_id)->update([
             'status' => '完了',
-            'message' => '処理件数：'.$proc_count.'件',
+            'message' => '処理件数：'.$proc_count.'件' . (!empty($errors) ? '　※一部エラーあり' : ''),
         ]);
     }
 
@@ -395,7 +402,24 @@ class ItemUploadJobs implements ShouldQueue
                     Item::upsert($create_item, 'item_id');
                     $proc_count += count($create_item);
                 }, 'item_import_id');
-            return $proc_count;
+            // item_importsにあるがitemsに既に存在する商品コードを検出
+            $already_exists_item_codes = ItemImport::whereExists(function($query){
+                    $query->select(DB::raw(1))
+                        ->from('items')
+                        ->whereColumn('items.item_code', 'item_imports.item_code');
+                })
+                ->pluck('item_code');
+            // itemsに存在する商品コードがある場合
+            if($already_exists_item_codes->isNotEmpty()){
+                $error_data = $already_exists_item_codes->map(function($item_code){
+                    return [
+                        '商品コード' => $item_code,
+                        'エラー内容' => '既に存在する商品コードのため、追加できませんでした。',
+                    ];
+                })->toArray();
+                return ['proc_count' => $proc_count, 'errors' => $error_data];
+            }
+            return ['proc_count' => $proc_count, 'errors' => []];
         }
         // +-+-+-+-+-+-+-+-+-   商品コードがitemsテーブルに存在する場合は、更新処理を行う   +-+-+-+-+-+-+-+-+-
         // itemsテーブルとitem_importsテーブルを結合して更新に必要なカラムを取得（結合した結果、どっちのテーブルにも存在しているデータ）
@@ -516,19 +540,33 @@ class ItemUploadJobs implements ShouldQueue
                         }, $headers)
                     ))
                     ->chunkById($chunk_size, function($chunk) use ($update_columns, &$proc_count){
-                        DB::transaction(function() use ($chunk, $update_columns, &$proc_count){
-                            // item_idを除いてupsert
-                            $update_item = collect($chunk)->map(function($item){
-                                // (array)$item ではなく toArray() を使う
-                                $item = $item->toArray();
-                                unset($item['item_id']);
-                                return $item;
-                            })->toArray();
-                            Item::upsert($update_item, ['item_code'], $update_columns);
-                            $proc_count += count($update_item);
-                        });
+                        // item_idを除いてupsert
+                        $update_item = collect($chunk)->map(function($item){
+                            $item = $item->toArray();
+                            unset($item['item_id']);
+                            return $item;
+                        })->toArray();
+                        Item::upsert($update_item, ['item_code'], $update_columns);
+                        $proc_count += count($update_item);
                     }, 'item_id');
-            return $proc_count;
+            // item_importsにあるがitemsに存在しない商品コードを検出
+            $not_found_item_codes = ItemImport::whereNotExists(function($query){
+                    $query->select(DB::raw(1))
+                        ->from('items')
+                        ->whereColumn('items.item_code', 'item_imports.item_code');
+                })
+                ->pluck('item_code');
+            // itemsに存在しない商品コードがある場合
+            if($not_found_item_codes->isNotEmpty()){
+                $error_data = $not_found_item_codes->map(function($item_code){
+                    return [
+                        '商品コード' => $item_code,
+                        'エラー内容' => '存在しない商品コードのため、更新できませんでした。',
+                    ];
+                })->toArray();
+                return ['proc_count' => $proc_count, 'errors' => $error_data];
+            }
+            return ['proc_count' => $proc_count, 'errors' => []];
         }
     }
 
@@ -544,9 +582,9 @@ class ItemUploadJobs implements ShouldQueue
         $csvFilePath = storage_path('app/public/export/item_upload_error/'.$error_file_name);
         // エラーファイル名を更新
         ItemUploadHistory::where('item_upload_history_id', $item_upload_history->item_upload_history_id)->update([
-            'error_file_name' => $error_file_name,
-            'status' => '失敗',
-            'message' => $message,
+            'error_file_name'   => $error_file_name,
+            'status'            => '失敗',
+            'message'           => $message,
         ]);
         // ヘッダ行を書き込む
         $header = ['商品コード', 'エラー内容'];
