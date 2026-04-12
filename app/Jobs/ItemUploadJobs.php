@@ -426,23 +426,26 @@ class ItemUploadJobs implements ShouldQueue
         if($upload_type === ItemUploadEnum::UPLOAD_TYPE_UPDATE){
             // is_stock_managedが含まれている場合のみチェック
             if(in_array('is_stock_managed', $headers)){
-                // 在庫管理が更新されようとしている商品コードを取得
-                $conflicting_item_codes = Item::join('item_imports', 'item_imports.item_code', 'items.item_code')
-                                                ->whereColumn('items.is_stock_managed', '!=', 'item_imports.is_stock_managed')
-                                                ->pluck('items.item_code');
+                // 在庫管理が更新されようとしている商品を取得
+                $conflicting_items = Item::join('item_imports', 'item_imports.item_code', 'items.item_code')
+                                            ->whereColumn('items.is_stock_managed', '!=', 'item_imports.is_stock_managed')
+                                            ->select('items.item_id', 'items.item_code')
+                                            ->get();
                 // 更新されようとしている商品コードがある場合
-                if($conflicting_item_codes->isNotEmpty()){
+                if($conflicting_items->isNotEmpty()){
+                    // item_idを取得
+                    $conflicting_item_ids = $conflicting_items->pluck('item_id');
                     // 出荷完了前で今回の商品が含まれている受注が存在するか確認
-                    $exists = OrderItem::whereIn('order_item_code', $conflicting_item_codes)
+                    $exists = OrderItem::whereIn('item_id', $conflicting_item_ids)
                                     ->whereHas('order', function ($query) {
                                         $query->where('order_status_id', '!=', OrderStatusEnum::SHUKKA_ZUMI);
                                     })
                                     ->exists();
                     // 受注が存在する場合
                     if($exists){
-                        $error_data = $conflicting_item_codes->map(function($item_code){
+                        $error_data = $conflicting_items->map(function($item){
                             return [
-                                '商品コード' => $item_code,
+                                '商品コード' => $item->item_code,
                                 'エラー内容' => '在庫管理が変更される商品が出荷完了前の受注に含まれているため、アップロードできませんでした。',
                             ];
                         })->toArray();
@@ -454,15 +457,14 @@ class ItemUploadJobs implements ShouldQueue
                         );
                     }
                     // 在庫が残っているか確認
-                    $stock_exists_codes = Stock::join('items', 'items.item_id', 'stocks.item_id')
-                                                ->whereIn('items.item_code', $conflicting_item_codes)
-                                                ->where('stocks.total_stock', '>', 0)
-                                                ->pluck('items.item_code');
+                    $stock_exists = Stock::whereIn('item_id', $conflicting_item_ids)
+                                        ->where('total_stock', '>', 0)
+                                        ->exists();
                     // 在庫が残っている場合
-                    if($stock_exists_codes->isNotEmpty()){
-                        $error_data = $stock_exists_codes->map(function($item_code){
+                    if($stock_exists){
+                        $error_data = $conflicting_items->map(function($item){
                             return [
-                                '商品コード' => $item_code,
+                                '商品コード' => $item->item_code,
                                 'エラー内容' => '在庫が残っているため、在庫管理を変更できませんでした。',
                             ];
                         })->toArray();
@@ -477,23 +479,25 @@ class ItemUploadJobs implements ShouldQueue
             }
             // is_lot_managedが含まれている場合のみチェック
             if(in_array('is_lot_managed', $headers)){
-                // ロット管理が更新されようとしている商品コードを取得
-                $conflicting_item_codes = Item::join('item_imports', 'item_imports.item_code', 'items.item_code')
-                                                ->whereColumn('items.is_lot_managed', '!=', 'item_imports.is_lot_managed')
-                                                ->pluck('items.item_code');
-                // 更新されようとしている商品コードがある場合
-                if($conflicting_item_codes->isNotEmpty()){
+                // ロット管理が更新されようとしている商品を取得
+                $conflicting_items = Item::join('item_imports', 'item_imports.item_code', 'items.item_code')
+                                            ->whereColumn('items.is_lot_managed', '!=', 'item_imports.is_lot_managed')
+                                            ->select('items.item_id', 'items.item_code')
+                                            ->get();
+                // 更新されようとしている商品がある場合
+                if($conflicting_items->isNotEmpty()){
+                    $conflicting_item_ids = $conflicting_items->pluck('item_id');
                     // 出荷完了前で今回の商品が含まれている受注が存在するか確認
-                    $exists = OrderItem::whereIn('order_item_code', $conflicting_item_codes)
+                    $exists = OrderItem::whereIn('item_id', $conflicting_item_ids)
                                     ->whereHas('order', function ($query) {
                                         $query->where('order_status_id', '!=', OrderStatusEnum::SHUKKA_ZUMI);
                                     })
                                     ->exists();
                     // 受注が存在する場合
                     if($exists){
-                        $error_data = $conflicting_item_codes->map(function($item_code){
+                        $error_data = $conflicting_items->map(function($item){
                             return [
-                                '商品コード' => $item_code,
+                                '商品コード' => $item->item_code,
                                 'エラー内容' => 'ロット管理フラグが変更される商品が出荷完了前の受注に含まれているため、アップロードできませんでした。',
                             ];
                         })->toArray();
@@ -505,15 +509,14 @@ class ItemUploadJobs implements ShouldQueue
                         );
                     }
                     // 在庫が残っているか確認
-                    $stock_exists_codes = Stock::join('items', 'items.item_id', 'stocks.item_id')
-                                            ->whereIn('items.item_code', $conflicting_item_codes)
-                                            ->where('stocks.total_stock', '>', 0)
-                                            ->pluck('items.item_code');
+                    $stock_exists = Stock::whereIn('item_id', $conflicting_item_ids)
+                                        ->where('total_stock', '>', 0)
+                                        ->exists();
                     // 在庫が残っている場合
-                    if($stock_exists_codes->isNotEmpty()){
-                        $error_data = $stock_exists_codes->map(function($item_code){
+                    if($stock_exists){
+                        $error_data = $conflicting_items->map(function($item){
                             return [
-                                '商品コード' => $item_code,
+                                '商品コード' => $item->item_code,
                                 'エラー内容' => '在庫が残っているため、ロット管理フラグを変更できませんでした。',
                             ];
                         })->toArray();

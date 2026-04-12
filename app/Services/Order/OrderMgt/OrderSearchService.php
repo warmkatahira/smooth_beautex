@@ -67,7 +67,7 @@ class OrderSearchService extends BaseFilterService
                         DB::raw('(
                             SELECT COUNT(*) FROM order_item_lots oil
                             INNER JOIN order_items oi ON oi.order_item_id = oil.order_item_id
-                            INNER JOIN items i ON i.item_code = oi.order_item_code
+                            INNER JOIN items i ON i.item_id = oi.item_id
                             WHERE oi.order_control_id = orders.order_control_id
                             AND orders.is_shipping_inspection_complete = true
                             AND oil.lot IS NOT NULL
@@ -152,7 +152,7 @@ class OrderSearchService extends BaseFilterService
                     ->having(DB::raw('(
                         SELECT COUNT(*) FROM order_item_lots oil
                         INNER JOIN order_items oi ON oi.order_item_id = oil.order_item_id
-                        INNER JOIN items i ON i.item_code = oi.order_item_code
+                        INNER JOIN items i ON i.item_id = oi.item_id
                         WHERE oi.order_control_id = orders.order_control_id
                             AND oil.lot IS NOT NULL
                             AND NOT EXISTS (

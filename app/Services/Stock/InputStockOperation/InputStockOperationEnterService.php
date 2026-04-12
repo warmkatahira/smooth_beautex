@@ -61,7 +61,7 @@ class InputStockOperationEnterService
                 }
                 // 出荷前の受注で引き当たっている数量を取得
                 $already_allocated = OrderItem::join('orders', 'orders.order_control_id', 'order_items.order_control_id')
-                                        ->join('items', 'items.item_code', '=', 'order_items.order_item_code')
+                                        ->join('items', 'items.item_id', '=', 'order_items.item_id')
                                         ->where('orders.shipping_base_id', $stock->base_id)
                                         ->where('items.item_id', $stock->item_id)
                                         ->where('orders.order_status_id', '<', OrderStatusEnum::SHUKKA_ZUMI)

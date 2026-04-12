@@ -106,16 +106,31 @@ class OrderAllocateService
     // 商品引当処理
     public function procItemAllocate($allocate_orders)
     {
-        // itemsテーブルで商品引当がOKになる対象を取得
-        $order_items = OrderItem::whereIn('order_control_id', $allocate_orders)
-                            ->where('is_item_allocated', 0)
-                            ->join('items', 'items.item_code', 'order_items.order_item_code')
-                            ->pluck('order_item_id');
-        // 商品引当をOK「1」に更新
-        OrderItem::whereIn('order_item_id', $order_items)
-                    ->update([
-                        'is_item_allocated' => 1,
-                    ]);
+        // 受注管理IDを取得
+        $order_control_ids = $allocate_orders->pluck('order_control_id');
+        // item_idがnullのレコードを取得
+        $unresolved_items = OrderItem::whereIn('order_control_id', $order_control_ids)
+                                ->whereNull('item_id')
+                                ->get();
+        // レコードの分だけループ処理
+        foreach($unresolved_items as $order_item){
+            // item_codeを条件にitemsから検索
+            $item = Item::where('item_code', $order_item->order_item_code)->first();
+            // item_codeが存在した場合
+            if($item){
+                // item_idを更新
+                $order_item->update(['item_id' => $item->item_id]);
+            }
+        }
+        // item_idが更新されたレコードを結合して引当OK
+        $order_item_ids = OrderItem::whereIn('order_control_id', $order_control_ids)
+                                ->where('is_item_allocated', 0)
+                                ->whereNotNull('item_id')
+                                ->pluck('order_items.order_item_id');
+        //  商品引当をOKに更新
+        OrderItem::whereIn('order_item_id', $order_item_ids)->update([
+            'is_item_allocated' => 1,
+        ]);
         // 商品引当NG対象を取得
         $item_allocate_ng_orders = OrderItem::whereIn('order_control_id', $allocate_orders)
                                         ->where('is_item_allocated', 0)
@@ -133,11 +148,11 @@ class OrderAllocateService
     {
         // 在庫引当対象の商品IDと出荷倉庫IDを重複を除いて取得
         $stock_allocate_items = Order::join('order_items', 'order_items.order_control_id', 'orders.order_control_id')
-                                    ->join('items', 'items.item_code', 'order_items.order_item_code')
                                     ->whereIn('orders.order_control_id', $allocate_orders)
                                     ->where('order_items.is_stock_allocated', 0)
-                                    ->select('shipping_base_id', 'item_id')
-                                    ->groupBy('shipping_base_id', 'item_id')
+                                    ->whereNotNull('order_items.item_id')
+                                    ->select('orders.shipping_base_id', 'order_items.item_id')
+                                    ->groupBy('orders.shipping_base_id', 'order_items.item_id')
                                     ->get();
         // レコードが取得できていない場合
         if($stock_allocate_items->isEmpty()){
@@ -176,7 +191,7 @@ class OrderAllocateService
     {
         // 在庫引当の条件を満たしていて在庫管理していない商品のレコードを取得
         $order_item_ids = Order::join('order_items', 'order_items.order_control_id', 'orders.order_control_id')
-                                    ->join('items', 'items.item_code', 'order_items.order_item_code')
+                                    ->join('items', 'items.item_id', 'order_items.item_id')
                                     ->whereIn('orders.order_control_id', $allocate_orders)
                                     ->where('order_items.is_stock_allocated', 0)
                                     ->where('items.is_stock_managed', 0)
@@ -197,7 +212,7 @@ class OrderAllocateService
         ');
         // 在庫引当の条件を満たしていて在庫管理している商品のレコードを取得(取込日時+注文番号で昇順をかけている)
         $stock_allocate_orders = Order::join('order_items', 'order_items.order_control_id', 'orders.order_control_id')
-                                    ->join('items', 'items.item_code', '=', 'order_items.order_item_code')
+                                    ->join('items', 'items.item_id', 'order_items.item_id')
                                     ->whereIn('orders.order_control_id', $allocate_orders)
                                     ->where('order_items.is_stock_allocated', 0)
                                     ->where('items.is_stock_managed', 1)
@@ -216,15 +231,14 @@ class OrderAllocateService
                                 ->sum('total_stock');
             // 注文ステータスが出荷前で引き当てされている数量を取得
             $already_allocated = OrderItem::join('orders', 'orders.order_control_id', 'order_items.order_control_id')
-                                        ->join('items', 'items.item_code', '=', 'order_items.order_item_code')
-                                        ->where('orders.shipping_base_id', $stock_allocate_order->shipping_base_id)
-                                        ->where('items.item_id', $stock_allocate_order->item_id)
-                                        ->where('orders.order_status_id', '<', OrderStatusEnum::SHUKKA_ZUMI)
-                                        ->where('orders.is_stock_allocation_skipped', 0)
-                                        ->whereNotIn('orders.order_control_id', $allocate_orders)
-                                        ->whereRaw('order_items.shipping_quantity - order_items.unallocated_quantity > 0')
-                                        ->selectRaw('SUM(order_items.shipping_quantity - order_items.unallocated_quantity) as allocated_quantity')
-                                        ->value('allocated_quantity') ?? 0;
+                                    ->where('orders.shipping_base_id', $stock_allocate_order->shipping_base_id)
+                                    ->where('order_items.item_id', $stock_allocate_order->item_id) // ← order_items.item_idで直接絞る
+                                    ->where('orders.order_status_id', '<', OrderStatusEnum::SHUKKA_ZUMI)
+                                    ->where('orders.is_stock_allocation_skipped', 0)
+                                    ->whereNotIn('orders.order_control_id', $allocate_orders)
+                                    ->whereRaw('order_items.shipping_quantity - order_items.unallocated_quantity > 0')
+                                    ->selectRaw('SUM(order_items.shipping_quantity - order_items.unallocated_quantity) as allocated_quantity')
+                                    ->value('allocated_quantity') ?? 0;
             // 一時テーブルから仮引当数を取得
             $temp_allocated = DB::table('temp_allocated_quantity')
                                 ->where('item_id', $stock_allocate_order->item_id)

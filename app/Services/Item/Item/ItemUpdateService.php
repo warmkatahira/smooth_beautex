@@ -30,7 +30,7 @@ class ItemUpdateService
             ]);
             $target = implode('・', $targets);
             // 出荷完了前で今回の商品が含まれている受注が存在するか確認
-            $orderExists = OrderItem::where('order_item_code', $item->item_code)
+            $orderExists = OrderItem::where('item_id', $item->item_id)
                                     ->whereHas('order', function ($query) {
                                         $query->where('order_status_id', '!=', OrderStatusEnum::SHUKKA_ZUMI);
                                     })

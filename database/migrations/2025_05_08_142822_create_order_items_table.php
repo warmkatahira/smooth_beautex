@@ -17,6 +17,7 @@ return new class extends Migration
             $table->boolean('is_item_allocated')->default(0);
             $table->boolean('is_stock_allocated')->default(0);
             $table->unsignedInteger('unallocated_quantity');
+            $table->unsignedInteger('item_id')->nullable();
             // ここから受注データの内容
             $table->string('order_item_code', 255);
             $table->string('order_item_name', 255);
@@ -27,6 +28,7 @@ return new class extends Migration
             $table->timestamps();
             // 外部キー
             $table->foreign('order_control_id')->references('order_control_id')->on('orders')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreign('item_id')->references('item_id')->on('items')->nullOnDelete();
         });
         // 文字セット・照合順序を変更
         DB::statement("ALTER TABLE order_items MODIFY order_item_code VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");

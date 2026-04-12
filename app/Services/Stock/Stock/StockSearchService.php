@@ -93,7 +93,7 @@ class StockSearchService
         if($route_name === RouteNameEnum::STOCK_BY_ITEM){
             // 受注数を商品×出荷倉庫毎で取得
             $shipping_quantity_sub_query = Order::join('order_items', 'order_items.order_control_id', 'orders.order_control_id')
-                                            ->join('items', 'items.item_code', 'order_items.order_item_code')
+                                            ->join('items', 'items.item_id', 'order_items.item_id')
                                             ->where('order_status_id', '<', OrderStatusEnum::SHUKKA_ZUMI)
                                             ->select(
                                                 'items.item_id',

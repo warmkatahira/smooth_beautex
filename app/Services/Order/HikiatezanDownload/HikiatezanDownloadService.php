@@ -25,7 +25,7 @@ class HikiatezanDownloadService
                     'items.supplier',
                     DB::raw('SUM(order_items.unallocated_quantity) as total_unallocated_quantity')
                 )
-                ->join('items', 'items.item_code', '=', 'order_items.order_item_code')
+                ->join('items', 'items.item_id', '=', 'order_items.item_id')
                 ->whereIn('order_items.order_control_id', $chk)
                 ->groupBy('order_items.order_item_code', 'items.item_jan_code', 'items.item_name', 'items.manufacturer', 'items.supplier')
                 ->having('total_unallocated_quantity', '>=', 1)

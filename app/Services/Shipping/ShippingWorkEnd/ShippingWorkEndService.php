@@ -51,7 +51,7 @@ class ShippingWorkEndService
         // 出荷完了される受注のorder_item_lotsを取得（在庫管理されている商品のみ）
         $order_item_lots = Order::join('order_items', 'order_items.order_control_id', 'orders.order_control_id')
                                 ->join('order_item_lots', 'order_item_lots.order_item_id', 'order_items.order_item_id')
-                                ->join('items', 'items.item_code', 'order_items.order_item_code')
+                                ->join('items', 'items.item_id', 'order_items.item_id')
                                 ->join('bases', 'bases.base_id', 'orders.shipping_base_id')
                                 ->whereIn('orders.order_control_id', $order_control_ids)
                                 ->where('items.is_stock_managed', 1)

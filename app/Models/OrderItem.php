@@ -14,6 +14,7 @@ class OrderItem extends Model
         'is_item_allocated',
         'is_stock_allocated',
         'unallocated_quantity',
+        'item_id',
         'order_item_code',
         'order_item_name',
         'shipping_quantity',
@@ -44,6 +45,6 @@ class OrderItem extends Model
     // itemsテーブルとのリレーション
     public function item()
     {
-        return $this->belongsTo(Item::class, 'order_item_code', 'item_code');
+        return $this->belongsTo(Item::class, 'item_id', 'item_id');
     }
 }

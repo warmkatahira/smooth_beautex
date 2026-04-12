@@ -5,6 +5,8 @@ namespace App\Services\Item\Item;
 // モデル
 use App\Models\Item;
 use App\Models\Stock;
+// 列挙
+use App\Enums\OrderStatusEnum;
 
 class ItemDeleteService
 {
@@ -12,11 +14,19 @@ class ItemDeleteService
     public function checkDeletable($request)
     {
         // 商品と在庫を取得
-        $item = Item::getSpecify($request->item_id)->withCount('order_items')->lockForUpdate()->first();
+        $item = Item::getSpecify($request->item_id)
+                    ->withCount([
+                        'order_items' => function ($query) {
+                            $query->join('orders', 'orders.order_control_id', 'order_items.order_control_id')
+                                ->where('orders.order_status_id', '<', OrderStatusEnum::SHUKKA_ZUMI);
+                        }
+                    ])
+                    ->lockForUpdate()
+                    ->first();
         $stocks = Stock::getSpecifyByItemId($request->item_id)->lockForUpdate()->get();
         // 受注に存在する商品の場合
         if($item->order_items_count > 0){
-            throw new \RuntimeException('使用されている商品のため、削除できません。');
+            throw new \RuntimeException('出荷前の受注に存在する商品のため、削除できません。');
         }
         // 在庫数が1以上の場合
         if($stocks->where('total_stock', '>=', 1)->isNotEmpty()){

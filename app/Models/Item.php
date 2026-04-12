@@ -62,7 +62,7 @@ class Item extends Model
     // order_itemsとのリレーション
     public function order_items()
     {
-        return $this->hasMany(OrderItem::class, 'order_item_code', 'item_code');
+        return $this->hasMany(OrderItem::class, 'item_id', 'item_id');
     }
     // shipping_methodsテーブルとのリレーション
     public function shipping_method()

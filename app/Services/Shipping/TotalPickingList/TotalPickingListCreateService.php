@@ -18,7 +18,7 @@ class TotalPickingListCreateService
         // 残数計算で使用する在庫数から引く出荷数を取得
         $shipping_group_shipping_quantity = ShippingGroup::join('orders', 'orders.shipping_group_id', 'shipping_groups.shipping_group_id')
                                             ->join('order_items', 'order_items.order_control_id', 'orders.order_control_id')
-                                            ->join('items', 'items.item_code', 'order_items.order_item_code')
+                                            ->join('items', 'items.item_id', 'order_items.item_id')
                                             ->where('shipping_groups.shipping_base_id', $shipping_group->shipping_base_id)
                                             ->where('estimated_shipping_date', '<=', $shipping_group->estimated_shipping_date)
                                             ->select(
@@ -29,7 +29,7 @@ class TotalPickingListCreateService
                                             ->groupBy('shipping_groups.shipping_base_id', 'item_id');
         // トータルピックする出荷数を取得
         $order_quantities = Order::join('order_items', 'order_items.order_control_id', 'orders.order_control_id')
-                                ->join('items', 'items.item_code', 'order_items.order_item_code')
+                                ->join('items', 'items.item_id', 'order_items.item_id')
                                 ->where('shipping_group_id', session('filter_shipping_group_id'))
                                 ->select(
                                     'shipping_base_id',

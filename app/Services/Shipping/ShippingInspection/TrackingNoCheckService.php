@@ -34,7 +34,7 @@ class TrackingNoCheckService
         return Order::getSpecifyByOrderControlId($order_control_id)
                     ->where('order_status_id', OrderStatusEnum::SAGYO_CHU)
                     ->join('order_items', 'order_items.order_control_id', 'orders.order_control_id')
-                    ->join('items', 'items.item_code', 'order_items.order_item_code')
+                    ->join('items', 'items.item_id', 'order_items.item_id')
                     ->select(
                         'items.item_id',
                         'items.item_jan_code',
