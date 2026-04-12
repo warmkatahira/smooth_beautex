@@ -4,6 +4,7 @@ namespace App\Services\Item\Item;
 
 // モデル
 use App\Models\Item;
+use App\Models\Stock;
 use App\Models\OrderItem;
 // 列挙
 use App\Enums\SystemEnum;
