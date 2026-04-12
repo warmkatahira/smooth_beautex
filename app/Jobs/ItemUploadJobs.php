@@ -385,23 +385,6 @@ class ItemUploadJobs implements ShouldQueue
         if($upload_type === ItemUploadEnum::UPLOAD_TYPE_CREATE){
             $chunk_size = 500;
             $proc_count = 0;
-            ItemImport::doesntHave('item')
-                ->select(array_merge(
-                    ['item_import_id'],
-                    array_map(function($col){
-                        return DB::raw("item_imports.{$col} as {$col}");
-                    }, $headers)
-                ))
-                ->chunkById($chunk_size, function($chunk) use (&$proc_count){
-                    $create_item = collect($chunk)->map(function($item){
-                        // (array)ではなくtoArray()を使う
-                        $item = $item->toArray();
-                        unset($item['item_import_id']);
-                        return $item;
-                    })->toArray();
-                    Item::upsert($create_item, 'item_id');
-                    $proc_count += count($create_item);
-                }, 'item_import_id');
             // item_importsにあるがitemsに既に存在する商品コードを検出
             $already_exists_item_codes = ItemImport::whereExists(function($query){
                     $query->select(DB::raw(1))
@@ -419,6 +402,24 @@ class ItemUploadJobs implements ShouldQueue
                 })->toArray();
                 return ['proc_count' => $proc_count, 'errors' => $error_data];
             }
+            // 存在しないものだけ追加
+            ItemImport::doesntHave('item')
+                ->select(array_merge(
+                    ['item_import_id'],
+                    array_map(function($col){
+                        return DB::raw("item_imports.{$col} as {$col}");
+                    }, $headers)
+                ))
+                ->chunkById($chunk_size, function($chunk) use (&$proc_count){
+                    $create_item = collect($chunk)->map(function($item){
+                        // (array)ではなくtoArray()を使う
+                        $item = $item->toArray();
+                        unset($item['item_import_id']);
+                        return $item;
+                    })->toArray();
+                    Item::upsert($create_item, 'item_id');
+                    $proc_count += count($create_item);
+                }, 'item_import_id');
             return ['proc_count' => $proc_count, 'errors' => []];
         }
         // +-+-+-+-+-+-+-+-+-   商品コードがitemsテーブルに存在する場合は、更新処理を行う   +-+-+-+-+-+-+-+-+-
