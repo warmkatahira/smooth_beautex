@@ -82,6 +82,8 @@ class BaseRequest extends FormRequest
             'hs_code'                       => 'HSコード',
             'item_weight_g'                 => '商品重量',
             'is_lot_managed'                => 'ロット管理',
+            'qr_code'                       => 'QRコード',
+            'jan_code'                      => 'JANコード',
             // 在庫
             'stock_id'                  => '在庫',
             'lot'                       => 'LOT',

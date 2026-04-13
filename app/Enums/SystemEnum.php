@@ -10,7 +10,7 @@ enum SystemEnum
     // システム名
     const SYSTEM_NAME_JP            = '出荷システム';
     // ページネーションの値を定義
-    const PAGINATE_DEFAULT = 1000;
+    const PAGINATE_DEFAULT = 500;
     const PAGINATE_OPERATION_LOG = 200;
     // 初期プロフィール画像のファイル名を定義
     const DEFAULT_PROFILE_IMAGE_FILE_NAME = 'no_image.png';

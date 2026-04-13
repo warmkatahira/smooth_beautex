@@ -40,6 +40,7 @@
                 <x-navigation-btn route="item.index" label="商品" isLeftMargin="true" isRightMargin="true" />
                 @can('warm_check')
                     <x-navigation-btn route="item_upload.index" label="商品アップロード" isLeftMargin="true" isRightMargin="true" />
+                    <x-navigation-btn route="item_qr_analysis.index" label="商品QR解析" isLeftMargin="true" isRightMargin="true" />
                 @endcan
             </div>
         </div>

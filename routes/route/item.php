@@ -9,6 +9,8 @@ use App\Http\Controllers\Item\Item\ItemDeleteController;
 use App\Http\Controllers\Item\Item\ItemDownloadController;
 // +-+-+-+-+-+-+-+- 商品アップロード +-+-+-+-+-+-+-+-
 use App\Http\Controllers\Item\ItemUpload\ItemUploadController;
+// +-+-+-+-+-+-+-+- 商品QR解析 +-+-+-+-+-+-+-+-
+use App\Http\Controllers\Item\ItemQrAnalysis\ItemQrAnalysisController;
 
 Route::middleware('common')->group(function (){
     // +-+-+-+-+-+-+-+- 商品 +-+-+-+-+-+-+-+-
@@ -31,6 +33,11 @@ Route::middleware('common')->group(function (){
             Route::get('', 'index')->name('index');
             Route::post('upload', 'upload')->name('upload');
             Route::get('error_download', 'error_download')->name('error_download');
+        });
+        // +-+-+-+-+-+-+-+- 商品QR解析 +-+-+-+-+-+-+-+-
+        Route::controller(ItemQrAnalysisController::class)->prefix('item_qr_analysis')->name('item_qr_analysis.')->group(function(){
+            Route::get('', 'index')->name('index');
+            Route::post('analysis', 'analysis')->name('analysis');
         });
     });
 });
