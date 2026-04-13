@@ -25,6 +25,7 @@ enum OperationLogEnum
         'input_stock_operation_enter',
         'stock_history',
         'receiving_inspection',
+        'receiving_inspection/ajax_check_lot_exp',
         // 設定
         'auto_process',
         'auto_process_create',
