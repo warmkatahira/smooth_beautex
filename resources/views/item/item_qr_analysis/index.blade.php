@@ -8,7 +8,8 @@
                     name="qr_code"
                     class="form-control font-monospace @error('qr_code') is-invalid @enderror"
                     autofocus
-                    autocomplete="off">
+                    autocomplete="off"
+                    onkeydown="if(event.key === 'Enter') { event.preventDefault(); document.querySelector('[name=jan_code]').focus(); }">
             </div>
             <div class="flex flex-row">
                 <p class="pt-2.5 w-40 bg-black text-white pl-2">JANコード</p>
@@ -16,7 +17,8 @@
                         name="jan_code"
                         class="form-control font-monospace @error('jan_code') is-invalid @enderror"
                         maxlength="13"
-                        autocomplete="off">
+                        autocomplete="off"
+                        onkeydown="if(event.key === 'Enter') { event.preventDefault(); document.querySelector('[name=lot]').focus(); }">
             </div>
             <div class="flex flex-row">
                 <p class="pt-2.5 w-40 bg-black text-white pl-2">LOT</p>
