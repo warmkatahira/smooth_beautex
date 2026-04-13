@@ -11,6 +11,6 @@ trait PaginatesResultsTrait
 {
     protected function setPagination($query)
     {
-        return $query->paginate(100);
+        return $query->paginate(SystemEnum::PAGINATE_DEFAULT);
     }
 }

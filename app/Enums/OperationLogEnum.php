@@ -61,6 +61,7 @@ enum OperationLogEnum
         'order_delete/delete'                               => '受注削除',
         'hikiatezan_download/download'                      => '引当残データダウンロード',
         'order_detail_update/supplement'                    => '補足事項更新',
+        'order_mgt/allocate'                                ==> '引当処理',
         // 出荷
         'shipping_mgt'                                      => '出荷管理',
         'total_picking_list_create/create'                  => 'トータルピッキングリスト発行',
@@ -88,6 +89,7 @@ enum OperationLogEnum
         'stock_history_download/download'                   => '在庫履歴ダウンロード',
         'stock_download/download'                           => '在庫ダウンロード',
         'receiving_inspection/ajax_check_item_id_code'      => '入庫検品',
+        'receiving_inspection_enter/enter'                  => '入庫確定',
         // 設定
         'auto_process_create/create'                        => '自動処理追加',
         'auto_process_update/update'                        => '自動処理更新',
