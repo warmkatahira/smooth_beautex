@@ -133,16 +133,56 @@ class NifudaCreateService
                     $shipper_company_name = $order->ship_country_code == 'US' ? 'NAOKI IWASE' : 'BEAUTEX Corp. / Push!Color';
                     // ship_country_codeが「US」の場合は「1」(ギフト)、それ以外は「3」(販売品)
                     $content_type = $order->ship_country_code == 'US' ? 0 : 3;
+                    // 全住所を結合
+                    $full_address = implode(',', array_filter([
+                        $order->ship_address_1,
+                        $order->ship_address_2,
+                        $order->ship_city,
+                    ]));
+                    // 文字数カウント（全角2文字換算）
+                    $splitByWidth = function($str, $max_width) {
+                        $chars = mb_str_split($str);
+                        $chunk = '';
+                        $rest = '';
+                        $c = 0;
+                        $cutting = false;
+                        foreach ($chars as $char) {
+                            if ($cutting) {
+                                $rest .= $char;
+                                continue;
+                            }
+                            $w = ord($char) > 0x7F ? 2 : 1;
+                            if ($c + $w <= $max_width) {
+                                $chunk .= $char;
+                                $c += $w;
+                            } else {
+                                $cutting = true;
+                                $rest .= $char;
+                            }
+                        }
+                        return [$chunk, $rest];
+                    };
+                    // 80・80・36で切り分け
+                    [$addr1, $remaining]  = $splitByWidth($full_address, 80);
+                    [$addr2, $remaining]  = $splitByWidth($remaining, 80);
+                    [$addr3, $addr3_over] = $splitByWidth($remaining, 36);
+                    // 住所3に収まらなかった分は住所3の末尾にそのまま追記（消えるより残す）
+                    if ($addr3_over !== '') {
+                        $addr3 .= $addr3_over;
+                    }
                     // 各情報を出力
                     $worksheet->setCellValue('A'.$row, $shipper_company_name);                                                  // 出荷人会社名
                     $worksheet->setCellValue('B'.$row, $order->ship_name.' (' . $order->order_no . ')');                        // 受取人お名前
                     $worksheet->setCellValue('C'.$row, "");                                                                     // 受取人会社名
                     $worksheet->setCellValue('E'.$row, $order->ship_country_code);                                              // 受取人国名
-                    $worksheet->setCellValue('G'.$row, $order->ship_address_1);                                                 // 受取人住所2
+                    $worksheet->setCellValue('F'.$row, $addr1);  // 受取人住所1
+                    $worksheet->setCellValue('G'.$row, $addr2);  // 受取人住所2
+                    $worksheet->setCellValue('H'.$row, $addr3);  // 受取人住所3
+                    /* $worksheet->setCellValue('G'.$row, $order->ship_address_1);                                                 // 受取人住所2
                     $worksheet->setCellValue('H'.$row, implode(',', array_filter([
                                                 $order->ship_address_2,
                                                 $order->ship_city,
-                                            ])));                                                                               // 受取人住所3
+                                            ])));                                                                               // 受取人住所3 */
                     $worksheet->setCellValue('I'.$row, $order->ship_province_code);                                             // 受取人州名など
                     $worksheet->setCellValue('J'.$row, $order->ship_zip_code);                                                  // 受取人郵便番号
                     $worksheet->setCellValue('K'.$row, $order->ship_tel);                                                       // 受取人ご連絡先電話番号
