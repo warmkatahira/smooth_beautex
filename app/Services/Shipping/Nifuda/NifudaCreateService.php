@@ -133,65 +133,16 @@ class NifudaCreateService
                     $shipper_company_name = $order->ship_country_code == 'US' ? 'NAOKI IWASE' : 'BEAUTEX Corp. / Push!Color';
                     // ship_country_codeが「US」の場合は「1」(ギフト)、それ以外は「3」(販売品)
                     $content_type = $order->ship_country_code == 'US' ? 0 : 3;
-                    // 全住所を結合
-                    $full_address = implode(',', array_filter([
-                        $order->ship_address_1,
-                        $order->ship_address_2,
-                        $order->ship_city,
-                    ]));
-
-                    $splitByWidth = function($str, $max_width) {
-                        $chars = mb_str_split($str);
-                        $chunk = ''; $rest = ''; $c = 0; $cutting = false;
-                        foreach ($chars as $char) {
-                            if ($cutting) { $rest .= $char; continue; }
-                            $w = ord($char) > 0x7F ? 2 : 1;
-                            if ($c + $w <= $max_width) { $chunk .= $char; $c += $w; }
-                            else { $cutting = true; $rest .= $char; }
-                        }
-                        return [$chunk, $rest];
-                    };
-
-                    // まず全体を住所2(80)+住所3(36)で分割を試みる
-                    [$addr2, $remaining] = $splitByWidth($full_address, 80);
-                    [$addr3, $remaining] = $splitByWidth($remaining, 36);
-
-                    if ($remaining === '') {
-                        // 住所2+住所3で収まった
-                        // 住所3が空の場合（全体が80文字以内）、住所2の末尾を住所3に移す
-                        if ($addr3 === '') {
-                            // カンマで区切って最後の要素を住所3へ
-                            $parts = explode(',', $addr2);
-                            $addr3 = trim(array_pop($parts));
-                            $addr2 = implode(',', $parts);
-                            // 住所3が36文字を超える場合は先頭36文字分を住所3に、残りは住所2末尾へ
-                            [$addr3, $addr3_over] = $splitByWidth($addr3, 36);
-                            if ($addr3_over !== '') {
-                                $addr2 = $addr2 . ',' . $addr3_over;
-                            }
-                        }
-                        $addr1 = '';
-                    } else {
-                        // 住所2+住所3で収まらない場合は住所1も使う
-                        [$addr1, $r2]   = $splitByWidth($full_address, 80);
-                        [$addr2, $r3]   = $splitByWidth($r2, 80);
-                        [$addr3, $over] = $splitByWidth($r3, 36);
-                        // それでも溢れる場合は住所3にそのまま追記
-                        if ($over !== '') { $addr3 .= $over; }
-                    }
                     // 各情報を出力
                     $worksheet->setCellValue('A'.$row, $shipper_company_name);                                                  // 出荷人会社名
                     $worksheet->setCellValue('B'.$row, $order->ship_name.' (' . $order->order_no . ')');                        // 受取人お名前
                     $worksheet->setCellValue('C'.$row, "");                                                                     // 受取人会社名
                     $worksheet->setCellValue('E'.$row, $order->ship_country_code);                                              // 受取人国名
-                    $worksheet->setCellValue('F'.$row, $addr1);  // 受取人住所1
-                    $worksheet->setCellValue('G'.$row, $addr2);  // 受取人住所2
-                    $worksheet->setCellValue('H'.$row, $addr3);  // 受取人住所3
-                    /* $worksheet->setCellValue('G'.$row, $order->ship_address_1);                                                 // 受取人住所2
+                    $worksheet->setCellValue('G'.$row, $order->ship_address_1);                                                 // 受取人住所2
                     $worksheet->setCellValue('H'.$row, implode(',', array_filter([
                                                 $order->ship_address_2,
                                                 $order->ship_city,
-                                            ])));                                                                               // 受取人住所3 */
+                                            ])));                                                                               // 受取人住所3
                     $worksheet->setCellValue('I'.$row, $order->ship_province_code);                                             // 受取人州名など
                     $worksheet->setCellValue('J'.$row, $order->ship_zip_code);                                                  // 受取人郵便番号
                     $worksheet->setCellValue('K'.$row, $order->ship_tel);                                                       // 受取人ご連絡先電話番号
