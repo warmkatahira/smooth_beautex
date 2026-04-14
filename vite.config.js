@@ -49,6 +49,7 @@ export default defineConfig({
                 // 商品
                 'resources/js/item/item/item.js',
                 'resources/js/item/item_upload/item_upload.js',
+                'resources/js/item/item_qr_analysis/item_qr_analysis.js',
                 // 在庫
                 'resources/js/stock/stock/stock.js',
                 'resources/js/stock/input_stock_operation/input_stock_operation.js',

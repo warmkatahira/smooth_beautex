@@ -29,6 +29,11 @@ class ItemQrAnalysisHistory extends Model
     {
         return self::orderBy('created_at', 'desc')->limit(50);
     }
+    // 指定したレコードを取得
+    public static function getSpecify($item_qr_analysis_history_id)
+    {
+        return self::where('item_qr_analysis_history_id', $item_qr_analysis_history_id);
+    }
     // usersテーブルとのリレーション
     public function user()
     {

@@ -25,8 +25,8 @@ class ItemQrAnalysisController extends Controller
     public function analysis(ItemQrAnalysisRequest $request)
     {
         // 変数に入力された値を格納
-        $qr         = str_replace([' ', '　'], '', $request->qr_code);
-        $jan_code   = str_replace([' ', '　'], '', $request->jan_code);
+        $qr         = $request->qr_code;
+        $jan_code   = $request->jan_code;
         $lot        = $request->lot;
         // DB保存用パラメータ
         $saveParam = [

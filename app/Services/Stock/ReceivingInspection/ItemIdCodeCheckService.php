@@ -88,7 +88,7 @@ class ItemIdCodeCheckService
     // QRコードを使って商品マスタからレコードを取得
     public function getItemFromQrCode($item_id_code)
     {
-        // 商品を全て取得し配列に変換
+        /* // 商品を全て取得し配列に変換
         $items = Item::getAll()->get()->toArray();
         // 代表JANコードがnull以外の情報を取得
         $model_jan_code_arr = array_filter($items, function ($item) {
@@ -109,6 +109,22 @@ class ItemIdCodeCheckService
                     session(['item_id' => $value['item_id']]);
                     session(['item' => Item::getSpecify($value['item_id'])->first()]);
                     break;
+                }
+            }
+        } */
+        $model_jan_code = substr($item_id_code, 0, InspectionEnum::JAN_LENGTH);
+        // ★ 全件取得をやめて、代表JANコードが一致するものだけ取得
+        $items = Item::where('model_jan_code', $model_jan_code)->get();
+        if($items->isNotEmpty()) {
+            session(['model_jan_match' => true]);
+
+            foreach($items as $item) {
+                // S-POWERコードが一致したら
+                if($item->s_power_code == substr($item_id_code, $item->s_power_code_start_position - 1, InspectionEnum::S_POWER_CODE_LENGTH)) {
+                    session(['found' => true]);
+                    session(['item_id' => $item->item_id]);
+                    session(['item' => $item]);
+                    return;
                 }
             }
         }

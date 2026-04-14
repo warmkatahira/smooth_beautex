@@ -1,0 +1,1 @@
+import{s as t}from"./loading-CLXJ3Lsj.js";$(".item_qr_analysis_result_update_enter").on("click",function(){window.confirm("商品QR解析結果の反映を実行しますか？")===!0&&(t(),$("#item_qr_analysis_history_id").val($(this).data("item-qr-analysis-history-id")),$("#item_qr_analysis_result_update_form").submit())});

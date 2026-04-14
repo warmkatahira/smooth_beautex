@@ -84,6 +84,7 @@ class BaseRequest extends FormRequest
             'is_lot_managed'                => 'ロット管理',
             'qr_code'                       => 'QRコード',
             'jan_code'                      => 'JANコード',
+            'item_qr_analysis_history_id'   => '商品QR解析履歴',
             // 在庫
             'stock_id'                  => '在庫',
             'lot'                       => 'LOT',

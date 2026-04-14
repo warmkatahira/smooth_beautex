@@ -35,6 +35,7 @@
             <table class="text-xs">
                 <thead>
                     <tr class="text-left text-white bg-black whitespace-nowrap sticky top-0 h-7 z-10">
+                        <th class="font-thin py-1 px-2 text-center">操作</th>
                         <th class="font-thin py-1 px-2 text-center">QRコード</th>
                         <th class="font-thin py-1 px-2 text-center">JANコード</th>
                         <th class="font-thin py-1 px-2 text-center">LOT</th>
@@ -54,6 +55,11 @@
                 <tbody class="bg-white">
                     @foreach($item_qr_analysis_histories as $item_qr_analysis_history)
                         <tr class="text-left cursor-default whitespace-nowrap hover:bg-theme-sub group">
+                            <td class="py-1 px-2 border">
+                                <div class="flex flex-row gap-5">
+                                    <button type="button" class="btn rounded item_qr_analysis_result_update_enter bg-btn-enter text-white py-1 px-2" data-item-qr-analysis-history-id="{{ $item_qr_analysis_history->item_qr_analysis_history_id }}">反映</button>
+                                </div>
+                            </td>
                             <td class="py-1 px-2 border relative group/clipboard">
                                 {{ $item_qr_analysis_history->qr_code }}
                                 <x-clipboard-copy-btn :value="$item_qr_analysis_history->qr_code" label="QRコード" />
@@ -112,4 +118,9 @@
             </table>
         </div>
     </div>
+    <form method="POST" action="{{ route('item_qr_analysis_result_update.update') }}" id="item_qr_analysis_result_update_form" class="hidden">
+        @csrf
+        <input type="hidden" id="item_qr_analysis_history_id" name="item_qr_analysis_history_id">
+    </form>
 </x-app-layout>
+@vite(['resources/js/item/item_qr_analysis/item_qr_analysis.js'])
