@@ -55,15 +55,6 @@ Route::middleware('common')->group(function (){
             Route::post('is_stock_allocation_skipped', 'is_stock_allocation_skipped')->name('is_stock_allocation_skipped');
             Route::post('is_shipping_inspection_skipped', 'is_shipping_inspection_skipped')->name('is_shipping_inspection_skipped');
         });
-        // +-+-+-+-+-+-+-+- 受注商品追加 +-+-+-+-+-+-+-+-
-        Route::controller(OrderItemCreateController::class)->prefix('order_item_create')->name('order_item_create.')->group(function(){
-            Route::get('search', 'search')->name('search');
-            Route::post('create', 'create')->name('create');
-        });
-        // +-+-+-+-+-+-+-+- 受注商品削除 +-+-+-+-+-+-+-+-
-        Route::controller(OrderItemDeleteController::class)->prefix('order_item_delete')->name('order_item_delete.')->group(function(){
-            Route::post('delete', 'delete')->name('delete');
-        });
         // +-+-+-+-+-+-+-+- 過去注文から商品情報を引用 +-+-+-+-+-+-+-+-
         Route::controller(PastOrderItemController::class)->prefix('past_order_item')->name('past_order_item.')->group(function(){
             Route::get('search', 'search')->name('search');
@@ -82,6 +73,16 @@ Route::middleware('common')->group(function (){
             Route::post('enter', 'enter')->name('enter');
         });
     });
+    // +-+-+-+-+-+-+-+- 受注商品追加 +-+-+-+-+-+-+-+-
+    Route::controller(OrderItemCreateController::class)->prefix('order_item_create')->name('order_item_create.')->group(function(){
+        Route::get('search', 'search')->name('search');
+        Route::post('create', 'create')->name('create');
+    });
+    // +-+-+-+-+-+-+-+- 受注商品削除 +-+-+-+-+-+-+-+-
+    Route::controller(OrderItemDeleteController::class)->prefix('order_item_delete')->name('order_item_delete.')->group(function(){
+        Route::post('delete', 'delete')->name('delete');
+    });
+    // +-+-+-+-+-+-+-+- 補足事項更新 +-+-+-+-+-+-+-+-
     Route::controller(OrderDetailUpdateController::class)->prefix('order_detail_update')->name('order_detail_update.')->group(function(){
         Route::post('supplement', 'supplement')->name('supplement');
     });

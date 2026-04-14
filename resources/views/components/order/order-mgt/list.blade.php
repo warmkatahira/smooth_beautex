@@ -22,6 +22,7 @@
                     <th class="font-thin py-1 px-2 text-center">出荷倉庫</th>
                     <th class="font-thin py-1 px-2 text-center">配送先名</th>
                     <th class="font-thin py-1 px-2 text-center">配送地域</th>
+                    <th class="font-thin py-1 px-2 text-center">配送先国名コード</th>
                     <th class="font-thin py-1 px-2 text-center">配送先都道府県</th>
                     <th class="font-thin py-1 px-2 text-center">運送会社</th>
                     <th class="font-thin py-1 px-2 text-center">配送方法</th>
@@ -49,6 +50,7 @@
                     <x-filter.select id="filter_shipping_base_id" name="filter_shipping_base_id" :selectItems="$bases" optionValue="base_id" optionText="base_name" />
                     <x-filter.input type="text" id="filter_ship_name" name="filter_ship_name" />
                     <x-filter.select-array id="filter_ship_region_type" name="filter_ship_region_type" :items="$shipRegionTypes" />
+                    <x-filter.input type="text" id="filter_ship_province_code" name="filter_ship_province_code" />
                     <x-filter.select id="filter_ship_province_name" name="filter_ship_province_name" :selectItems="$prefectures" optionValue="prefecture_name" optionText="prefecture_name" />
                     <x-filter.select id="filter_shipping_delivery_company_id" name="filter_shipping_delivery_company_id" :selectItems="$deliveryCompanies" optionValue="delivery_company_id" optionText="delivery_company" />
                     <x-filter.select-delivery-company id="filter_shipping_method_id" name="filter_shipping_method_id" :deliveryCompanies="$deliveryCompanies" />
@@ -99,6 +101,7 @@
                             <x-clipboard-copy-btn :value="$order->ship_name" label="配送先名" />
                         </td>
                         <td class="py-1 px-2 border text-center">{{ $order->ship_region_type }}</td>
+                        <td class="py-1 px-2 border text-center">{{ $order->ship_province_code }}</td>
                         <td class="py-1 px-2 border text-center">{{ $order->ship_province_name }}</td>
                         <td class="py-1 px-2 border text-center">
                             @if($image = $order->shipping_method?->delivery_company?->company_image)
