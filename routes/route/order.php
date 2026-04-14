@@ -50,7 +50,6 @@ Route::middleware('common')->group(function (){
             Route::post('order_mark', 'order_mark')->name('order_mark');
             Route::post('order_memo', 'order_memo')->name('order_memo');
             Route::post('shipping_work_memo', 'shipping_work_memo')->name('shipping_work_memo');
-            Route::post('ship_address', 'ship_address')->name('ship_address');
             Route::post('desired_delivery_date', 'desired_delivery_date')->name('desired_delivery_date');
             Route::post('is_stock_allocation_skipped', 'is_stock_allocation_skipped')->name('is_stock_allocation_skipped');
             Route::post('is_shipping_inspection_skipped', 'is_shipping_inspection_skipped')->name('is_shipping_inspection_skipped');
@@ -82,8 +81,9 @@ Route::middleware('common')->group(function (){
     Route::controller(OrderItemDeleteController::class)->prefix('order_item_delete')->name('order_item_delete.')->group(function(){
         Route::post('delete', 'delete')->name('delete');
     });
-    // +-+-+-+-+-+-+-+- 補足事項更新 +-+-+-+-+-+-+-+-
+    // +-+-+-+-+-+-+-+- 配送先住所+補足事項更新 +-+-+-+-+-+-+-+-
     Route::controller(OrderDetailUpdateController::class)->prefix('order_detail_update')->name('order_detail_update.')->group(function(){
+        Route::post('ship_address', 'ship_address')->name('ship_address');
         Route::post('supplement', 'supplement')->name('supplement');
     });
     // +-+-+-+-+-+-+-+- 引当残ダウンロード +-+-+-+-+-+-+-+-
