@@ -210,7 +210,7 @@ class NifudaCreateService
             // 受注の分だけループ処理
             foreach($orders as $order){
                 // 配送先住所と荷送人住所からスペースを取り除く
-                $ship_address = str_replace(array(" ", "　"), "", $order->ship_address);
+                $ship_address = str_replace(array(" ", "　"), "", $order->full_ship_address);
                 $shipper_address = str_replace(array(" ", "　"), "", $order->order_category->shipper->shipper_address);
                 // 各情報を出力
                 $worksheet->setCellValue('C'.$row, $order->ship_tel);   // 配送先電話番号
@@ -284,7 +284,7 @@ class NifudaCreateService
             // 受注の分だけループ処理
             foreach($orders as $order){
                 // 配送先住所と荷送人住所からスペースを取り除く
-                $ship_address = str_replace(array(" ", "　"), "", $order->ship_address);
+                $ship_address = str_replace(array(" ", "　"), "", $order->full_ship_address);
                 $shipper_address = str_replace(array(" ", "　"), "", $order->order_category->shipper->shipper_address);
                 // 各情報を出力
                 $worksheet->setCellValue('A'.$row, $order->order_control_id);   // 受注管理ID
