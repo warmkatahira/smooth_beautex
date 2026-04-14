@@ -136,6 +136,7 @@ $('#item_id_code').on("change",function(){
             },
             dataType: 'json',
             success: function(data){
+                console.log(data['ship_country_code']);
                 try {
                     // エラーがある場合
                     if(data['error_message']) {
@@ -193,10 +194,12 @@ function inspection_ok(data){
             $('#item_id_code').prop("disabled", true);
             $('#item_id_code').addClass('bg-gray-200');
             // 完了音の再生が終了したら
+            // ★ USの場合はcomplete終了後にship_usaを再生
+            const nextSound = data['ship_country_code'] === 'US' ? 'ship_usa' : null;
             audio_play('complete', function () {
                 $('#order_control_id').prop("disabled", false);
                 $('#shipping_inspection_form').submit();
-            });
+            }, nextSound);
         }
         audio_play('proc');
     }

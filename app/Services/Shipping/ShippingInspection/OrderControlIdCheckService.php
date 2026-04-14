@@ -30,6 +30,8 @@ class OrderControlIdCheckService
         if(!$order->tracking_no){
             return '配送伝票番号が設定されていません。';
         }
+        // 配送先国名コードをセッションに格納
+        session(['ship_country_code' => $order->ship_country_code]);
         // 問題なければnullを返す
         return null;
     }

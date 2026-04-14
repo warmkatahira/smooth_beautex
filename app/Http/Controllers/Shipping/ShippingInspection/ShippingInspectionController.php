@@ -77,6 +77,7 @@ class ShippingInspectionController extends Controller
             'lot_result' => session('lot_result'),
             'item_id_type' => session('item_id_type'),
             'progress' => session('progress'),
+            'ship_country_code' => session('ship_country_code'),
         ]);
     }
 
@@ -99,6 +100,7 @@ class ShippingInspectionController extends Controller
             'lot_result' => session('lot_result'),
             'item_id_type' => session('item_id_type'),
             'progress' => session('progress'),
+            'ship_country_code' => session('ship_country_code'),
         ]);
     }
 

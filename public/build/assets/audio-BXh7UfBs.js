@@ -1,1 +1,0 @@
-function u(e,p=null){(l=>{const o="audio/";let i="";if(e==="proc")i=`${o}proc.mp3`;else if(e==="ng")i=`${o}ng.mp3`;else if(e==="complete")i=`${o}complete.mp3`;else{console.warn(`無効なカテゴリ: ${e}`);return}const n=new Audio(i);n.currentTime=0,n.play(),p&&e==="complete"&&n.addEventListener("ended",p)})()}export{u as a};
