@@ -89,7 +89,6 @@ class OrderSearchService extends BaseFilterService
             'filter_order_import_time',
             'filter_order_no',
             'filter_order_time',
-            'filter_order_control_id',
             'filter_order_mark',
             'filter_ship_name',
             'filter_ship_region_type',
@@ -102,6 +101,10 @@ class OrderSearchService extends BaseFilterService
     protected function specialKeys(): array
     {
         return [
+            // 受注管理ID
+            'filter_order_control_id' => function ($query, $value) {
+                $query->where('orders.order_control_id', 'LIKE', '%' . $value . '%');
+            },
             // 取込日
             'filter_order_import_date_from' => function ($query, $value) {
                 $query->whereDate('order_import_date', '>=', session('filter_order_import_date_from'))
