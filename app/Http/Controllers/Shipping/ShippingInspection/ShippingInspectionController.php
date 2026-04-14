@@ -34,6 +34,7 @@ class ShippingInspectionController extends Controller
         // 結果を返す
         return response()->json([
             'error_message' => $error_message,
+            'ship_country_code' => session('ship_country_code'),
         ]);
     }
 

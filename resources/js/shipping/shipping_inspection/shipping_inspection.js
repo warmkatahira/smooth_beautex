@@ -38,7 +38,12 @@ $('#order_control_id').on("change",function(){
                     // 配送伝票番号にフォーカスして、メッセージをクリア
                     $('#tracking_no').focus();
                     $('#message').html(null);
-                    audio_play('proc');
+                    // ★ USの場合はship_usaを再生、それ以外はproc
+                    if(data['ship_country_code'] === 'US'){
+                        audio_play('ship_usa');
+                    } else {
+                        audio_play('proc');
+                    }
                 } catch (e) {
                     audio_play('ng');
                     // エラーをメッセージに出力
