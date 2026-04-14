@@ -18,11 +18,11 @@ return new class extends Migration
             $table->string('item_name', 255)->nullable();
             $table->string('item_category_1', 20)->nullable();
             $table->string('item_category_2', 20)->nullable();
-            $table->boolean('is_lot_managed')->default(false);
+            $table->boolean('is_lot_managed')->default(true);
             $table->string('model_jan_code', 13)->nullable();
-            $table->unsignedTinyInteger('exp_start_position')->nullable();
-            $table->unsignedTinyInteger('lot_1_start_position')->nullable();
-            $table->unsignedTinyInteger('lot_1_length')->nullable();
+            $table->unsignedTinyInteger('exp_start_position')->default(99)->nullable();
+            $table->unsignedTinyInteger('lot_1_start_position')->default(99)->nullable();
+            $table->unsignedTinyInteger('lot_1_length')->default(99)->nullable();
             $table->unsignedTinyInteger('lot_2_start_position')->nullable();
             $table->unsignedTinyInteger('lot_2_length')->nullable();
             $table->unsignedTinyInteger('s_power_code')->nullable();
