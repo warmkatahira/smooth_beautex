@@ -31,7 +31,7 @@ class ItemUploadJobs implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $timeout = 600;              // 最大実行時間を600秒に設定
+    public $timeout = 1800;             // 最大実行時間を1800秒に設定
     public $user_no;                    // プロパティの定義
     public $save_file_full_path;        // プロパティの定義
     public $upload_original_file_name;  // プロパティの定義
@@ -60,86 +60,85 @@ class ItemUploadJobs implements ShouldQueue
      */
     public function handle(): void
     {
-        // 現在のjob_idを取得
         $job_id = $this->job->getJobId();
-        // カラムにパラメータの値を更新
         Job::where('id', $job_id)->update([
-            'user_no'           => $this->user_no,
-            'upload_file_path'  => $this->save_file_full_path,
+            'user_no'          => $this->user_no,
+            'upload_file_path' => $this->save_file_full_path,
         ]);
-        // ジョブを管理するテーブルにレコードを追加
         $item_upload_history = ItemUploadHistory::create([
-            'job_id'            => $job_id,
-            'user_no'           => $this->user_no,
-            'upload_target'     => ItemUploadEnum::UPLOAD_TARGET_ITEM,
-            'upload_file_path'  => $this->save_file_full_path,
-            'upload_file_name'  => $this->upload_original_file_name,
-            'upload_type'       => $this->upload_type,
+            'job_id'           => $job_id,
+            'user_no'          => $this->user_no,
+            'upload_target'    => ItemUploadEnum::UPLOAD_TARGET_ITEM,
+            'upload_file_path' => $this->save_file_full_path,
+            'upload_file_name' => $this->upload_original_file_name,
+            'upload_type'      => $this->upload_type,
         ]);
-        // 処理タイプを変数にセット
         $upload_type = $this->upload_type;
-        // ファイルタイプを変数にセット
-        $file_type = $this->file_type;
-        // 全データを取得
-        $all_line = (new FastExcel)->import($this->save_file_full_path);
-        // インポートしたデータのヘッダーを取得
-        $data_header = array_keys(mb_convert_encoding($all_line[0], 'UTF-8', 'ASCII, JIS, UTF-8, SJIS-win'));
-        // ヘッダーを日本語から英語に変換
+        $file_type   = $this->file_type;
+        $nowDate     = CarbonImmutable::now();
+        $chunk_size  = 500;
+        // コールバック形式で1行だけ読んで即終了
+        $first_row = null;
+        (new FastExcel)->import($this->save_file_full_path, function ($row) use (&$first_row) {
+            if ($first_row === null) {
+                $first_row = $row;
+                return false; // FastExcel はfalseを返すとループ中断
+            }
+        });
+        $data_header = array_keys(mb_convert_encoding($first_row, 'UTF-8', 'ASCII, JIS, UTF-8, SJIS-win'));
         $headers = $this->changeHeaderEn($data_header);
-        // ファイルのデータを配列化（これをしないとチャンク処理できない）
-        $all_line = $all_line->toArray();
-        // チャンクサイズの設定
-        $chunk_size = 500;
-        // チャンクサイズ毎に分割
-        $chunks = array_chunk($all_line, $chunk_size);
-        // 現在の日時を取得
-        $nowDate = CarbonImmutable::now();
         // テーブルをクリア
         $this->clearItemImport();
-        try {
-            // 先に全チャンク分バリデーションを実施
-            $all_errors = [];
-            $all_data = [];
-            foreach ($chunks as $chunk_index => $chunk){
-                $data = $this->setArrayImportData($chunk, $headers, $chunk_size, $chunk_index, $file_type);
-                if(count(array_filter($data['validation_error'])) != 0){
-                    $all_errors = array_merge($all_errors, $data['validation_error']);
-                } else {
-                    $all_data[] = $data['create_data'];
+        $all_errors = [];
+        $chunk_index = 0;
+        // ★ $buffer を外に出して参照渡しにする
+        $buffer = [];
+        // ★ 全件をメモリに乗せず、500行ずつ読んで即処理
+        (new FastExcel)->import($this->save_file_full_path, function ($row) use (
+            &$buffer, &$all_errors, &$chunk_index, &$is_first_row, $headers, $chunk_size, $file_type
+        ) {
+            $line = mb_convert_encoding($row, 'UTF-8', 'ASCII, JIS, UTF-8, SJIS-win');
+            $param = [];
+            foreach ($line as $key => $value) {
+                $en_column = Item::column_en_change($key);
+                if ($en_column !== '') {
+                    $param[$en_column] = $this->valueAdjustment($key, $value);
                 }
             }
-            // エラーがあれば終了
-            if(!empty($all_errors)){
-                throw new ItemUploadException('データが正しくない為、アップロードできませんでした。', $all_errors, $nowDate, $item_upload_history);
+            $buffer[] = $param;
+            // 500行溜まったらバリデーション＋INSERT＋即コミット
+            if (count($buffer) >= $chunk_size) {
+                $errors = $this->validateAndInsertChunk($buffer, $headers, $chunk_size, $chunk_index, $file_type);
+                $all_errors = array_merge($all_errors, $errors);
+                $buffer = [];       // ★ 即メモリ解放
+                $chunk_index++;
             }
-            // エラーがなければDB書き込み
-            $result = DB::transaction(function () use ($headers, $upload_type, $all_data, $nowDate, $item_upload_history){
-                foreach ($all_data as $create_data){
-                    $this->createArrayImportData($create_data);
-                }
-                // itemsテーブルへ追加と更新処理
-                return $this->procCreateAndUpdate($headers, $upload_type, $item_upload_history);
-            });
-        } catch (ItemUploadException $e){
-            // 渡された内容を取得
-            $validation_error = $e->getValidationError();
-            $nowDate = $e->getNowDate();
-            $item_upload_history = $e->getItemUploadHistory();
-            // エラーファイルを作成してテーブルを更新
-            $this->item_upload_error_export($validation_error, $nowDate, $item_upload_history, $e->getMessage());
+        });
+        // 端数処理（500行に満たない最後のチャンク）
+        // ★ 端数処理（これを追加）
+        if (!empty($buffer)) {
+            $errors = $this->validateAndInsertChunk($buffer, $headers, $chunk_size, $chunk_index, $file_type);
+            $all_errors = array_merge($all_errors, $errors);
+        }
+        if (!empty($all_errors)) {
+            $this->item_upload_error_export($all_errors, $nowDate, $item_upload_history, 'データが正しくない為、アップロードできませんでした。');
             return;
         }
-        // 返ってきた結果を変数に格納
+        // items への反映（chunkById で順次処理・既存のまま使用可）
+        try {
+            $result = $this->procCreateAndUpdate($headers, $upload_type, $item_upload_history);
+        } catch (ItemUploadException $e) {
+            $this->item_upload_error_export($e->getValidationError(), $e->getNowDate(), $e->getItemUploadHistory(), $e->getMessage());
+            return;
+        }
         $proc_count = $result['proc_count'];
-        $errors = $result['errors'];
-        // itemsに存在しない商品コードがあればエラーファイルを出力しつつ、完了ステータスも更新
-        if(!empty($errors)){
+        $errors     = $result['errors'];
+        if (!empty($errors)) {
             $this->item_upload_error_export($errors, $nowDate, $item_upload_history, '存在しない商品コードが含まれているため、一部更新できませんでした。');
         }
-        // 完了フラグを更新
         ItemUploadHistory::where('item_upload_history_id', $item_upload_history->item_upload_history_id)->update([
-            'status' => '完了',
-            'message' => '処理件数：'.$proc_count.'件' . (!empty($errors) ? '　※一部エラーあり' : ''),
+            'status'  => '完了',
+            'message' => '処理件数：' . $proc_count . '件' . (!empty($errors) ? '　※一部エラーあり' : ''),
         ]);
     }
 
@@ -228,6 +227,23 @@ class ItemUploadJobs implements ShouldQueue
         return $adjustment_value === '' ? null : $adjustment_value;
     }
 
+    // バリデーション → INSERT → コミット を1チャンクで完結
+    private function validateAndInsertChunk(array $chunk, array $headers, int $chunk_size, int $chunk_index, string $file_type): array
+    {
+        // $chunk はすでに英語キー変換済みなので setArrayImportData は使わない
+        $validation_error = $this->commonValidation($chunk, $headers, $chunk_size, $chunk_index, $file_type);
+
+        if (!empty(array_filter($validation_error))) {
+            return $validation_error;
+        }
+
+        DB::transaction(function () use ($chunk) {
+            $this->createArrayImportData($chunk);
+        });
+
+        return [];
+    }
+
     public function commonValidation($params, $headers, $chunk_size, $chunk_index, $file_type)
     {
         // ルールを格納する配列をセット
@@ -278,7 +294,7 @@ class ItemUploadJobs implements ShouldQueue
                     $rules += ['*.'.$column => 'required_with:*.lot_2_start_position|nullable|integer|between:1,255'];
                     break;
                 case 's_power_code':
-                    $rules += ['*.'.$column => 'required_with:*.model_jan_code|nullable|integer|between:200,240'];
+                    $rules += ['*.'.$column => 'required_with:*.model_jan_code|nullable|integer|between:200,248'];
                     break;
                 case 's_power_code_start_position':
                     $rules += ['*.'.$column => 'required_with:*.model_jan_code|nullable|integer|between:1,255'];

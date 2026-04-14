@@ -49,7 +49,7 @@ class ItemUpdateRequest extends BaseRequest
             'lot_1_length'                  => 'required_if:is_lot_managed,1|required_with:lot_1_start_position|nullable|integer|between:1,255',
             'lot_2_start_position'          => 'required_with:lot_2_length|nullable|integer|between:1,255',
             'lot_2_length'                  => 'required_with:lot_2_start_position|nullable|integer|between:1,255',
-            's_power_code'                  => 'required_with:model_jan_code|nullable|integer|between:200,240',
+            's_power_code'                  => 'required_with:model_jan_code|nullable|integer|between:200,248',
             's_power_code_start_position'   => 'required_with:model_jan_code|nullable|integer|between:1,255',
             'is_stock_managed'              => 'required|boolean',
             'image_file'                    => 'nullable|image|mimes:jpeg,png,jpg|max:2048',

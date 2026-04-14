@@ -50,7 +50,7 @@ class ItemQrAnalysisController extends Controller
                 $chunk = substr($searchArea, $i, 3);
                 if(ctype_digit($chunk)){
                     $num = (int) $chunk;
-                    if($num >= 200 && $num <= 240){
+                    if($num >= 200 && $num <= 248){
                         $foundCode = $num;
                         $foundPos  = 34 + $i; // 1-based
                         break;
