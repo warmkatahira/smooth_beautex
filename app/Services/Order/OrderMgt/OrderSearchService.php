@@ -92,7 +92,7 @@ class OrderSearchService extends BaseFilterService
             'filter_order_mark',
             'filter_ship_name',
             'filter_ship_region_type',
-            'filter_ship_province_code',
+            'filter_ship_country_code',
             'filter_desired_delivery_time',
             'filter_tracking_no',
         ];
