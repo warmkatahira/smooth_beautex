@@ -59,7 +59,8 @@ class ItemDownloadService
                         $item->item_weight_g,
                         $item->sort_order,
                         $item->item_image_file_name === SystemEnum::DEFAULT_ITEM_IMAGE_FILE_NAME ? 'なし' : 'あり',
-                        CarbonImmutable::parse($item->updated_at)->isoFormat('Y年MM月DD日(ddd) HH:mm:ss'),
+                        CarbonImmutable::parse($item->updated_at)->isoFormat('Y年MM月DD日'),
+                        CarbonImmutable::parse($item->updated_at)->isoFormat('HH:mm:ss'),
                     ];
                     // 書き込む
                     fputcsv($handle, $row);
