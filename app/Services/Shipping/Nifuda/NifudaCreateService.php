@@ -152,29 +152,32 @@ class NifudaCreateService
                         return [$chunk, $rest];
                     };
 
-                    // 住所3（36文字）に収まるか試す
-                    [$addr3, $remaining] = $splitByWidth($full_address, 36);
+                    // まず全体を住所2(80)+住所3(36)で分割を試みる
+                    [$addr2, $remaining] = $splitByWidth($full_address, 80);
+                    [$addr3, $remaining] = $splitByWidth($remaining, 36);
 
                     if ($remaining === '') {
-                        // 住所3だけで収まった
-                        $addr1 = '';
-                        $addr2 = '';
-                    } else {
-                        // 住所3に収まらない → 住所3+住所2で分割
-                        [$addr2, $remaining] = $splitByWidth($full_address, 80);
-                        [$addr3, $remaining] = $splitByWidth($remaining, 36);
-
-                        if ($remaining === '') {
-                            // 住所2+住所3で収まった
-                            $addr1 = '';
-                        } else {
-                            // 住所1も使う
-                            [$addr1, $remaining2] = $splitByWidth($full_address, 80);
-                            [$addr2, $remaining]  = $splitByWidth($remaining2, 80);
-                            [$addr3, $over]       = $splitByWidth($remaining, 36);
-                            // それでも溢れる場合は住所3にそのまま追記
-                            if ($over !== '') { $addr3 .= $over; }
+                        // 住所2+住所3で収まった
+                        // 住所3が空の場合（全体が80文字以内）、住所2の末尾を住所3に移す
+                        if ($addr3 === '') {
+                            // カンマで区切って最後の要素を住所3へ
+                            $parts = explode(',', $addr2);
+                            $addr3 = trim(array_pop($parts));
+                            $addr2 = implode(',', $parts);
+                            // 住所3が36文字を超える場合は先頭36文字分を住所3に、残りは住所2末尾へ
+                            [$addr3, $addr3_over] = $splitByWidth($addr3, 36);
+                            if ($addr3_over !== '') {
+                                $addr2 = $addr2 . ',' . $addr3_over;
+                            }
                         }
+                        $addr1 = '';
+                    } else {
+                        // 住所2+住所3で収まらない場合は住所1も使う
+                        [$addr1, $r2]   = $splitByWidth($full_address, 80);
+                        [$addr2, $r3]   = $splitByWidth($r2, 80);
+                        [$addr3, $over] = $splitByWidth($r3, 36);
+                        // それでも溢れる場合は住所3にそのまま追記
+                        if ($over !== '') { $addr3 .= $over; }
                     }
                     // 各情報を出力
                     $worksheet->setCellValue('A'.$row, $shipper_company_name);                                                  // 出荷人会社名
