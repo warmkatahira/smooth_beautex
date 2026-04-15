@@ -19,9 +19,9 @@ class MieruService
     public function getUpdateProgressTarget($order_control_id)
     {
         // 開発環境の場合は行わない
-        /* if(config('app.env') === 'local'){
+        if(config('app.env') === 'local'){
             return;
-        } */
+        }
         // 更新を実行する倉庫を格納する配列を初期化
         $mieru_progress_update_arr = [];
         // nullの場合
