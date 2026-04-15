@@ -186,9 +186,9 @@ class Order extends Model
         ];
     }
     // 指定した注文ステータスの件数を取得
-    public static function getOrderSpecifyOrderStatus($order_status_id)
+    public static function getOrderSpecifyOrderStatus($operator, $order_status_id)
     {
-        return self::where('order_status_id', $order_status_id);
+        return self::where('order_status_id', $operator, $order_status_id);
     }
     // 指定した期間の出荷済み件数を取得
     public static function getShippedOrder($from, $to)

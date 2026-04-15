@@ -31,6 +31,7 @@ function create_object(month){
         dataType: 'json',
         success: function(data){
             try {
+                console.log(data['info']);
                 // グラフを作成
                 create_chart(data);
                 // カレンダーを作成
