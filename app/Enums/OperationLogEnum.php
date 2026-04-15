@@ -84,6 +84,7 @@ enum OperationLogEnum
         'item_download/download'                            => '商品ダウンロード',
         'item_upload/upload'                                => '商品アップロード',
         'item_qr_analysis/analysis'                         => '商品QR解析',
+        'item_qr_analysis_result_update/update'             => '商品QR解析結果反映',
         // 在庫
         'stock/index_by_item'                               => '在庫(商品別)',
         'stock/index_by_stock'                              => '在庫(在庫別)',
