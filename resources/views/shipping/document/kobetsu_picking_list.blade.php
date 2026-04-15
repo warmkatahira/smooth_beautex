@@ -52,7 +52,7 @@
                     <x-shipping.kobetsu-picking-list.info-div label="受注管理ID" :value="$order->order_control_id" />
                     <x-shipping.kobetsu-picking-list.info-div label="受注区分(モール)" :value="$order->order_category->order_category_name.'('.$order->order_category->mall->mall_name.')'" />
                     <x-shipping.kobetsu-picking-list.info-div label="配送先名" :value="$order->ship_name" />
-                    <x-shipping.kobetsu-picking-list.info-div label="配送地域" :value="$order->ship_region_type" />
+                    <x-shipping.kobetsu-picking-list.info-div label="配送地域" :value="$order->ship_region_type === '海外' ? $order->ship_region_type . '(' . $order->ship_country_code . ')' : $order->ship_region_type" />
                     <x-shipping.kobetsu-picking-list.info-div label="総商品金額" :value="$total_item_price" isPrice="true" />
                     <x-shipping.kobetsu-picking-list.info-div label="出荷倉庫" :value="$order->base->base_name" />
                     <x-shipping.kobetsu-picking-list.info-div label="配送方法" :value="$order->delivery_company_and_shipping_method" />
