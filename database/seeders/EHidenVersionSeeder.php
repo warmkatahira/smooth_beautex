@@ -16,8 +16,8 @@ class EHidenVersionSeeder extends Seeder
     {
         EHidenVersion::create([
             'e_hiden_version' => 'e飛伝3',
-            'file_name' => 'sagawa.xlsx',
-            'file_extension' => 'xlsx',
+            'file_name' => 'sagawa.csv',
+            'file_extension' => 'csv',
             'data_start_row' => 2,
         ]);
     }

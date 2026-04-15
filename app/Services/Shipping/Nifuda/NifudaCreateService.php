@@ -69,8 +69,8 @@ class NifudaCreateService
         // 運送会社によって処理を可変
         // 佐川急便
         if($shipping_method->delivery_company_id === DeliveryCompanyEnum::SAGAWA){
-            // 国内は「xlsx」、海外は「csv」
-            $file_extension = ShippingMethodEnum::SAGAWA_EMS_ID === $shipping_method->shipping_method_id ? 'csv' : 'xlsx';
+            // ファイルの拡張子を格納
+            $file_extension = "csv";
             // ファイル名を取得
             $download_filename = '【'.$shipping_method->delivery_company_and_shipping_method.'】荷札データ_'.$nowDate->isoFormat('Y年MM月DD日HH時mm分ss秒').'.'.$file_extension;
             // 配送方法が佐川EMSの場合
@@ -202,7 +202,7 @@ class NifudaCreateService
             // 作成ファイル数をカウントアップ
             $make_file_count++;
             // テンプレートを読み込む
-            $templatePath = public_path('template/sagawa.xlsx');
+            $templatePath = public_path('template/sagawa.csv');
             $spreadsheet = IOFactory::load($templatePath);
             $worksheet = $spreadsheet->getActiveSheet();
             // データを書き込む位置を初期化
