@@ -11,6 +11,7 @@
                     <th class="font-thin py-1 px-2 text-center">注文日</th>
                     <th class="font-thin py-1 px-2 text-center">注文時間</th>
                     <th class="font-thin py-1 px-2 text-center">受注管理ID</th>
+                    <th class="font-thin py-1 px-2 text-center">補足事項</th>
                     <th class="font-thin py-1 px-2 text-center">受注区分</th>
                     <th class="font-thin py-1 px-2 text-center">モール</th>
                     <th class="font-thin py-1 px-2 text-center">出荷倉庫</th>
@@ -34,6 +35,7 @@
                     <x-filter.date-period type="date" fromId="filter_order_date_from" fromName="filter_order_date_from" toId="filter_order_date_to" toName="filter_order_date_to" />
                     <x-filter.input type="tel" id="filter_order_time" name="filter_order_time" />
                     <x-filter.input type="tel" id="filter_order_control_id" name="filter_order_control_id" />
+                    <x-filter.select-boolean id="filter_has_supplement" name="filter_has_supplement" label1="あり" label0="なし" />
                     <x-filter.select-mall id="filter_order_category_id" name="filter_order_category_id" :malls="$malls" />
                     <x-filter.select id="filter_mall_id" name="filter_mall_id" :selectItems="$malls" optionValue="mall_id" optionText="mall_name" />
                     <x-filter.select id="filter_shipping_base_id" name="filter_shipping_base_id" :selectItems="$bases" optionValue="base_id" optionText="base_name" />
@@ -69,6 +71,9 @@
                         <td class="py-1 px-2 border text-center relative group/clipboard">
                             {{ $order->order_control_id }}
                             <x-clipboard-copy-btn :value="$order->order_control_id" label="受注管理ID" />
+                        </td>
+                        <td class="py-1 px-2 border text-center">
+                            <x-list.status :value="!empty($order->supplement)" label1="あり" label0="なし" />
                         </td>
                         <td class="py-1 px-2 border text-center">{{ $order->order_category->order_category_name }}</td>
                         <td class="py-1 px-2 border text-center">

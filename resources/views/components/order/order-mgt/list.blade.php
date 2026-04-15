@@ -17,6 +17,7 @@
                     @can('warm_check')
                         <th class="font-thin py-1 px-2 text-center">受注マーク</th>
                     @endcan
+                    <th class="font-thin py-1 px-2 text-center">補足事項</th>
                     <th class="font-thin py-1 px-2 text-center">受注区分</th>
                     <th class="font-thin py-1 px-2 text-center">モール</th>
                     <th class="font-thin py-1 px-2 text-center">出荷倉庫</th>
@@ -45,6 +46,7 @@
                     @can('warm_check')
                         <x-filter.datalist listId="order_mark" id="filter_order_mark" name="filter_order_mark" :selectItems="$orderMarks" optionValue="order_mark" />
                     @endcan
+                    <x-filter.select-boolean id="filter_has_supplement" name="filter_has_supplement" label1="あり" label0="なし" />
                     <x-filter.select-mall id="filter_order_category_id" name="filter_order_category_id" :malls="$malls" />
                     <x-filter.select id="filter_mall_id" name="filter_mall_id" :selectItems="$malls" optionValue="mall_id" optionText="mall_name" />
                     <x-filter.select id="filter_shipping_base_id" name="filter_shipping_base_id" :selectItems="$bases" optionValue="base_id" optionText="base_name" />
@@ -91,6 +93,9 @@
                                 <x-clipboard-copy-btn :value="$order->order_mark" label="受注マーク" />
                             </td>
                         @endcan
+                        <td class="py-1 px-2 border text-center">
+                            <x-list.status :value="!empty($order->supplement)" label1="あり" label0="なし" />
+                        </td>
                         <td class="py-1 px-2 border text-center">{{ $order->order_category->order_category_name }}</td>
                         <td class="py-1 px-2 border text-center">
                             <img src="{{ asset('image/'.$order->order_category->mall->mall_image_file_name) }}" class="w-12 inline-block">

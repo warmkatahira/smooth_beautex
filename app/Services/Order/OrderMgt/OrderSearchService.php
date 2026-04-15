@@ -168,6 +168,18 @@ class OrderSearchService extends BaseFilterService
                             )
                     )'), $value === '1' ? '>' : '=', 0);
             },
+            // 補足事項
+            'filter_has_supplement' => function ($query, $value) {
+                if($value === '1'){
+                    $query->whereNotNull('orders.supplement')
+                        ->where('orders.supplement', '!=', '');
+                }else{
+                    $query->where(function ($q) {
+                        $q->whereNull('orders.supplement')
+                            ->orWhere('orders.supplement', '=', '');
+                    });
+                }
+            },
         ];
     }
 

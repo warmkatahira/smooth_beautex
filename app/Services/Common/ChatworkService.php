@@ -47,6 +47,10 @@ class ChatworkService
     // メッセージを投稿
     public function postEnter($message)
     {
+        // 開発環境の場合は行わない
+        if(config('app.env') === 'local'){
+            return;
+        }
         // メッセージを投稿
         $data = array('body' => $message);
         $options = array(
