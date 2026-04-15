@@ -35,6 +35,7 @@ class ChatworkService
         $message = "[info][title]smooth@".SystemEnum::CUSTOMER_NAME_JP."からのメッセージ[/title]".
                     "以下受注の補足事項が更新されました。\n\n".
                     $notice_date."\n".
+                    "注文番号：".$order->order_no."\n".
                     "受注管理ID：".$order->order_control_id."\n".
                     "補足事項：\n".$request->supplement."\n".
                     "URL：".$url.
