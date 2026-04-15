@@ -21,3 +21,17 @@ $('#user_update_enter').on("click",function(){
         $("#user_form").submit();
     }
 });
+
+// 削除ボタンを押下した場合
+$('.password_reset_enter').on("click",function(){
+    // 確認のためのインプットボックスを表示
+    const input = prompt("パスワードをリセットしますか？\n続行するには「reset」と入力してください。");
+    // インプットボックスに「delete」と入力された場合のみ処理を実行
+    if (input === 'reset') {
+        // リセット対象のユーザーNoを要素にセット
+        $('#user_no').val($(this).data('user-no'));
+        $("#password_reset_form").submit();
+    } else {
+        alert("パスワードリセットはキャンセルされました。");
+    }
+});

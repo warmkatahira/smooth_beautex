@@ -9,7 +9,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class UserCreateNotificationMail extends Mailable
+class PasswordResetNotificationMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -57,7 +57,7 @@ class UserCreateNotificationMail extends Mailable
 
     public function build()
     {
-        return $this->view('mail.user_create_notification_mail')
+        return $this->view('mail.password_reset_notification_mail')
                 ->with([
                     'user'      => $this->user,
                     'password'  => $this->password,

@@ -6,3 +6,4 @@
         <x-system-admin.user.list :users="$users" :roles="$roles" :companies="$companies" />
     </div>
 </x-app-layout>
+@vite(['resources/js/system_admin/user/user.js'])

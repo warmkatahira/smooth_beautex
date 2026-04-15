@@ -1,0 +1,2 @@
+import{s as e}from"./loading-CLXJ3Lsj.js";$("#user_create_enter").on("click",function(){window.confirm("追加を実行しますか？")===!0&&(e(),$("#user_form").submit())});$("#user_update_enter").on("click",function(){window.confirm("更新を実行しますか？")===!0&&(e(),$("#user_form").submit())});$(".password_reset_enter").on("click",function(){prompt(`パスワードをリセットしますか？
+続行するには「reset」と入力してください。`)==="reset"?($("#user_no").val($(this).data("user-no")),$("#password_reset_form").submit()):alert("パスワードリセットはキャンセルされました。")});
