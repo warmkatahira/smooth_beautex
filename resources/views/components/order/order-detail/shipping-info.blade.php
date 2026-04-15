@@ -8,6 +8,7 @@
                 @endif
                 <x-order.order-detail.info-div label="出荷倉庫" :value="$order->base?->base_name" :order="$order" openModalId="shipping_base_update_modal_open" modalTippy="tippy_shipping_base_update" />
                 <x-order.order-detail.info-div label="配送方法" :value="$order->delivery_company_and_shipping_method" :order="$order" openModalId="shipping_method_update_modal_open" modalTippy="tippy_shipping_method_update" />
+                <x-order.order-detail.info-div label="モール配送方法" :value="$order->mall_shipping_method" />
             </div>
         </div>
         <div class="w-1/2">
