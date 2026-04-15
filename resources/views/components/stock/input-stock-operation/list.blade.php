@@ -29,6 +29,7 @@
                     <x-filter.select-boolean id="filter_is_stock_managed" name="filter_is_stock_managed" label1="有効" label0="無効" />
                     <x-filter.input type="tel" id="filter_lot" name="filter_lot" />
                     <x-filter.input type="tel" id="filter_exp" name="filter_exp" placeholder="YYYYMM形式" />
+                    <x-filter.total-stock-range />
                 </tr>
             </thead>
             <tbody class="bg-white">

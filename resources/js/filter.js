@@ -66,6 +66,15 @@ $(document).ready(function () {
             }
         }
     });
+    // 在庫数範囲のクリアボタン表示制御
+    if($('#filter_total_stock_min').val() !== ''){
+        $('[data-target="filter_total_stock_min"]').removeClass('hidden');
+        $('#filter_total_stock_min').addClass('bg-theme-sub');
+    }
+    if($('#filter_total_stock_max').val() !== ''){
+        $('[data-target="filter_total_stock_max"]').removeClass('hidden');
+        $('#filter_total_stock_max').addClass('bg-theme-sub');
+    }
     // URLパラメータからスクロール位置(X軸)を取得
     const scrollX = new URLSearchParams(window.location.search).get('scroll_x');
     // X軸が取得されている場合

@@ -29,6 +29,7 @@ class InputStockOperationController extends Controller
         $ItemSearchService->deleteSession();
         // セッションに検索条件を格納
         $ItemSearchService->setSearchCondition($request);
+        $StockSearchService->setSearchCondition($request);
         // 検索結果を取得
         $result = $ItemSearchService->getSearchResult();
         // 検索結果を取得して集計

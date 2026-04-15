@@ -13,6 +13,18 @@ use Illuminate\Support\Facades\DB;
 
 class StockSearchService
 {
+    // 在庫検索用の初期セッションを設定
+    public function setSearchCondition($request)
+    {
+        // filterリクエストの場合はリクエストの値を優先（クリアボタンで空にできるように）
+        if($request->process_type === 'filter'){
+            session(['filter_total_stock_min' => $request->filter_total_stock_min]);
+        // 初回アクセスの場合のみデフォルト値をセット
+        } elseif(!session()->has('filter_total_stock_min')){
+            session(['filter_total_stock_min' => '1']);
+        }
+    }
+
     // 検索結果を取得して集計
     public function getSearchResultAndAggregateData($query, $route_name)
     {
@@ -69,15 +81,13 @@ class StockSearchService
                     ->on('stocks.base_id', '=', 'item_base.base_id');
             });
         }
-        // 在庫数の条件がある場合
-        if(session('filter_total_stock') !== null){
-            if($route_name === RouteNameEnum::STOCK_BY_ITEM){
-                // STOCK_BY_ITEMはgroupBy後にSUMで集計されているのでhaving
-                $query = $query->havingRaw("SUM(stocks.total_stock) = ?", [session('filter_total_stock')]);
-            } else {
-                // それ以外はそのままwhere
-                $query = $query->where('stocks.total_stock', session('filter_total_stock'));
-            }
+        // 在庫数（以上）の条件がある場合
+        if(session('filter_total_stock_min') !== null){
+            $query = $query->where('stocks.total_stock', '>=', session('filter_total_stock_min'));
+        }
+        // 在庫数（以下）の条件がある場合
+        if(session('filter_total_stock_max') !== null){
+            $query = $query->where('stocks.total_stock', '<=', session('filter_total_stock_max'));
         }
         // LOTの条件がある場合
         if(session('filter_lot') != null){
