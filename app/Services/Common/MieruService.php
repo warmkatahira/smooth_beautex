@@ -74,7 +74,7 @@ class MieruService
                             ->where('order_status_id', OrderStatusEnum::SAGYO_CHU)
                             ->count();
             // 送信
-            $this->postProgress($mieru_progress_update['customer_code'], MieruEnum::SHIPMENT_SHIPPING_QUANTITY, $value);
+            $this->postProgress($mieru_progress_update['customer_code'], MieruEnum::SHIPMENT_ORDER_QUANTITY, $value);
             // 出荷作業中で未検品の件数を取得
             $value = ShippingGroup::join('orders', 'orders.shipping_group_id', 'shipping_groups.shipping_group_id')
                             ->where('shipping_groups.estimated_shipping_date', $nowDate)
@@ -83,7 +83,7 @@ class MieruService
                             ->where('is_shipping_inspection_complete', 0)
                             ->count();
             // 送信
-            $this->postProgress($mieru_progress_update['customer_code'], MieruEnum::INSPECTION_INCOMPLETE_SHIPMENT_SHIPPING_QUANTITY, $value);
+            $this->postProgress($mieru_progress_update['customer_code'], MieruEnum::INSPECTION_INCOMPLETE_SHIPMENT_ORDER_QUANTITY, $value);
             // 出荷作業中で未検品のPCS数を取得
             $value = ShippingGroup::join('orders', 'shipping_groups.shipping_group_id', 'orders.shipping_group_id')
                         ->join('order_items', 'orders.order_control_id', 'order_items.order_control_id')
