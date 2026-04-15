@@ -69,6 +69,22 @@ class Item extends Model
     {
         return $this->belongsTo(ShippingMethod::class, 'shipping_method_id', 'shipping_method_id');
     }
+    // 直近入庫履歴とのリレーション
+    public function latestInboundStockHistories()
+    {
+        return $this->hasMany(Stock::class, 'item_id', 'item_id')
+                    ->select(
+                        'stocks.item_id',
+                        \DB::raw('MAX(stock_histories.created_at) as latest_inbound_date')
+                    )
+                    ->join('stock_history_details', 'stock_history_details.stock_id', '=', 'stocks.stock_id')
+                    ->join('stock_histories', function ($join) {
+                        $join->on('stock_histories.stock_history_id', '=', 'stock_history_details.stock_history_id')
+                            ->where('stock_histories.stock_history_category_id', 1)
+                            ->where('stock_history_details.quantity', '>', 0);
+                    })
+                    ->groupBy('stocks.item_id');
+    }
     // ダウンロード時のヘッダーを定義
     public static function downloadHeader()
     {

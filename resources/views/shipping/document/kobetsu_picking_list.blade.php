@@ -76,7 +76,18 @@
                             <td class="item_jan_code py-1 px-2 border border-black text-center">
                                 {{ substr($order_item->item->item_jan_code, 0, -4) }}<span class="text-xl font-semibold pl-0.5">{{ substr($order_item->item->item_jan_code, -4) }}</span>
                             </td>
-                            <td class="item_name py-1 px-2 border border-black">{{ $order_item->item->item_name}}</td>
+                            <td class="item_name py-1 px-2 border border-black">
+                                {{ $order_item->item->item_name}}
+                                @php
+                                    $latestInbound = $order_item->item->latestInboundStockHistories->first();
+                                @endphp
+                                @if($latestInbound?->latest_inbound_date)
+                                    <br>
+                                    <span class="text-xs ml-1">
+                                        ※最終入庫日：{{ CarbonImmutable::parse($latestInbound->latest_inbound_date)->isoFormat('Y年MM月DD日(ddd)') }}
+                                    </span>
+                                @endif
+                            </td>
                             <td class="shipping_quantity py-1 px-2 border border-black text-right">{{ $order_item->shipping_quantity}}</td>
                         </tr>
                     @endforeach

@@ -13,7 +13,7 @@ class OrderDocumentService
         // 指定された出荷グループ × 配送方法の受注を取得
         $orders = Order::where('shipping_group_id', session('filter_shipping_group_id'))
                     ->where('orders.shipping_method_id', $shipping_method_id)
-                    ->with(['shipping_method', 'shipping_group', 'order_items.item', 'order_category.mall'])
+                    ->with(['shipping_method', 'shipping_group', 'order_items.item.latestInboundStockHistories', 'order_category.mall'])
                     ->select('orders.*')
                     ->orderBy('order_control_id', 'asc');
         // $startがnullでなければ、skipで飛ばして、takeで指定した数を取得

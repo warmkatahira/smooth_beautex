@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
             BaseShippingMethodSeeder::class,
             ShipperSeeder::class,
             ItemSeeder::class,
-            StockSeeder::class,
+            //StockSeeder::class,
             StockHistoryCategorySeeder::class,
             MallSeeder::class,
             OrderCategorySeeder::class,
