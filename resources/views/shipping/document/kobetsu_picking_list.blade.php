@@ -18,6 +18,12 @@
                 <div class="text-center">
                     <span class="text-2xl">個別ピッキングリスト</span>
                 </div>
+                <!-- US強調表示 -->
+                @if($order->ship_country_code === 'US')
+                    <div class="my-2 p-2 bg-red-200 border border-red-500 text-center">
+                        <span class="text-red-700 font-bold text-lg">アメリカ宛て出荷</span>
+                    </div>
+                @endif
                 <!-- 注文概要 -->
                 <div class="my-3 flex flex-row flex-wrap">
                     @php
@@ -75,6 +81,12 @@
                         </tr>
                     @endforeach
                 </tbody>
+                <tfoot>
+                    <tr class="bg-gray-200">
+                        <td class="py-1 px-2 border border-black text-center" colspan="2">合計</td>
+                        <td class="py-1 px-2 border border-black text-right text-2xl">{{ $order->order_items->sum('shipping_quantity') }}</td>
+                    </tr>
+                </tfoot>
             </table>
         @endforeach
     </div>
