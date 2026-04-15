@@ -41,18 +41,18 @@ class ItemQrAnalysisController extends Controller
             $match = $qrJan === $jan_code;
             $saveParam['is_jan_code_match'] = $match;
         }
-        // ── 度数計算（34桁目以降で200〜240の数値を検索）
-        if(strlen($qr) >= 34){
-            $searchArea = substr($qr, 33);
+        // ── 度数計算（30桁目以降を後ろから検索）
+        if(strlen($qr) >= 30){
+            $searchArea = substr($qr, 29);
             $foundCode  = null;
             $foundPos   = null;
-            for($i = 0; $i <= strlen($searchArea) - 3; $i++){
+            for($i = strlen($searchArea) - 3; $i >= 0; $i--){
                 $chunk = substr($searchArea, $i, 3);
                 if(ctype_digit($chunk)){
                     $num = (int) $chunk;
                     if($num >= 200 && $num <= 248){
                         $foundCode = $num;
-                        $foundPos  = 34 + $i; // 1-based
+                        $foundPos  = 30 + $i; // 1-based
                         break;
                     }
                 }
