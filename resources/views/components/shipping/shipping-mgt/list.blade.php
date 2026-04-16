@@ -51,7 +51,7 @@
                     <x-filter.select id="filter_shipping_base_id" name="filter_shipping_base_id" :selectItems="$bases" optionValue="base_id" optionText="base_name" />
                     <x-filter.input type="text" id="filter_ship_name" name="filter_ship_name" />
                     <x-filter.select-array id="filter_ship_region_type" name="filter_ship_region_type" :items="$shipRegionTypes" />
-                    <x-filter.input type="text" id="filter_ship_province_code" name="filter_ship_country_code" />
+                    <x-filter.input type="text" id="filter_ship_country_code" name="filter_ship_country_code" />
                     <x-filter.select id="filter_ship_province_name" name="filter_ship_province_name" :selectItems="$prefectures" optionValue="prefecture_name" optionText="prefecture_name" />
                     <x-filter.select id="filter_shipping_delivery_company_id" name="filter_shipping_delivery_company_id" :selectItems="$deliveryCompanies" optionValue="delivery_company_id" optionText="delivery_company" />
                     <x-filter.select-delivery-company id="filter_shipping_method_id" name="filter_shipping_method_id" :deliveryCompanies="$deliveryCompanies" />

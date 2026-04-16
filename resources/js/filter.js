@@ -38,6 +38,13 @@ function submitSearch() {
     });
     // 固定パラメータを設定
     params.set('process_type', 'filter');
+    // filter_shipping_group_idが存在する場合のみ追加
+    if($('#filter_shipping_group_id').length){
+        const shippingGroupId = $('#filter_shipping_group_id').val();
+        if(shippingGroupId !== ''){
+            params.set('filter_shipping_group_id', shippingGroupId);
+        }
+    }
     // 追加パラメータを設定
     Object.entries(extraParams).forEach(([key, value]) => {
         // valueが空の場合はDOMから取得
