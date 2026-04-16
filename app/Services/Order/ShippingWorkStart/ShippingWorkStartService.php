@@ -62,8 +62,12 @@ class ShippingWorkStartService
                 // 次のループ処理へ
                 continue;
             }
-            // order_control_id毎にorder_itemsを取得
-            $order_items = $order->order_items;
+            // 出荷数の多い順に並び替え（数量が同じ場合はorder_item_idの昇順）
+            $order_items = $order->order_items()
+                                ->reorder()
+                                ->orderBy('shipping_quantity', 'desc')
+                                ->orderBy('order_item_id', 'asc')
+                                ->get();
             // 計算に使用する変数を初期化
             $package_no = 1;
             $cumulative = 0;
