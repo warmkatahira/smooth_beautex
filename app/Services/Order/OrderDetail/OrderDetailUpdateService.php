@@ -58,10 +58,11 @@ class OrderDetailUpdateService
     // 配送方法を更新
     public function updateShippingMethod($request, $order)
     {
-        // 配送方法と配送伝票番号(Nullへ)を更新
+        // 配送方法と配送方法変更を更新し、配送伝票番号(Nullへ)を更新
         $order->update([
-            'shipping_method_id'    => $request->shipping_method_id,
-            'tracking_no'           => null,
+            'shipping_method_id'            => $request->shipping_method_id,
+            'is_shipping_method_changed'    => 1,
+            'tracking_no'                   => null,
         ]);
     }
 
