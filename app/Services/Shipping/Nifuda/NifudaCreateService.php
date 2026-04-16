@@ -122,10 +122,8 @@ class NifudaCreateService
                     $total_weight = $package_items->sum(
                         fn($item) => ($item->item->item_weight_g ?? 0) * $item->shipping_quantity
                     );
-                    // 重量の区切りを定義
-                    $weight_tiers = [500, 600, 700, 800, 900, 1000, 1250, 1500, 1750, 2000];
-                    // 2001g以上の場合は、計算した重量を適用
-                    $rounded_weight = collect($weight_tiers)->first(fn($tier) => $total_weight <= $tier) ?? $total_weight;
+                    // 10g単位で切り上げ
+                    $rounded_weight = ceil($total_weight / 10) * 10;
                     // 内容品のオフセット用の変数を初期化
                     $column_offset = 0;
                     // 出荷人会社名を変数に格納

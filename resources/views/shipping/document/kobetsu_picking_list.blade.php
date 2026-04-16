@@ -9,6 +9,24 @@
             @php
                 // 受注をカウント
                 $order_count++;
+                // 変数を初期化
+                $desired_delivery_date = '';
+                // 配送希望日がNull以外の場合
+                if(!is_null($order->desired_delivery_date)){
+                    // フォーマットを変更
+                    $desired_delivery_date = CarbonImmutable::parse($order->desired_delivery_date)->isoFormat('Y年MM月DD日(ddd)');
+                }
+                // 海外のみ総商品金額を取得
+                if($order->ship_region_type === '海外'){
+                    $total_item_price = $order->order_items->sum(function($order_item) use ($order) {
+                        $unit_price = $order->ship_country_code == 'US'
+                            ? floor($order_item->order_item_unit_price / 1.6)
+                            : $order_item->order_item_unit_price;
+                        return $unit_price * $order_item->shipping_quantity;
+                    });
+                }else {
+                    $total_item_price = 0;
+                }
             @endphp
             <div style="{{ $order_count != 1 ? 'page-break-before: always; padding-top: 0mm;' : '' }}">
                 <div class="flex justify-between items-start">
@@ -20,32 +38,13 @@
                 </div>
                 <!-- US強調表示 -->
                 @if($order->ship_country_code === 'US')
-                    <div class="my-2 p-2 bg-red-200 border border-red-500 text-center">
+                    <div class="my-2 p-2 bg-red-200 border border-red-500 text-center flex flex-col justify-center items-center gap-2">
                         <span class="text-red-700 font-bold text-lg">アメリカ宛て出荷</span>
+                        <span class="text-red-700 font-bold text-lg">総商品金額：{{ number_format($total_item_price) }} 円</span>
                     </div>
                 @endif
                 <!-- 注文概要 -->
                 <div class="my-3 flex flex-row flex-wrap">
-                    @php
-                        // 変数を初期化
-                        $desired_delivery_date = '';
-                        // 配送希望日がNull以外の場合
-                        if(!is_null($order->desired_delivery_date)){
-                            // フォーマットを変更
-                            $desired_delivery_date = CarbonImmutable::parse($order->desired_delivery_date)->isoFormat('Y年MM月DD日(ddd)');
-                        }
-                        // 海外のみ総商品金額を取得
-                        if($order->ship_region_type === '海外'){
-                            $total_item_price = $order->order_items->sum(function($order_item) use ($order) {
-                                $unit_price = $order->ship_country_code == 'US'
-                                    ? floor($order_item->order_item_unit_price / 1.6)
-                                    : $order_item->order_item_unit_price;
-                                return $unit_price * $order_item->shipping_quantity;
-                            });
-                        }else {
-                            $total_item_price = 0;
-                        }
-                    @endphp
                     <x-shipping.kobetsu-picking-list.info-div label="出荷個口No" :value="$order->package_no_index . '/' . $order->package_no_total" />
                     <x-shipping.kobetsu-picking-list.info-div label="出荷グループ名" :value="$order->shipping_group?->shipping_group_name" />
                     <x-shipping.kobetsu-picking-list.info-div label="注文番号" :value="$order->order_no" />
