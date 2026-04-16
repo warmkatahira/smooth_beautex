@@ -52,6 +52,7 @@ return new class extends Migration
             $table->boolean('is_redelivery');
             $table->boolean('is_stock_allocation_skipped')->default(false);
             $table->boolean('is_shipping_inspection_skipped')->default(false);
+            $table->boolean('is_shipping_method_changed')->default(false);
             $table->timestamps();
             // 外部キー
             $table->foreign('shipping_group_id')->references('shipping_group_id')->on('shipping_groups')->cascadeOnUpdate()->onDelete('set null');

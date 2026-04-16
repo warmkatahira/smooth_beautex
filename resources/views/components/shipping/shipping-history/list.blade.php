@@ -21,6 +21,7 @@
                     <th class="font-thin py-1 px-2 text-center">配送先都道府県</th>
                     <th class="font-thin py-1 px-2 text-center">運送会社</th>
                     <th class="font-thin py-1 px-2 text-center">配送方法</th>
+                    <th class="font-thin py-1 px-2 text-center">配送方法変更</th>
                     <th class="font-thin py-1 px-2 text-center">配送希望日</th>
                     <th class="font-thin py-1 px-2 text-center">配送希望時間</th>
                     <th class="font-thin py-1 px-2 text-center">出荷個口No</th>
@@ -45,6 +46,7 @@
                     <x-filter.select id="filter_ship_province_name" name="filter_ship_province_name" :selectItems="$prefectures" optionValue="prefecture_name" optionText="prefecture_name" />
                     <x-filter.select id="filter_shipping_delivery_company_id" name="filter_shipping_delivery_company_id" :selectItems="$deliveryCompanies" optionValue="delivery_company_id" optionText="delivery_company" />
                     <x-filter.select-delivery-company id="filter_shipping_method_id" name="filter_shipping_method_id" :deliveryCompanies="$deliveryCompanies" />
+                    <x-filter.select-boolean id="filter_is_shipping_method_changed" name="filter_is_shipping_method_changed" label1="あり" label0="なし" />
                     <x-filter.date-period type="date" fromId="filter_desired_delivery_date_from" fromName="filter_desired_delivery_date_from" toId="filter_desired_delivery_date_to" toName="filter_desired_delivery_date_to" />
                     <x-filter.input type="tel" id="filter_desired_delivery_time" name="filter_desired_delivery_time" />
                     <x-filter.input type="tel" id="filter_package_count" name="filter_package_count" />
@@ -91,6 +93,9 @@
                             <img src="{{ asset('image/'.$order->shipping_method->delivery_company->company_image) }}" class="h-8 w-auto inline-block">
                         </td>
                         <td class="py-1 px-2 border text-center">{{ $order->shipping_method->shipping_method }}</td>
+                        <td class="py-1 px-2 border text-center">
+                            <x-list.status :value="$order->is_shipping_method_changed" label1="あり" label0="なし" />
+                        </td>
                         <td class="py-1 px-2 border text-center">
                             @if(!is_null($order->desired_delivery_date))
                                 {{ CarbonImmutable::parse($order->desired_delivery_date)->isoFormat('Y年MM月DD日(ddd)') }}

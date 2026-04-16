@@ -53,6 +53,7 @@ class Order extends Model
         'is_redelivery',
         'is_stock_allocation_skipped',
         'is_shipping_inspection_skipped',
+        'is_shipping_method_changed',
     ];
     // 指定したレコードを取得
     public static function getSpecifyByOrderControlId($order_control_id)
