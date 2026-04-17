@@ -113,15 +113,6 @@
       "resources/js/loading.js"
     ]
   },
-  "resources/js/order/order_detail/order_item_split.js": {
-    "file": "assets/order_item_split-DCqPTkF1.js",
-    "name": "order_item_split",
-    "src": "resources/js/order/order_detail/order_item_split.js",
-    "isEntry": true,
-    "imports": [
-      "resources/js/loading.js"
-    ]
-  },
   "resources/js/order/order_import/order_import.js": {
     "file": "assets/order_import-Dzzzb7mZ.js",
     "name": "order_import",
@@ -153,6 +144,15 @@
     "file": "assets/order_item_lot_update-C-n4L6i_.js",
     "name": "order_item_lot_update",
     "src": "resources/js/order/order_item_lot/order_item_lot_update.js",
+    "isEntry": true,
+    "imports": [
+      "resources/js/loading.js"
+    ]
+  },
+  "resources/js/order/order_item_split/order_item_split.js": {
+    "file": "assets/order_item_split-DCqPTkF1.js",
+    "name": "order_item_split",
+    "src": "resources/js/order/order_item_split/order_item_split.js",
     "isEntry": true,
     "imports": [
       "resources/js/loading.js"
