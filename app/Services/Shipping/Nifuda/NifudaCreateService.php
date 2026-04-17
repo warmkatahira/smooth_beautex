@@ -163,7 +163,7 @@ class NifudaCreateService
                         $colAC = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(29 + $column_offset);
                         $colAE = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(31 + $column_offset);
                         // 各情報を出力
-                        $worksheet->setCellValue($colY . $row, 'ColoredContactLens');                   // 内容品名
+                        $worksheet->setCellValue($colY . $row, $order_item->item->ems_item_name);       // 内容品名
                         $worksheet->setCellValue($colZ . $row, $order_item->item->hs_code);             // HSコード
                         $worksheet->setCellValue($colAA . $row, $order_item->shipping_quantity);        // 個数
                         $worksheet->setCellValue($colAB . $row, $order->ship_country_code == 'US' 
