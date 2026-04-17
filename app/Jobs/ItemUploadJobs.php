@@ -219,6 +219,10 @@ class ItemUploadJobs implements ShouldQueue
                 // 空なら「99999」をセットする
                 $adjustment_value = $value === '' ? 99999 : $value;
                 break;
+            case '原価単価':
+                // 「未登録」なら0に変換
+                $adjustment_value = $value === '未登録' ? 0 : $value;
+                break;
             default:
                 // 何もしない
                 $adjustment_value = $value;
@@ -311,7 +315,10 @@ class ItemUploadJobs implements ShouldQueue
                     break;
                 case 'item_weight_g':
                 case 'unit_cost':
-                    $rules += ['*.'.$column => 'nullable|integer|min:1'];
+                    $rules += ['*.'.$column => 'nullable|integer|min:0'];
+                    break;
+                case 'ems_item_name':
+                    $rules += ['*.'.$column => 'nullable|string|max:50'];
                     break;
                 default:
                     break;
@@ -362,6 +369,7 @@ class ItemUploadJobs implements ShouldQueue
             '*.color_row'                   => 'カラーROW',
             '*.manufacturer'                => 'メーカー',
             '*.supplier'                    => '仕入先',
+            '*.ems_item_name'               => 'EMS品名',
             '*.item_weight_g'               => '商品重量',
             '*.sort_order'                  => '並び順',
         ];

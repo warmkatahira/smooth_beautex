@@ -35,6 +35,7 @@ class ItemSearchService extends BaseFilterService
             'filter_quantity_per_box',
             'filter_manufacturer',
             'filter_supplier',
+            'filter_ems_item_name',
         ];
     }
 

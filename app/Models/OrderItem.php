@@ -21,6 +21,7 @@ class OrderItem extends Model
         'order_item_unit_price',
         'package_no',
         'is_auto_process_add',
+        'is_over_threshold',
     ];
     // 指定したレコードを取得
     public static function getSpecify($order_item_id)
@@ -46,5 +47,10 @@ class OrderItem extends Model
     public function item()
     {
         return $this->belongsTo(Item::class, 'item_id', 'item_id');
+    }
+    // 1個口料金オーバーの文字列を返すアクセサ
+    public function getIsOverThresholdTextAttribute()
+    {
+        return $this->is_over_threshold ? '対象' : '対象外';
     }
 }

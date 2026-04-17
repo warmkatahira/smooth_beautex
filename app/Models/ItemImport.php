@@ -36,6 +36,7 @@ class ItemImport extends Model
         'color_row',
         'manufacturer',
         'supplier',
+        'ems_item_name',
         'sort_order',
     ];
     // itemsテーブルとのリレーション

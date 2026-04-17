@@ -37,6 +37,7 @@ class Item extends Model
         'color_row',
         'manufacturer',
         'supplier',
+        'ems_item_name',
         'sort_order',
     ];
     // 全てのレコードを取得
@@ -114,6 +115,7 @@ class Item extends Model
             '原価単価',
             '原産国',
             'HSコード',
+            'EMS品名',
             '商品重量',
             '並び順',
             '商品画像',
@@ -149,6 +151,7 @@ class Item extends Model
         '原価単価'              => 'unit_cost',
         '原産国'                => 'country_of_origin',
         'HSコード'              => 'hs_code',
+        'EMS品名'               => 'ems_item_name',
         '商品重量'              => 'item_weight_g',
         '並び順'                => 'sort_order',
     ];

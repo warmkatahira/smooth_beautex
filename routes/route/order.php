@@ -9,6 +9,8 @@ use App\Http\Controllers\Order\OrderMgt\OrderMgtController;
 // +-+-+-+-+-+-+-+- 受注詳細 +-+-+-+-+-+-+-+-
 use App\Http\Controllers\Order\OrderDetail\OrderDetailController;
 use App\Http\Controllers\Order\OrderDetail\OrderDetailUpdateController;
+// +-+-+-+-+-+-+-+- 受注商品分割 +-+-+-+-+-+-+-+-
+use App\Http\Controllers\Order\OrderDetail\OrderItemSplitController;
 // +-+-+-+-+-+-+-+- 受注商品追加 +-+-+-+-+-+-+-+-
 use App\Http\Controllers\Order\OrderItem\OrderItemCreateController;
 // +-+-+-+-+-+-+-+- 受注商品削除 +-+-+-+-+-+-+-+-
@@ -53,6 +55,11 @@ Route::middleware('common')->group(function (){
             Route::post('desired_delivery_date', 'desired_delivery_date')->name('desired_delivery_date');
             Route::post('is_stock_allocation_skipped', 'is_stock_allocation_skipped')->name('is_stock_allocation_skipped');
             Route::post('is_shipping_inspection_skipped', 'is_shipping_inspection_skipped')->name('is_shipping_inspection_skipped');
+        });
+        // +-+-+-+-+-+-+-+- 受注商品分割 +-+-+-+-+-+-+-+-
+        Route::controller(OrderItemSplitController::class)->prefix('order_item_split')->name('order_item_split.')->group(function(){
+            Route::get('split_preview', 'split_preview')->name('split_preview');
+            Route::post('split', 'split')->name('split');
         });
         // +-+-+-+-+-+-+-+- 過去注文から商品情報を引用 +-+-+-+-+-+-+-+-
         Route::controller(PastOrderItemController::class)->prefix('past_order_item')->name('past_order_item.')->group(function(){

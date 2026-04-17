@@ -80,6 +80,7 @@ class BaseRequest extends FormRequest
             'unit_cost'                     => '原価単価',
             'country_of_origin'             => '原産国',
             'hs_code'                       => 'HSコード',
+            'ems_item_name'                 => 'EMS品名',
             'item_weight_g'                 => '商品重量',
             'is_lot_managed'                => 'ロット管理',
             'qr_code'                       => 'QRコード',

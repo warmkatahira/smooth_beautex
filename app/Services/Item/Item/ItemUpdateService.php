@@ -81,6 +81,7 @@ class ItemUpdateService
             'unit_cost'                     => $request->unit_cost,
             'country_of_origin'             => $request->country_of_origin,
             'hs_code'                       => $request->hs_code,
+            'ems_item_name'                 => $request->ems_item_name,
             'item_weight_g'                 => $request->item_weight_g,
             'sort_order'                    => $request->sort_order,
         ]);
@@ -102,7 +103,6 @@ class ItemUpdateService
             // 商品画像を削除
             unlink($item_image_path);
         }
-        return;
     }
 
     // 商品画像を保存

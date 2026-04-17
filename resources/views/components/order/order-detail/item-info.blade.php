@@ -5,6 +5,12 @@
     $show_shipping_inspection_lot = $has_lots && $order->order_status_id < OrderStatusEnum::SHUKKA_ZUMI;
     // 出荷検品で取得したロット×EXPを編集できるかを取得
     $editable_lots = $order->is_shipping_inspection_complete === 1 && $order->order_status_id === OrderStatusEnum::SAGYO_CHU;
+    // colspanを動的に計算
+    $colspan = 10; // 固定列数
+    if($order->order_status_id <= OrderStatusEnum::SHUKKA_MACHI) $colspan++;    // 操作列
+    if($order->order_status_id == OrderStatusEnum::SAGYO_CHU) $colspan++;       // 1個口料金オーバー列
+    if($has_lots) $colspan++;                                                   // LOT列
+    if($show_shipping_inspection_lot) $colspan++;                               // LOT照合列
 @endphp
 
 <div>
@@ -38,6 +44,9 @@
                         <th class="font-thin py-1 px-2 text-center">出荷数</th>
                         <th class="font-thin py-1 px-2 text-center">商品単価</th>
                         <th class="font-thin py-1 px-2 text-center">引当残</th>
+                        @if($order->order_status_id == OrderStatusEnum::SAGYO_CHU)
+                            <th class="font-thin py-1 px-2 text-center">1個口料金オーバー</th>
+                        @endif
                         @if($has_lots)
                             @if($show_shipping_inspection_lot)
                                 <th class="font-thin py-1 px-2 text-center">LOT照合</th>
@@ -76,6 +85,26 @@
                             <td class="py-1 px-2 border text-right">{{ number_format($order_item->shipping_quantity) }}</td>
                             <td class="py-1 px-2 border text-right">{{ number_format($order_item->order_item_unit_price) }}</td>
                             <td class="py-1 px-2 border text-right">{{ number_format($order_item->unallocated_quantity) }}</td>
+                            @if($order->order_status_id == OrderStatusEnum::SAGYO_CHU)
+                                <td class="py-1 px-2 border text-center">
+                                    <x-list.status :value="$order_item->is_over_threshold" label1="対象" label0="対象外" />
+                                    @if($order_item->is_over_threshold)
+                                        @php
+                                            $unit = floor($order_item->order_item_unit_price / 1.6);
+                                            $price = $unit * $order_item->shipping_quantity;
+                                        @endphp
+                                        <div class="text-gray-500 mt-0.5 flex flex-col gap-1">
+                                            <p>¥{{ number_format($order_item->order_item_unit_price) }} ÷ 1.6 = ¥{{ number_format($unit) }}</p>
+                                            <p>¥{{ number_format($unit) }} × {{ number_format($order_item->shipping_quantity) }} = ¥{{ number_format($price) }}</p>
+                                        </div>
+                                        <button type="button"
+                                            class="btn bg-yellow-500 text-white px-2 py-0.5 rounded mt-1 text-xs split_preview_modal_open"
+                                            data-order-item-id="{{ $order_item->order_item_id }}">
+                                            分割
+                                        </button>
+                                    @endif
+                                </td>
+                            @endif
                             @if($has_lots)
                                 @if($show_shipping_inspection_lot)
                                     <td class="py-1 px-2 border text-center">
@@ -97,7 +126,7 @@
                         </tr>
                         @if($order_item->order_item_lots->isNotEmpty())
                             <tr id="lot_detail_{{ $order_item->order_item_id }}" class="hidden bg-gray-50">
-                                <td colspan="{{ $show_shipping_inspection_lot ? 12 : 11 }}" class="py-2 px-4 border">
+                                <td colspan="{{ $colspan }}" class="py-2 px-4 border">
                                     @if($editable_lots && $order_item->item?->is_lot_managed)
                                         <form method="POST" action="{{ route('order_item_lot_update.update') }}" id="order_item_lot_update_form_{{ $order_item->order_item_id }}">
                                             @csrf
@@ -165,4 +194,17 @@
         @csrf
         <input type="hidden" id="order_item_id" name="order_item_id">
     </form>
+    <form method="POST" action="{{ route('order_item_split.split') }}" id="order_item_split_form">
+        @csrf
+        <input type="hidden" id="split_order_item_id" name="order_item_id">
+    </form>
+</div>
+<div id="split_preview_modal" class="split_preview_modal_close hidden fixed inset-0 bg-black bg-opacity-50 z-50 items-center justify-center">
+    <div class="bg-white rounded-lg p-6 w-96">
+        <p class="font-semibold mb-4">分割プレビュー</p>
+        <div id="split_preview_content" class="text-sm mb-4"></div>
+        <div class="flex justify-end gap-3">
+            <button type="button" id="split_confirm" class="btn bg-btn-enter text-white px-4 py-1 rounded">確定</button>
+        </div>
+    </div>
 </div>

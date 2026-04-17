@@ -67,7 +67,7 @@ enum OperationLogEnum
         // 出荷
         'shipping_mgt'                                      => '出荷管理',
         'total_picking_list_create/create'                  => 'トータルピッキングリスト発行',
-        'delivery_note_create/create'                       => '納品書発行',
+        'kobetsu_picking_list_create/create'                => '個別ピッキングリスト発行',
         'nifuda_create/create'                              => '荷札データ作成',
         'nifuda_download/download'                          => '荷札データダウンロード',
         'tracking_no_import/import'                         => '配送伝票番号取込',

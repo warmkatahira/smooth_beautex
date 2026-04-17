@@ -56,6 +56,7 @@ class ItemDownloadService
                         $item->unit_cost,
                         $item->country_of_origin,
                         $item->hs_code,
+                        $item->ems_item_name,
                         $item->item_weight_g,
                         $item->sort_order,
                         $item->item_image_file_name === SystemEnum::DEFAULT_ITEM_IMAGE_FILE_NAME ? 'なし' : 'あり',

@@ -25,6 +25,7 @@ return new class extends Migration
             $table->unsignedInteger('order_item_unit_price');
             $table->unsignedTinyInteger('package_no')->default(1);
             $table->boolean('is_auto_process_add')->default(0);
+            $table->boolean('is_over_threshold')->default(0);
             $table->timestamps();
             // 外部キー
             $table->foreign('order_control_id')->references('order_control_id')->on('orders')->cascadeOnUpdate()->cascadeOnDelete();

@@ -72,7 +72,6 @@ Route::middleware('common')->group(function (){
         // +-+-+-+-+-+-+-+- 個別ピッキングリスト +-+-+-+-+-+-+-+-
         Route::controller(KobetsuPickingListCreateController::class)->prefix('kobetsu_picking_list_create')->name('kobetsu_picking_list_create.')->group(function(){
             Route::get('create', 'create')->name('create');
-            Route::get('create_specify_order', 'create_specify_order')->name('create_specify_order');
         });
         // +-+-+-+-+-+-+-+- 荷札データ +-+-+-+-+-+-+-+-
         Route::controller(NifudaCreateController::class)->prefix('nifuda_create')->name('nifuda_create.')->group(function(){

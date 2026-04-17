@@ -9,7 +9,6 @@ use App\Http\Requests\Order\ShippingWorkStart\ShippingWorkStartRequest;
 // サービス
 use App\Services\Order\ShippingWorkStart\ShippingWorkStartService;
 use App\Services\Common\MieruService;
-use App\Services\Common\ChatworkService;
 // その他
 use Illuminate\Support\Facades\DB;
 
@@ -28,8 +27,8 @@ class ShippingWorkStartController extends Controller
                 // 出荷グループと注文ステータスを更新
                 $count = $ShippingWorkStartService->updateShippingWorkStart($request->chk, $shipping_group->shipping_group_id);
                 // 配送方法がEMSでUS宛ての場合、出荷個口Noを条件に応じて更新
-                $ShippingWorkStartService->updatePackageNo($orders);
-                return compact('shipping_group', 'count');
+                $over_threshold_order_ids = $ShippingWorkStartService->updatePackageNo($orders);
+                return compact('shipping_group', 'count', 'over_threshold_order_ids');
             });
         }catch (\Exception $e){
             return redirect()->back()->with([
@@ -39,14 +38,19 @@ class ShippingWorkStartController extends Controller
         }
         // インスタンス化
         $MieruService = new MieruService;
-        $ChatworkService = new ChatworkService;
         // ミエルの進捗を更新する対象を取得
         $MieruService->getUpdateProgressTarget(null);
-        // Chatworkに通知する処理@出荷作業開始
-        //$ChatworkService->postMessageAtSihppingWorkStart($result['count'], $result['shipping_group']->shipping_group_name);
+        // メッセージを作成
+        $message = $result['count'] . '件の出荷作業を開始しました。';
+        $alert_type = 'success';
+        // 配列が空ではない場合
+        if(!empty($result['over_threshold_order_ids'])){
+            $message .= "\n1商品で14,500円をこえる受注が" . count($result['over_threshold_order_ids']) . "件あります。";
+            $alert_type = 'warning';
+        }
         return redirect()->back()->with([
-            'alert_type' => 'success',
-            'alert_message' => $result['count'] . '件の出荷作業を開始しました。',
+            'alert_type' => $alert_type,
+            'alert_message' => $message,
         ]);
     }
 }

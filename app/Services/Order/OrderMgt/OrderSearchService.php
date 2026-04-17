@@ -79,6 +79,11 @@ class OrderSearchService extends BaseFilterService
                                     AND s.base_id = orders.shipping_base_id
                             )
                         ) as invalid_lot_count'),
+                         DB::raw('(
+                            SELECT COUNT(*) FROM order_items oi
+                            WHERE oi.order_control_id = orders.order_control_id
+                            AND oi.is_over_threshold = true
+                        ) > 0 as has_over_threshold_item'),
                     ]);
     }
 
@@ -178,6 +183,22 @@ class OrderSearchService extends BaseFilterService
                         $q->whereNull('orders.supplement')
                             ->orWhere('orders.supplement', '=', '');
                     });
+                }
+            },
+            // 1個口料金オーバー
+            'filter_has_over_threshold_item' => function ($query, $value) {
+                if($value === '1'){
+                    $query->having(DB::raw('(
+                        SELECT COUNT(*) FROM order_items oi
+                        WHERE oi.order_control_id = orders.order_control_id
+                        AND oi.is_over_threshold = true
+                    )'), '>', 0);
+                }else{
+                    $query->having(DB::raw('(
+                        SELECT COUNT(*) FROM order_items oi
+                        WHERE oi.order_control_id = orders.order_control_id
+                        AND oi.is_over_threshold = true
+                    )'), '=', 0);
                 }
             },
         ];

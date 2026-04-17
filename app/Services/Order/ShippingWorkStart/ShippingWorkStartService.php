@@ -55,6 +55,8 @@ class ShippingWorkStartService
     // 配送方法がEMSでUS宛ての場合、出荷個口Noを条件に応じて更新
     public function updatePackageNo($orders)
     {
+        // 14,500円でおさまらなかった受注を格納する配列を初期化
+        $over_threshold_order_ids = [];
         // 受注の分だけループ処理
         foreach($orders as $order){
             // 配送方法がEMS以外かUS宛て以外の場合
@@ -75,10 +77,18 @@ class ShippingWorkStartService
             $threshold = 14500;
             // 受注に紐付いている商品の分だけループ処理
             foreach($order_items as $order_item){
+                // 1個口で14,500円をこえた場合のフラグを初期化
+                $order_item->is_over_threshold = false;
                 // 商品単価を1.6で割り、購入数をかける(小数点以下は切り捨て)
                 $price = floor($order_item->order_item_unit_price / 1.6) * $order_item->shipping_quantity;
-                // この商品を加算すると閾値を超える場合
-                if($cumulative + $price > $threshold){
+                // 1商品で閾値を超えている場合
+                if($cumulative === 0 && $price > $threshold){
+                    // 受注管理IDとフラグを更新
+                    $over_threshold_order_ids[] = $order->order_control_id;
+                    $order_item->is_over_threshold = true;
+                }
+                // 累計が0でない場合かつ、この商品を加算すると閾値を超える場合
+                if($cumulative > 0 && $cumulative + $price > $threshold){
                     // package_noをカウントアップして、合計商品金額を初期化
                     $package_no++;
                     $cumulative = 0;
@@ -90,5 +100,6 @@ class ShippingWorkStartService
                 $cumulative += $price;
             }
         }
+        return array_unique($over_threshold_order_ids);
     }
 }

@@ -35,6 +35,7 @@ export default defineConfig({
                 'resources/js/order/order_import/order_import.js',
                 'resources/js/order/order_mgt/order_mgt.js',
                 'resources/js/order/order_detail/order_detail.js',
+                'resources/js/order/order_detail/order_item_split.js',
                 'resources/js/order/order_item/order_item_update.js',
                 'resources/js/order/order_item/past_order_reference.js',
                 'resources/js/order/order_item_lot/order_item_lot_update.js',
