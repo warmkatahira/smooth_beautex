@@ -278,7 +278,7 @@ function create_calendar(data){
                 let href = "";
                 let clickable = "";
                 if (count && count != 0) {
-                    href = `/shipping_history?search_type=search&search_shipping_date_from=${currentKey}&search_shipping_date_to=${currentKey}`;
+                    href = `/shipping_history?process_type=filter&filter_shipping_date_from=${currentKey}&filter_shipping_date_to=${currentKey}`;
                     clickable = "hover:bg-theme-sub cursor-pointer";
                 }
                 tbody += `

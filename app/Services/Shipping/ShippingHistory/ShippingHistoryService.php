@@ -17,8 +17,13 @@ class ShippingHistoryService
         }
         // 「filter」なら検索が実行されているので、検索条件をセット
         if($request->process_type === 'filter'){
-            session(['filter_shipping_date_from' => $request->filter_shipping_date_from]);
-            session(['filter_shipping_date_to' => $request->filter_shipping_date_to]);
+            // 値があればセット、なければセッションを削除
+            if($request->filled('filter_shipping_date_from')){
+                session(['filter_shipping_date_from' => $request->filter_shipping_date_from]);
+                session(['filter_shipping_date_to' => $request->filter_shipping_date_to]);
+            }else{
+                session()->forget(['filter_shipping_date_from', 'filter_shipping_date_to']);
+            }
         }
     }
 }
