@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Order\OrderDetail;
+namespace App\Http\Controllers\Order\OrderItemSplit;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 // モデル
 use App\Models\OrderItem;
 // サービス
-use App\Services\Order\OrderDetail\OrderDetailUpdateService;
+use App\Services\Order\OrderItemSplit\OrderItemSplitService;
+use App\Services\Order\ShippingWorkStart\ShippingWorkStartService;
 // その他
 use Illuminate\Support\Facades\DB;
 
@@ -16,7 +17,7 @@ class OrderItemSplitController extends Controller
     public function split_preview(Request $request)
     {
         // 対象の受注商品を取得
-        $order_item = OrderItem::findOrFail($request->order_item_id);
+        $order_item = OrderItem::getSpecify($request->order_item_id)->first();
         // 単価を1.6で割り、小数点以下を切り捨て
         $unit = floor($order_item->order_item_unit_price / 1.6);
         // 1個口に収まる最大数量を計算（14,500円 ÷ 単価）
@@ -47,25 +48,13 @@ class OrderItemSplitController extends Controller
     {
         try {
             DB::transaction(function () use ($request) {
-                // 対象の受注商品を取得
-                $order_item = OrderItem::findOrFail($request->order_item_id);
-                // 分割数量の配列を取得（例：[8, 8, 4]）
-                $quantities = $request->quantities;
-                // 先頭の数量で元レコードを更新
-                $order_item->shipping_quantity = $quantities[0];
-                // 1個口料金オーバーフラグをリセット
-                $order_item->is_over_threshold = false;
-                $order_item->save();
-                // 2件目以降は元レコードを複製して新レコードとして追加
-                foreach(array_slice($quantities, 1) as $quantity){
-                    // 元レコードを複製
-                    $new = $order_item->replicate();
-                    // 分割数量をセット
-                    $new->shipping_quantity = $quantity;
-                    // 1個口料金オーバーフラグをリセット
-                    $new->is_over_threshold = false;
-                    $new->save();
-                }
+                // インスタンス化
+                $OrderItemSplitService = new OrderItemSplitService;
+                $ShippingWorkStartService = new ShippingWorkStartService;
+                // 指定された受注商品を分割
+                $orders = $OrderItemSplitService->splitOrderItem($request);
+                // 出荷個口Noを条件に応じて更新
+                $ShippingWorkStartService->updatePackageNo($orders);
             });
         } catch (\Exception $e) {
             return redirect()->back()->with([

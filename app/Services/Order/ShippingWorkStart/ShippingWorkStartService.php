@@ -16,7 +16,7 @@ class ShippingWorkStartService
     public function checkShippingWorkStartable($chk)
     {
         // 対象をロック
-        $orders = Order::whereIn('order_control_id', $chk)->lockForUpdate()->get();
+        $orders = Order::whereIn('order_control_id', $chk)->with('order_items')->lockForUpdate()->get();
         $order_items = OrderItem::whereIn('order_control_id', $chk)->lockForUpdate()->get();
         // 注文ステータスが「出荷待ち」以外の対象が存在する場合
         if($orders->where('order_status_id', '!=', OrderStatusEnum::SHUKKA_MACHI)->count() > 0){

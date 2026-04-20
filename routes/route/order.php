@@ -10,7 +10,7 @@ use App\Http\Controllers\Order\OrderMgt\OrderMgtController;
 use App\Http\Controllers\Order\OrderDetail\OrderDetailController;
 use App\Http\Controllers\Order\OrderDetail\OrderDetailUpdateController;
 // +-+-+-+-+-+-+-+- 受注商品分割 +-+-+-+-+-+-+-+-
-use App\Http\Controllers\Order\OrderDetail\OrderItemSplitController;
+use App\Http\Controllers\Order\OrderItemSplit\OrderItemSplitController;
 // +-+-+-+-+-+-+-+- 受注商品追加 +-+-+-+-+-+-+-+-
 use App\Http\Controllers\Order\OrderItem\OrderItemCreateController;
 // +-+-+-+-+-+-+-+- 受注商品削除 +-+-+-+-+-+-+-+-

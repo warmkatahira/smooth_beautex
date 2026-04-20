@@ -25,9 +25,9 @@ $(document).on('click', '.split_preview_modal_open', function () {
             <table class="w-full text-xs">
                 <thead>
                     <tr class="text-left text-white bg-black">
-                        <th class="py-1 px-2">件目</th>
-                        <th class="py-1 px-2 text-right">数量</th>
-                        <th class="py-1 px-2 text-right">小計</th>
+                        <th class="font-thin py-1 px-2">件目</th>
+                        <th class="font-thin py-1 px-2 text-right">数量</th>
+                        <th class="font-thin py-1 px-2 text-right">小計</th>
                     </tr>
                 </thead>
                 <tbody>
