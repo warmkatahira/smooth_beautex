@@ -25,6 +25,7 @@ $('#item_id_code').on("change",function(){
             dataType: 'json',
             success: function(data){
                 try {
+                    console.log(data);
                     // エラーがある場合
                     if(data['error_message']) {
                         // エラーを返す
@@ -35,7 +36,6 @@ $('#item_id_code').on("change",function(){
                         // エラーを返す
                         throw new Error(data['exp_lot_check_result']);
                     }
-                    console.log(data['item_id_type'] === 'JAN' && !data['item']['is_lot_managed']);
                     // JANコードで検品されているかつ、is_lot_managedがtrueの場合
                     if(data['item_id_type'] === 'JAN' && data['item']['is_lot_managed']){
                         // LOT入力モーダルを表示
@@ -108,17 +108,21 @@ $('#lot_exp_input_enter').on("click",function(){
 
 // 検品OK時の処理
 function inspection_ok(data){
+    // nullなら空文字を格納する
+    const lot = data['lot'] ?? '';
+    const exp = data['exp'] ?? '';
+    const rowId = data['item']['item_id'] + lot + exp;
     // trueであれば新しくスキャンされた商品なので、行を追加
     if(data['add']){
         // 新しい行を作成
-        const newRow = $('<tr>').attr('id', data['item']['item_id'] + data['lot'] + data['exp']).addClass('text-xs');
+        const newRow = $('<tr>').attr('id', rowId).addClass('text-xs');
         // 新しいセルを追加
         const newCell1 = $('<td>').text(data['item']['item_code']).addClass('py-1 px-2 border');
         const newCell2 = $('<td>').text(data['item']['item_jan_code']).addClass('py-1 px-2 border');
         const newCell3 = $('<td>').text(data['item']['item_name']).addClass('py-1 px-2 border');
         const newCell4 = $('<td>').text(data['lot']).addClass('py-1 px-2 border text-center');
         const newCell5 = $('<td>').text(data['exp']).addClass('py-1 px-2 border text-center');
-        const newCell6 = $('<td>').text(data['quantity']).addClass('inspection_quantity py-1 px-2 border text-right').attr('id', data['item']['item_id'] + data['lot'] + data['exp'] + '_quantity');
+        const newCell6 = $('<td>').text(data['quantity']).addClass('inspection_quantity py-1 px-2 border text-right').attr('id', rowId + '_quantity');
         // セルを行に追加
         newRow.append(newCell1);
         newRow.append(newCell2);
@@ -131,7 +135,7 @@ function inspection_ok(data){
     }
     // falseであれば既にスキャンされていた商品なので、数量を更新
     if(!data['add']){
-        $('#' + data['item']['item_id'] + data['lot'] + data['exp'] + '_quantity').text(data['quantity']);
+        $('#' + rowId + '_quantity').text(data['quantity']);
     }
 }
 
