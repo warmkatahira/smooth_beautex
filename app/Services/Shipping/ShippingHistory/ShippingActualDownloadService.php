@@ -70,7 +70,7 @@ class ShippingActualDownloadService
     public function createShippingActualFileAtQoo10($nowDate, $create_group, $create_orders, $directory_path)
     {
         // ファイル名を取得
-        $file_name = "【" . SystemEnum::CUSTOMER_NAME_JP . "様】【" . $create_group->mall_name . "】【" . $create_group->order_category_name . "】出荷実績データ_" . $nowDate->format('Ymd') . ".xlsx";
+        $file_name = $nowDate->format('Ymd') . "_出荷実績データ【" . $create_group->order_category_name . "】【" . $create_group->mall_name . "】【" . SystemEnum::CUSTOMER_NAME_JP . "】.xlsx";
         // ファイルパスを取得
         $file_path = $directory_path . '/' . $file_name;
         // 一時ファイルパスを生成
@@ -115,7 +115,7 @@ class ShippingActualDownloadService
     public function createShippingActualFileAtShopify($nowDate, $create_group, $create_orders, $directory_path)
     {
         // ファイル名を取得
-        $file_name = "【" . SystemEnum::CUSTOMER_NAME_JP . "様】【" . $create_group->mall_name . "】【" . $create_group->order_category_name . "】出荷実績データ_" . $nowDate->format('Ymd') . ".xlsx";
+        $file_name = $nowDate->format('Ymd') . "_出荷実績データ【" . $create_group->order_category_name . "】【" . $create_group->mall_name . "】【" . SystemEnum::CUSTOMER_NAME_JP . "】.xlsx";
         // ファイルパスを取得
         $file_path = $directory_path . '/' . $file_name;
         // 一時ファイルパスを生成
