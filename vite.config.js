@@ -21,6 +21,7 @@ export default defineConfig({
                 'resources/js/chart_color.js',
                 'resources/js/checkbox.js',
                 'resources/js/filter.js',
+                'resources/js/saved_filter/saved_filter.js',
                 'resources/sass/dropdown.scss',
                 'resources/sass/height_adjustment.scss',
                 'resources/sass/welcome.scss',

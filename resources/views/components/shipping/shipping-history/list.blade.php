@@ -1,6 +1,6 @@
 <div class="disable_scrollbar flex flex-grow overflow-scroll">
     <div class="shipping_history_list bg-white overflow-x-auto overflow-y-auto border border-gray-600">
-        <table id="filter_table" class="text-xs" data-search-url="/shipping_history" data-scroll-target=".shipping_history_list" data-extra-params='{"filter_order_status_id": ""}'>
+        <table id="filter_table" class="text-xs" data-search-url="/shipping_history" data-scroll-target=".shipping_history_list" data-extra-params='{"filter_order_status_id": ""}' data-filter-page="shipping_history">
             <thead>
                 <tr class="text-left text-white bg-black whitespace-nowrap sticky top-0 h-7 z-10">
                     <th class="font-thin py-1 px-2 text-center">操作</th>

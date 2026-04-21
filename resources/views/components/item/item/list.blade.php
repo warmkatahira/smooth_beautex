@@ -1,6 +1,6 @@
 <div class="disable_scrollbar flex flex-grow overflow-scroll">
     <div class="item_list bg-white overflow-x-auto overflow-y-auto border border-gray-600">
-        <table id="filter_table" class="text-xs" data-search-url="/item" data-scroll-target=".item_list">
+        <table id="filter_table" class="text-xs" data-search-url="/item" data-scroll-target=".item_list" data-filter-page="item">
             <thead>
                 <tr class="text-left text-white bg-black whitespace-nowrap sticky top-0 h-7 z-10">
                     @can('warm_check')

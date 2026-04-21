@@ -127,6 +127,9 @@ class BaseRequest extends FormRequest
             'setting_3'                 => '設定3',
             'e_hiden_version_id'        => 'e飛伝バージョン',
             'mieru_customer_code'       => 'ミエルカスタマーコード',
+            'filter_page'               => 'フィルターページ',
+            'filter_name'               => 'フィルター名',
+            'filter_conditions'         => 'フィルター条件',
             // 共通
             'select_file'                       => 'ファイル',
             'sort_order'                        => '並び順',

@@ -109,3 +109,5 @@ $(document).on('click', '.filter_clear', function () {
     // 検索を実施
     submitSearch();
 });
+
+export { submitSearch };
