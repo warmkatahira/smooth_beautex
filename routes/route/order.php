@@ -88,8 +88,9 @@ Route::middleware('common')->group(function (){
     Route::controller(OrderItemDeleteController::class)->prefix('order_item_delete')->name('order_item_delete.')->group(function(){
         Route::post('delete', 'delete')->name('delete');
     });
-    // +-+-+-+-+-+-+-+- 配送先住所+補足事項更新 +-+-+-+-+-+-+-+-
+    // +-+-+-+-+-+-+-+- 配送先郵便番号+配送先住所+補足事項更新 +-+-+-+-+-+-+-+-
     Route::controller(OrderDetailUpdateController::class)->prefix('order_detail_update')->name('order_detail_update.')->group(function(){
+        Route::post('ship_zip_code', 'ship_zip_code')->name('ship_zip_code');
         Route::post('ship_address', 'ship_address')->name('ship_address');
         Route::post('supplement', 'supplement')->name('supplement');
     });

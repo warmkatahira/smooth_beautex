@@ -38,6 +38,7 @@
 <x-order.order-detail.modal.shipping-work-memo-update-modal :order="$order" />
 <x-order.order-detail.modal.supplement-update-modal :order="$order" />
 <x-order.order-detail.modal.desired-delivery-date-update-modal :order="$order" />
+<x-order.order-detail.modal.ship-zip-code-update-modal :order="$order" />
 <x-order.order-detail.modal.ship-address-update-modal :order="$order" />
 <x-order.order-detail.modal.is-stock-allocation-skipped-update-modal :order="$order" />
 <x-order.order-detail.modal.is-shipping-inspection-skipped-update-modal :order="$order" />

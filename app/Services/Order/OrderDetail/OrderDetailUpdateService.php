@@ -120,6 +120,24 @@ class OrderDetailUpdateService
         ]);
     }
 
+    // 配送先郵便番号を更新できるか確認
+    public function checkUpdatableShipZipCode($order)
+    {
+        // 注文ステータスが「作業中」よりも大きい場合
+        if($order->order_status_id > OrderStatusEnum::SAGYO_CHU){
+            throw new \RuntimeException('配送先郵便番号を更新できない注文ステータスです。');
+        }
+    }
+
+    // 配送先郵便番号を更新
+    public function updateShipZipCode($request, $order)
+    {
+        // 配送先郵便番号を更新
+        $order->update([
+            'ship_zip_code'        => $request->ship_zip_code,
+        ]);
+    }
+
     // 配送先住所を更新できるか確認
     public function checkUpdatableShipAddress($order)
     {
