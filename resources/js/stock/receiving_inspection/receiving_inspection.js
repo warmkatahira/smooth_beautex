@@ -11,6 +11,11 @@ $(document).ready(function() {
 $('#item_id_code').on("change",function(){
     // 商品識別コードに値がある場合のみ処理する
     if($('#item_id_code').val()){
+        // 14桁かつ末尾がsの場合、末尾を除去する（エクステ関連でJANコードの末尾にsがついているのでその対策）
+        let item_id_code = $('#item_id_code').val();
+        if(item_id_code.length === 14 && item_id_code.endsWith('s')){
+            item_id_code = item_id_code.slice(0, -1);
+        }
         // AJAX通信のURLをセット
         const ajax_url = '/receiving_inspection/ajax_check_item_id_code';
         $.ajax({
@@ -20,12 +25,11 @@ $('#item_id_code').on("change",function(){
             url: ajax_url,
             type: 'GET',
             data: {
-                item_id_code: $('#item_id_code').val(),
+                item_id_code: item_id_code,
             },
             dataType: 'json',
             success: function(data){
                 try {
-                    console.log(data);
                     // エラーがある場合
                     if(data['error_message']) {
                         // エラーを返す

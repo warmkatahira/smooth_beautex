@@ -22,7 +22,7 @@ $('#user_update_enter').on("click",function(){
     }
 });
 
-// 削除ボタンを押下した場合
+// パスワードリセットボタンを押下した場合
 $('.password_reset_enter').on("click",function(){
     // 確認のためのインプットボックスを表示
     const input = prompt("パスワードをリセットしますか？\n続行するには「reset」と入力してください。");
