@@ -48,7 +48,7 @@
     "isEntry": true
   },
   "resources/js/dropdown.js": {
-    "file": "assets/dropdown-GO9xXqWO.js",
+    "file": "assets/dropdown-BqjT4J2s.js",
     "name": "dropdown",
     "src": "resources/js/dropdown.js",
     "isEntry": true
@@ -60,7 +60,7 @@
     "isEntry": true
   },
   "resources/js/filter.js": {
-    "file": "assets/filter-DA1edXyE.js",
+    "file": "assets/filter-si_zA3_j.js",
     "name": "filter",
     "src": "resources/js/filter.js",
     "isEntry": true
@@ -175,6 +175,15 @@
     "isEntry": true,
     "imports": [
       "resources/js/loading.js"
+    ]
+  },
+  "resources/js/saved_filter/saved_filter.js": {
+    "file": "assets/saved_filter-DDDbwL82.js",
+    "name": "saved_filter",
+    "src": "resources/js/saved_filter/saved_filter.js",
+    "isEntry": true,
+    "imports": [
+      "resources/js/filter.js"
     ]
   },
   "resources/js/search.js": {
@@ -346,7 +355,7 @@
     "isEntry": true
   },
   "resources/sass/dropdown.scss": {
-    "file": "assets/dropdown-vrpWzODa.css",
+    "file": "assets/dropdown-CHfXZFoi.css",
     "src": "resources/sass/dropdown.scss",
     "isEntry": true
   },

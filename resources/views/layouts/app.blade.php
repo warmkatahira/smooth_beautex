@@ -47,6 +47,7 @@
             'resources/js/checkbox.js',
             'resources/js/filter.js',
             'resources/js/clipboard_copy.js',
+            'resources/js/saved_filter/saved_filter.js',
         ])
 
         <!-- Select2 -->

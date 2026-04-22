@@ -22,3 +22,4 @@ require __DIR__.'/route/stock.php';
 require __DIR__.'/route/setting.php';
 require __DIR__.'/route/system_admin.php';
 require __DIR__.'/route/profile.php';
+require __DIR__.'/route/filter.php';

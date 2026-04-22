@@ -1,6 +1,6 @@
 <div class="disable_scrollbar flex flex-grow overflow-scroll">
     <div class="order_mgt_list bg-white overflow-x-auto overflow-y-auto border border-gray-600">
-        <table id="filter_table" class="text-xs" data-search-url="/order_mgt" data-scroll-target=".order_mgt_list" data-extra-params='{"filter_order_status_id": ""}'>
+        <table id="filter_table" class="text-xs" data-search-url="/order_mgt" data-scroll-target=".order_mgt_list" data-extra-params='{"filter_order_status_id": ""}' data-filter-page="order_mgt">
             <thead>
                 <tr class="text-left text-white bg-black whitespace-nowrap sticky top-0 h-7 z-10">
                     @can('warm_check')
