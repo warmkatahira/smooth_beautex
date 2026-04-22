@@ -23,29 +23,29 @@ class TotalPickingListCreateService
                                             ->where('estimated_shipping_date', '<=', $shipping_group->estimated_shipping_date)
                                             ->select(
                                                 'shipping_groups.shipping_base_id',
-                                                'item_id',
+                                                'order_items.item_id',
                                                 DB::raw("SUM(order_items.shipping_quantity) as shipping_group_shipping_quantity"
                                             ))
-                                            ->groupBy('shipping_groups.shipping_base_id', 'item_id');
+                                            ->groupBy('shipping_groups.shipping_base_id', 'order_items.item_id');
         // トータルピックする出荷数を取得
         $order_quantities = Order::join('order_items', 'order_items.order_control_id', 'orders.order_control_id')
                                 ->join('items', 'items.item_id', 'order_items.item_id')
                                 ->where('shipping_group_id', session('filter_shipping_group_id'))
                                 ->select(
                                     'shipping_base_id',
-                                    'item_id',
+                                    'order_items.item_id',
                                     DB::raw('SUM(order_items.shipping_quantity) as total_shipping_quantity')
                                 )
-                                ->groupBy('shipping_base_id', 'item_id');
+                                ->groupBy('shipping_base_id', 'order_items.item_id');
         // stocksをitem_id×base_id単位で合計するサブクエリ
         $stock_totals = DB::table('stocks')
                             ->select(
-                                'item_id',
+                                'stocks.item_id',
                                 'base_id',
                                 'item_location',
                                 DB::raw('SUM(total_stock) as total_stock')
                             )
-                            ->groupBy('item_id', 'base_id', 'item_location');
+                            ->groupBy('stocks.item_id', 'base_id', 'item_location');
         // 各情報を結合して表示する情報を取得
         $items = Item::joinSub($order_quantities, 'order_quantities', function ($join) {
                             $join->on('items.item_id', '=', 'order_quantities.item_id');
