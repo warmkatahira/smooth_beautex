@@ -46,6 +46,7 @@ class StockDownloadService
                             $stock->quantity_per_box,
                             $stock->manufacturer,
                             $stock->supplier,
+                            $stock->unit_cost,
                             $stock->is_stock_managed_text,
                         ];
                         // 倉庫の分だけループ処理
@@ -71,6 +72,7 @@ class StockDownloadService
                             $stock->quantity_per_box,
                             $stock->manufacturer,
                             $stock->supplier,
+                            $stock->unit_cost,
                             $stock->item_location,
                             $stock->is_stock_managed_text,
                             $stock->lot,
