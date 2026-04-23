@@ -298,7 +298,7 @@ class ItemUploadJobs implements ShouldQueue
                     $rules += ['*.'.$column => 'required_with:*.lot_2_start_position|nullable|integer|between:1,255'];
                     break;
                 case 's_power_code':
-                    $rules += ['*.'.$column => 'required_with:*.model_jan_code|nullable|integer|between:200,248'];
+                    $rules += ['*.'.$column => 'required_with:*.model_jan_code|nullable|integer|between:188,248'];
                     break;
                 case 's_power_code_start_position':
                     $rules += ['*.'.$column => 'required_with:*.model_jan_code|nullable|integer|between:1,255'];

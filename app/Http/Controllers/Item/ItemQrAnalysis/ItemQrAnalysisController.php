@@ -50,7 +50,7 @@ class ItemQrAnalysisController extends Controller
                 $chunk = substr($searchArea, $i, 3);
                 if(ctype_digit($chunk)){
                     $num = (int) $chunk;
-                    if($num >= 200 && $num <= 248){
+                    if($num >= 188 && $num <= 248){
                         $foundCode = $num;
                         $foundPos  = 30 + $i; // 1-based
                         break;
@@ -61,7 +61,13 @@ class ItemQrAnalysisController extends Controller
                 $power = $foundCode * 0.25 - 50;
                 $saveParam['s_power_code']                  = $foundCode;
                 $saveParam['s_power_code_start_position']   = $foundPos;
-                $saveParam['power']                         = ($power == 0 ? '±' : '-') . number_format($power, 2);
+                if ($foundCode < 200) {
+                    $saveParam['power'] = '+' . number_format(abs($power), 2);
+                } elseif ($foundCode > 200) {
+                    $saveParam['power'] = '-' . number_format(abs($power), 2);
+                } else {
+                    $saveParam['power'] = '±' . number_format(abs($power), 2);
+                }
             }
         }
         // ── LOTがQRに含まれているかチェック
