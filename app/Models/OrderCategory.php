@@ -13,6 +13,7 @@ class OrderCategory extends Model
         'order_category_name',
         'mall_id',
         'shipper_id',
+        'label_item_name_1',
         'sort_order',
     ];
     // 全てのレコードを取得

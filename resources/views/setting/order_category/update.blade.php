@@ -7,6 +7,7 @@
                 <x-form.input type="text" label="受注区分名" id="order_category_name" name="order_category_name" :value="$order_category->order_category_name" required="true" />
                 <x-form.select label="モール" id="mall_id" name="mall_id" :value="$order_category->mall_id" :items="$malls" optionValue="mall_id" optionText="mall_name" required="true" />
                 <x-form.select label="荷送人" id="shipper_id" name="shipper_id" :value="$order_category->shipper_id" :items="$shippers" optionValue="shipper_id" optionText="shipper_name" required="true" />
+                <x-form.input type="text" label="荷札品名1" id="label_item_name_1" name="label_item_name_1" :value="$order_category->label_item_name_1" required="true" />
                 <x-form.input type="tel" label="並び順" id="sort_order" name="sort_order" :value="$order_category->sort_order" required="true" />
             </div>
             <input type="hidden" name="order_category_id" value="{{ $order_category->order_category_id }}">

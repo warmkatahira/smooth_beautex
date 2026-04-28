@@ -143,6 +143,7 @@ class BaseRequest extends FormRequest
             'company_id'                        => '会社名',
             'order_category_id'                 => '受注区分',
             'order_category_name'               => '受注区分名',
+            'label_item_name_1'                 => '荷札品名1',
             'order_item_code'                   => '商品コード',
             'order_item_name'                   => '商品名',
             'shipping_quantity'                 => '出荷数',

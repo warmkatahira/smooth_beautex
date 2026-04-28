@@ -27,6 +27,7 @@ class OrderCategoryUpdateRequest extends BaseRequest
             'order_category_name'               => 'required|string|max:20',
             'mall_id'                           => 'required|exists:malls,mall_id',
             'shipper_id'                        => 'required|exists:shippers,shipper_id',
+            'label_item_name_1'                 => 'required|string|max:16',
             'sort_order'                        => 'required|integer|min:1',
         ];
     }

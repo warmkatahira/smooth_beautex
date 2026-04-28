@@ -14,10 +14,11 @@ class OrderCategoryUpdateService
         $order_category = OrderCategory::getSpecify($request->order_category_id)->first();
         // 受注区分を更新
         $order_category->update([
-            'order_category_name' => $request->order_category_name,
-            'mall_id' => $request->mall_id,
-            'shipper_id' => $request->shipper_id,
-            'sort_order' => $request->sort_order,
+            'order_category_name'   => $request->order_category_name,
+            'mall_id'               => $request->mall_id,
+            'shipper_id'            => $request->shipper_id,
+            'label_item_name_1'     => $request->label_item_name_1,
+            'sort_order'            => $request->sort_order,
         ]);
     }
 }

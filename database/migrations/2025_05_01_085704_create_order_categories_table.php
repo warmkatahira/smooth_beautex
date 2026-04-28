@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedInteger('mall_id');
             $table->unsignedInteger('shipper_id');
             $table->unsignedInteger('sort_order');
+            $table->string('label_item_name_1', 16);
             $table->timestamps();
             // 外部キー
             $table->foreign('mall_id')->references('mall_id')->on('malls');

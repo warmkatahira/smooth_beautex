@@ -223,7 +223,7 @@ class NifudaCreateService
                 $worksheet->setCellValue('T'.$row, $shipper_address); // ご依頼主住所
                 $worksheet->setCellValue('V'.$row, $order->order_category->shipper->shipper_name); // ご依頼主名
                 $worksheet->setCellValue('Y'.$row, $order->order_no); // 品名1
-                $worksheet->setCellValue('Z'.$row, 'コンタクトレンズ'); // 品名2
+                $worksheet->setCellValue('Z'.$row, $order->order_category->label_item_name_1); // 品名2
                 $worksheet->setCellValue('AS'.$row, is_null($order->desired_delivery_date) ? '' : CarbonImmutable::parse($order->desired_delivery_date)->format('Y/m/d')); // 配送希望日
                 $worksheet->setCellValue('AT'.$row, DeliveryTimeZoneEnum::sagawa_time_zone_get($order->desired_delivery_time));   // 配送希望時間
                 $worksheet->setCellValue('AZ'.$row, '011'); // 指定シール1(取注)
@@ -300,7 +300,7 @@ class NifudaCreateService
                 $worksheet->setCellValue('W'.$row, mb_substr($shipper_address, 0, 16)); // 荷送人住所1
                 $worksheet->setCellValue('X'.$row, mb_substr($shipper_address, 16, null));    // 配送先住所2
                 $worksheet->setCellValue('Y'.$row, $order->order_category->shipper->shipper_name); // 荷送人名
-                $worksheet->setCellValue('AB'.$row, 'コンタクトレンズ'); // 品名1
+                $worksheet->setCellValue('AB'.$row, $order->order_category->label_item_name_1); // 品名1
                 $worksheet->setCellValue('AD'.$row, $order->order_no); // 品名2
                 $worksheet->setCellValue('AG'.$row, $order->order_control_id); // 記事
                 $worksheet->setCellValue('AN'.$row, $base_shipping_method->setting_1); // 請求先顧客コード
