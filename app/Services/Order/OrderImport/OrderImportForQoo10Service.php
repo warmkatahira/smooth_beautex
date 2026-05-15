@@ -87,7 +87,7 @@ class OrderImportForQoo10Service
             'order_date'                => 'required|date',
             'order_time'                => 'required|date_format:H:i:s',
             'order_status_id'           => 'required|in:' . implode(',', array_keys(OrderStatusEnum::CHANGE_LIST_FROM_ID_TO_JP)),
-            'mall_shipping_method'      => 'nullable|string|max:20|in:' . implode(',', ShippingMethodEnum::QOO10_SHIPPING_METHOD_LIST),
+            /* 'mall_shipping_method'      => 'nullable|string|max:20|in:' . implode(',', ShippingMethodEnum::QOO10_SHIPPING_METHOD_LIST), */
             'ship_name'                 => 'required|string|max:255',
             'ship_zip_code'             => 'required|string|max:8',
             'ship_province_name'        => 'required|string|max:5|exists:prefectures,prefecture_name',
