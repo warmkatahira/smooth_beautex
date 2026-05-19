@@ -86,9 +86,9 @@ class OrderImportService
             // INSI_BEAUTY_QOO10のidを返す
             return OrderCategoryEnum::INSI_BEAUTY_QOO10;
         }elseif($mall_id === MallEnum::SHOPIFY_ID) {
-            if(str_contains($all_line[1]['Name'], 'PCGL')){
+            if(str_contains($all_line[0]['Name'], 'PCGL')){
                 return OrderCategoryEnum::PUSH_COLOR_SHOPIFY;
-            }elseif(str_contains($all_line[1]['Name'], 'INSI')){
+            }elseif(str_contains($all_line[0]['Name'], 'INSI')){
                 return OrderCategoryEnum::INSI_BEAUTY_SHOPIFY;
             }else{
                 throw new OrderImportException('受注区分が判別できませんでした。', null, null, null);
