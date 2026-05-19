@@ -94,7 +94,8 @@ class OrderImportForShopifyService
                 'ship_tel'                  => str_replace(' ', '', str_replace('+81', '0', $common_order_values[$line['Name']]['Shipping Phone'])), // +81を0に置換している
                 'subtotal'                  => $common_order_values[$line['Name']]['Subtotal'],
                 'total_payment'             => $common_order_values[$line['Name']]['Total'],
-                'order_item_code'           => $is_redelivery ? '再発送' : $line['Lineitem sku'],     // 再発送の場合は商品コードがNullなので、固定値を入れる
+                /* 'order_item_code'           => $is_redelivery ? '再発送' : $line['Lineitem sku'],     // 再発送の場合は商品コードがNullなので、固定値を入れる */
+                'order_item_code'           => $line['Lineitem sku'],   // 2026/05/19に再発送でも商品コードが入ってきたので、上のコードから変更
                 'order_item_name'           => $line['Lineitem name'],
                 'shipping_quantity'         => $line['Lineitem quantity'],
                 'order_item_unit_price'     => $line['Lineitem price'],
