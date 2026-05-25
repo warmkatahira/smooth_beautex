@@ -77,8 +77,10 @@ class StockHistorySearchService extends BaseFilterService
         return [
             // 履歴日
             'filter_history_date_from' => function ($query, $value) {
-                $query->whereDate('stock_histories.updated_at', '>=', session('filter_history_date_from'))
-                    ->whereDate('stock_histories.updated_at', '<=', session('filter_history_date_to'));
+                $query->whereBetween('stock_histories.updated_at', [
+                    session('filter_history_date_from') . ' 00:00:00',
+                    session('filter_history_date_to') . ' 23:59:59',
+                ]);
             },
             // 履歴時間
             'filter_history_time' => function ($query, $value) {
