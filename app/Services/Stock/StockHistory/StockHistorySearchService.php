@@ -84,6 +84,10 @@ class StockHistorySearchService extends BaseFilterService
             'filter_history_time' => function ($query, $value) {
                 $query->whereRaw("TIME(stock_histories.updated_at) LIKE ?", [session('filter_history_time') . '%']);
             },
+            // 区分
+            'filter_stock_history_category_id' => function ($query, $value) {
+                $query->where('stock_histories.stock_history_category_id', $value);
+            },
             // 数量
             'filter_quantity' => function ($query, $value) {
                 $query->where('stock_history_details.quantity', (int)$value);
