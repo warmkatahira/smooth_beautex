@@ -106,26 +106,8 @@ class StockHistorySearchService extends BaseFilterService
     // 並び替え
     protected function applySort($query)
     {
-        return $query->groupBy(
-                'stock_histories.stock_history_category_id',
-                'stock_histories.user_no',
-                'stock_histories.comment',
-                'stock_histories.updated_at',
-                'stock_history_details.quantity',
-                'stocks.base_id',
-                'items.item_code',
-                'items.item_jan_code',
-                'items.item_name',
-                'items.item_category_1',
-                'items.item_image_file_name',
-                'bases.base_name',
-                'bases.sort_order',
-                'stock_history_categories.stock_history_category_name',
-                'stocks.lot',
-                'stocks.exp',
-            )
-            ->orderBy('stock_histories.updated_at', 'asc')
-            ->orderBy('items.item_code', 'asc')
-            ->orderBy('bases.sort_order', 'asc');
+        return $query->orderBy('stock_histories.updated_at', 'asc')
+                    ->orderBy('items.item_code', 'asc')
+                    ->orderBy('bases.sort_order', 'asc');
     }
 }

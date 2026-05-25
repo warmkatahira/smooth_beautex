@@ -20,7 +20,7 @@
                     <th class="font-thin py-1 px-2 text-center">コメント</th>
                 </tr>
                 <tr class="filter-row sticky top-[28px] bg-white z-10">
-                    <x-filter.date-period type="date" fromId="filter_history_date_from" fromName="filter_history_date_from" toId="filter_history_date_to" toName="filter_history_date_to" />
+                    <x-filter.date-period type="date" fromId="filter_history_date_from" fromName="filter_history_date_from" toId="filter_history_date_to" toName="filter_history_date_to" resetToday="true" />
                     <x-filter.input type="tel" id="filter_history_time" name="filter_history_time" />
                     <x-filter.select id="filter_stock_history_category_id" name="filter_stock_history_category_id" :selectItems="$stockHistoryCategories" optionValue="stock_history_category_id" optionText="stock_history_category_name" />
                     <x-filter.select id="filter_user_no" name="filter_user_no" :selectItems="$users" optionValue="user_no" optionText="full_name" />
