@@ -73,7 +73,7 @@ class OrderImportForShopifyService
                 $ship_zip_code = substr(str_replace("-", "", $ship_zip_code), 0, 3).'-'.substr(str_replace("-", "", $ship_zip_code), 3);
             }
             // 商品名に「再発送手続き」が含まれている場合は1、含まれていない場合は0
-            $is_redelivery = str_contains($line['Lineitem name'], '再発送手続き') ? 1 : 0;
+            $is_redelivery = str_contains($line['Lineitem name'], '再発送') ? 1 : 0;
             // 追加先テーブルのカラム名に合わせて配列を整理
             $param = [
                 'order_import_date'         => $nowDate->toDateString(),
