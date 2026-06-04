@@ -155,6 +155,10 @@ class NifudaCreateService
                                             }));                                                                                // 総商品金額(JPY)
                     // package_itemsの分だけループ処理
                     foreach($package_items as $order_item){
+                        // 商品単価が0円のものは内容品詳細に出力しない
+                        if($order_item->order_item_unit_price == 0){
+                            continue;
+                        }
                         // 基準列（Y = 25列目）からのオフセットを加味して列を計算
                         $colY  = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(25 + $column_offset);
                         $colZ  = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(26 + $column_offset);
