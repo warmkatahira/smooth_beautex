@@ -130,7 +130,7 @@ class NifudaCreateService
                     // ship_country_codeが「US」の場合は「NAOKI IWASE」、それ以外は「BEAUTEX Corp. / Push!Color」
                     $shipper_company_name = $order->ship_country_code == 'US' ? 'NAOKI IWASE' : 'BEAUTEX Corp. / Push!Color';
                     // ship_country_codeが「US」の場合は「1」(ギフト)、それ以外は「3」(販売品)
-                    $content_type = $order->ship_country_code == 'US' ? 0 : 3;
+                    $content_type = $order->ship_country_code == 'US' ? 0 : 2;
                     // 各情報を出力
                     $worksheet->setCellValue('A'.$row, $shipper_company_name);                                                  // 出荷人会社名
                     $worksheet->setCellValue('B'.$row, $order->ship_name.' (' . $order->order_no . ')');                        // 受取人お名前
