@@ -24,7 +24,7 @@ class TrackingNoUpdateRequest extends BaseRequest
     {
         return [
             'order_control_id'          => 'required|string|exists:orders,order_control_id',
-            'tracking_no'               => 'nullable|string|max:14',
+            'tracking_no'               => 'nullable|string|max:18',
         ];
     }
 
