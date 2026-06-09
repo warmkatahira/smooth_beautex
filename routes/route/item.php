@@ -7,6 +7,7 @@ use App\Http\Controllers\Item\Item\ItemController;
 use App\Http\Controllers\Item\Item\ItemUpdateController;
 use App\Http\Controllers\Item\Item\ItemDeleteController;
 use App\Http\Controllers\Item\Item\ItemDownloadController;
+use App\Http\Controllers\Item\Item\ItemBarcodeController;
 // +-+-+-+-+-+-+-+- 商品アップロード +-+-+-+-+-+-+-+-
 use App\Http\Controllers\Item\ItemUpload\ItemUploadController;
 // +-+-+-+-+-+-+-+- 商品QR解析 +-+-+-+-+-+-+-+-
@@ -22,6 +23,9 @@ Route::middleware('common')->group(function (){
         Route::get('download', 'download')->name('download');
     });
     Route::middleware(['warm_check'])->group(function () {
+        Route::controller(ItemBarcodeController::class)->prefix('item_barcode')->name('item_barcode.')->group(function(){
+            Route::get('', 'index')->name('index');
+        });
         Route::controller(ItemUpdateController::class)->prefix('item_update')->name('item_update.')->group(function(){
             Route::get('', 'index')->name('index');
             Route::post('update', 'update')->name('update');

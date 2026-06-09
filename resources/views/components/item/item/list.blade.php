@@ -55,6 +55,7 @@
                                 <div class="flex flex-row gap-5">
                                     <a href="{{ route('item_update.index', ['item_id' => $item->item_id]) }}" class="btn rounded bg-btn-enter text-white py-1 px-2">更新</a>
                                     <button type="button" class="btn rounded item_delete_enter bg-btn-cancel text-white py-1 px-2" data-item-id="{{ $item->item_id }}">削除</button>
+                                    <a href="{{ route('item_barcode.index', ['item_id' => $item->item_id]) }}" class="btn rounded bg-green-500 text-white py-1 px-2" target="_blank">バーコード</a>
                                 </div>
                             </td>
                         @endcan
