@@ -57,6 +57,7 @@ class ShippingHistoryDownloadService
                                 $order_item->order_item_code,
                                 $order_item->item?->item_jan_code,
                                 $order_item->item?->item_name ?? $order_item->order_item_name,
+                                $order_item->item?->item_category_1,
                                 $order_item_lot->lot,
                                 $order_item_lot->exp,
                                 $order_item_lot->quantity,

@@ -181,6 +181,7 @@ class Order extends Model
             '商品コード',
             '商品JANコード',
             '商品名',
+            '商品カテゴリ1',
             'LOT',
             'EXP',
             '出荷数',
