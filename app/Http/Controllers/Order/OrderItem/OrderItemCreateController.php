@@ -10,6 +10,7 @@ use App\Models\Item;
 use App\Http\Requests\Order\OrderItem\OrderItemCreateRequest;
 // サービス
 use App\Services\Order\OrderItem\OrderItemCreateService;
+use App\Services\Order\OrderAllocate\OrderAllocateService;
 // その他
 use Illuminate\Support\Facades\DB;
 
@@ -35,12 +36,15 @@ class OrderItemCreateController extends Controller
             DB::transaction(function () use ($request) {
                 // インスタンス化
                 $OrderItemCreateService = new OrderItemCreateService;
+                $OrderAllocateService = new OrderAllocateService;
                 // 受注商品を追加できる注文であるか確認
                 $order = $OrderItemCreateService->checkOrderItemCreatable($request->order_control_id);
                 // 受注商品を追加
                 $OrderItemCreateService->createOrderItem($request);
                 // 注文ステータスを変更
                 $OrderItemCreateService->updateOrderStatus($order);
+                // 引当処理
+                $OrderAllocateService->procOrderAllocate($request->order_control_id);
             });
         } catch (\Exception $e) {
             return redirect()->back()->with([
