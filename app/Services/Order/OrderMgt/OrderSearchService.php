@@ -218,7 +218,8 @@ class OrderSearchService extends BaseFilterService
     // 並び替え
     protected function applySort($query)
     {
-        return $query->orderBy('order_import_date', 'asc')
+        return $query->orderBy('shipping_date', 'asc')
+                    ->orderBy('order_import_date', 'asc')
                     ->orderBy('order_import_time', 'asc')
                     ->orderBy('order_control_id', 'asc');
     }

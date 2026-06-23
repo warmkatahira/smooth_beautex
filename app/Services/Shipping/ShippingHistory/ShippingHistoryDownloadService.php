@@ -31,9 +31,11 @@ class ShippingHistoryDownloadService
                 foreach($orders as $order){
                     // 商品の分だけループ処理
                     foreach($order->order_items as $order_item){
+                        // LOTがある場合はLOTの数だけ出力、ない場合は1行出力
+                        $lots = $order_item->order_item_lots;
+                        $rows = $lots->isNotEmpty() ? $lots : [null];
                         // LOTの分だけループ処理
-                        foreach($order_item->order_item_lots as $order_item_lot){
-                            // 変数に情報を格納
+                        foreach($rows as $order_item_lot){
                             $row = [
                                 $order->shipping_date,
                                 $order->order_import_date,
@@ -58,9 +60,9 @@ class ShippingHistoryDownloadService
                                 $order_item->item?->item_jan_code,
                                 $order_item->item?->item_name ?? $order_item->order_item_name,
                                 $order_item->item?->item_category_1,
-                                $order_item_lot->lot,
-                                $order_item_lot->exp,
-                                $order_item_lot->quantity,
+                                $order_item_lot?->lot,
+                                $order_item_lot?->exp,
+                                $order_item_lot?->quantity,
                             ];
                             // 書き込む
                             fputcsv($handle, $row);
