@@ -87,7 +87,7 @@ class OrderImportForShopifyService
                 'ship_zip_code'             => $ship_zip_code,
                 'ship_country_code'         => $common_order_values[$line['Name']]['Shipping Country'],
                 'ship_province_code'        => $common_order_values[$line['Name']]['Shipping Province'],
-                'ship_province_name'        => $common_order_values[$line['Name']]['Shipping Country'] === 'JP' ? $common_order_values[$line['Name']]['Shipping Province Name'] : '',
+                'ship_province_name'        => $common_order_values[$line['Name']]['Shipping Country'] === 'JP' ? Prefecture::convertProvinceName($common_order_values[$line['Name']]['Shipping Province Name']) : '',
                 'ship_city'                 => $common_order_values[$line['Name']]['Shipping City'],
                 'ship_address_1'            => $common_order_values[$line['Name']]['Shipping Address1'],
                 'ship_address_2'            => $common_order_values[$line['Name']]['Shipping Address2'],
