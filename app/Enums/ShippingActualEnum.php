@@ -89,6 +89,7 @@ enum ShippingActualEnum
             ShippingMethodEnum::SAGAWA_NORMAL_ID    => '佐川急便',
             ShippingMethodEnum::SAGAWA_EMS_ID       => 'Japan Post',
             ShippingMethodEnum::UPS_ID              => 'UPS',
+            ShippingMethodEnum::DHL_ID              => 'DHL',
             default                                 => $shipping_method_id,
         };
     }

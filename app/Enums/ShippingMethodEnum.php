@@ -10,6 +10,7 @@ enum ShippingMethodEnum
     const SAGAWA_NORMAL_ID  = 4;    // 佐川急便 宅配便
     const SAGAWA_EMS_ID     = 5;    // 佐川急便 EMS
     const UPS_ID            = 6;    // UPS UPS
+    const DHL_ID            = 7;    // DHL DHL
 
     // Qoo10の配送会社に入ってくる値を定義
     const QOO10_SHIPPING_METHOD_YAMATO_NEKOPOS  = 'ゆうパケット';

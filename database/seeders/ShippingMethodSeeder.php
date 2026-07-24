@@ -38,5 +38,9 @@ class ShippingMethodSeeder extends Seeder
             'shipping_method' => 'UPS',
             'delivery_company_id' => 3,
         ]);
+        ShippingMethod::create([
+            'shipping_method' => 'DHL',
+            'delivery_company_id' => 4,
+        ]);
     }
 }

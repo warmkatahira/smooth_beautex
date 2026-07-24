@@ -29,5 +29,10 @@ class DeliveryCompanySeeder extends Seeder
             'tracking_no_url'   => 'https://www.ups.com/track?loc=en_US&tracknum=#tracking_no#',
             'company_image'     => 'ups.svg',
         ]);
+        DeliveryCompany::create([
+            'delivery_company'  => 'DHL',
+            'tracking_no_url'   => 'https://www.dhl.com/jp-ja/home/tracking/tracking-express.html?submit=1&tracking-id=#tracking_no#',
+            'company_image'     => 'dhl.svg',
+        ]);
     }
 }
