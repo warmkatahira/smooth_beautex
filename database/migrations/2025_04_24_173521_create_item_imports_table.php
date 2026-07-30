@@ -39,7 +39,7 @@ return new class extends Migration
             $table->unsignedTinyInteger('color_row')->nullable();
             $table->string('manufacturer', 20)->nullable();
             $table->string('supplier', 20)->nullable();
-            $table->string('ems_item_name', 50)->nullable();
+            $table->string('ems_item_name', 80)->nullable();
             $table->unsignedInteger('sort_order')->nullable();
             $table->timestamps();
         });

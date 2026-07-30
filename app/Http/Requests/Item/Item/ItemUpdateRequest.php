@@ -56,7 +56,7 @@ class ItemUpdateRequest extends BaseRequest
             'unit_cost'                     => 'nullable|integer|min:0',
             'country_of_origin'             => 'nullable|string|max:10',
             'hs_code'                       => 'nullable|string|max:10',
-            'ems_item_name'                 => 'nullable|string|max:50',
+            'ems_item_name'                 => 'nullable|string|max:80',
             'item_weight_g'                 => 'nullable|integer|min:0',
             'sort_order'                    => 'required|integer|min:1',
         ];

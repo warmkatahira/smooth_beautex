@@ -318,7 +318,7 @@ class ItemUploadJobs implements ShouldQueue
                     $rules += ['*.'.$column => 'nullable|integer|min:0'];
                     break;
                 case 'ems_item_name':
-                    $rules += ['*.'.$column => 'nullable|string|max:50'];
+                    $rules += ['*.'.$column => 'nullable|string|max:80'];
                     break;
                 default:
                     break;
