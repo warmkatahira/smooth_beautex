@@ -76,6 +76,9 @@
                                 {{ substr($order_item->item->item_jan_code, 0, -4) }}<span class="text-xl font-semibold pl-0.5">{{ substr($order_item->item->item_jan_code, -4) }}</span>
                             </td>
                             <td class="item_name py-1 px-2 border border-black">
+                                @if($order_item->is_gift_box)
+                                    <span class="inline-block mr-1 px-1 border-2 border-black font-bold">ギフトBOX付</span>
+                                @endif
                                 {{ $order_item->item->item_name}}
                                 @php
                                     $latestInbound = $order_item->item->latestInboundStockHistories->first();

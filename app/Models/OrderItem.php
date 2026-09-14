@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+// その他
+use Illuminate\Database\Eloquent\Casts\Attribute;
+
 class OrderItem extends Model
 {
     // 主キーカラムを変更
@@ -52,5 +55,12 @@ class OrderItem extends Model
     public function getIsOverThresholdTextAttribute()
     {
         return $this->is_over_threshold ? '対象' : '対象外';
+    }
+    // ギフトボックス付き明細か（受注商品名に「＋ギフトボックス」を含む）
+    protected function isGiftBox(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => preg_match('/[＋+]\s*ギフトボックス/u', $this->order_item_name ?? '') === 1,
+        );
     }
 }
