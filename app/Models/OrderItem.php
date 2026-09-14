@@ -56,11 +56,16 @@ class OrderItem extends Model
     {
         return $this->is_over_threshold ? '対象' : '対象外';
     }
-    // ギフトボックス付き明細か（受注商品名に「＋ギフトボックス」を含む）
+    // ギフトボックス付き明細か（受注商品名に「＋ギフトボックス」を含み、かつ商品名にDARUMARUを含む）
     protected function isGiftBox(): Attribute
     {
         return Attribute::make(
-            get: fn () => preg_match('/[＋+]\s*ギフトボックス/u', $this->order_item_name ?? '') === 1,
+            get: function () {
+                $hasGiftBox = preg_match('/[＋+]\s*ギフトボックス/u', $this->order_item_name ?? '') === 1;
+                $isDarumaru = str_contains($this->item?->item_name ?? '', 'DARUMARU');
+
+                return $hasGiftBox && $isDarumaru;
+            },
         );
     }
 }
