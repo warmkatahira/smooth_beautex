@@ -132,8 +132,8 @@ class NifudaCreateService
                     // 内容品のオフセット用の変数を初期化
                     $column_offset = 0;
                     // 出荷人会社名を変数に格納
-                    // ship_country_codeが「US」の場合は「NAOKI IWASE」、それ以外は「BEAUTEX Corp. / Push!Color」
-                    $shipper_company_name = $order->ship_country_code == 'US' ? 'NAOKI IWASE' : 'BEAUTEX Corp. / Push!Color';
+                    // ship_country_codeが「US」の場合は「NAOKI IWASE」、それ以外は荷送人会社名を使用
+                    $shipper_company_name = $order->ship_country_code == 'US' ? 'NAOKI IWASE' : $order->order_category->shipper->shipper_company_name;
                     // ship_country_codeが「US」の場合は「1」(ギフト)、それ以外は「3」(販売品)
                     $content_type = $order->ship_country_code == 'US' ? 0 : 2;
                     // 各情報を出力

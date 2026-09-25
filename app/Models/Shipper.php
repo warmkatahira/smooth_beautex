@@ -10,6 +10,7 @@ class Shipper extends Model
     protected $primaryKey = 'shipper_id';
     // 操作可能なカラムを定義
     protected $fillable = [
+        'shipper_company_name',
         'shipper_name',
         'shipper_zip_code',
         'shipper_address',
