@@ -15,6 +15,8 @@ use App\Http\Controllers\Order\OrderItemSplit\OrderItemSplitController;
 use App\Http\Controllers\Order\OrderItem\OrderItemCreateController;
 // +-+-+-+-+-+-+-+- 受注商品削除 +-+-+-+-+-+-+-+-
 use App\Http\Controllers\Order\OrderItem\OrderItemDeleteController;
+// +-+-+-+-+-+-+-+- 受注商品引当解除 +-+-+-+-+-+-+-+-
+use App\Http\Controllers\Order\OrderItem\OrderItemAllocateReleaseController;
 // +-+-+-+-+-+-+-+- 受注商品削除 +-+-+-+-+-+-+-+-
 use App\Http\Controllers\Order\OrderItem\PastOrderItemController;
 // +-+-+-+-+-+-+-+- 出荷検品ロット更新 +-+-+-+-+-+-+-+-
@@ -60,6 +62,10 @@ Route::middleware('common')->group(function (){
         Route::controller(OrderItemSplitController::class)->prefix('order_item_split')->name('order_item_split.')->group(function(){
             Route::get('split_preview', 'split_preview')->name('split_preview');
             Route::post('split', 'split')->name('split');
+        });
+        // +-+-+-+-+-+-+-+- 受注商品引当解除 +-+-+-+-+-+-+-+-
+        Route::controller(OrderItemAllocateReleaseController::class)->prefix('order_item_allocate_release')->name('order_item_allocate_release.')->group(function(){
+            Route::post('release', 'release')->name('release');
         });
         // +-+-+-+-+-+-+-+- 過去注文から商品情報を引用 +-+-+-+-+-+-+-+-
         Route::controller(PastOrderItemController::class)->prefix('past_order_item')->name('past_order_item.')->group(function(){

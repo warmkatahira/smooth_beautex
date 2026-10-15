@@ -61,6 +61,11 @@
                             @if($order->order_status_id <= OrderStatusEnum::SHUKKA_MACHI)
                                 <td class="py-1 px-2 border">
                                     <button type="button" class="btn order_item_delete_enter rounded bg-btn-cancel text-white py-1 px-2" data-order-item-id="{{ $order_item->order_item_id }}">削除</a>
+                                    @if($order_item->shipping_quantity - $order_item->unallocated_quantity > 0 && $order_item->item?->is_stock_managed && !$order->is_stock_allocation_skipped)
+                                        @can('warm_check')
+                                            <button type="button" class="btn order_item_allocate_release_enter rounded bg-orange-500 text-white py-1 px-2 ml-1" data-order-item-id="{{ $order_item->order_item_id }}">引当解除</button>
+                                        @endcan
+                                    @endif
                                 </td>
                             @endif
                             <td class="py-1 px-2 border">
@@ -193,6 +198,10 @@
     <form method="POST" action="{{ route('order_item_delete.delete') }}" id="order_item_delete_form">
         @csrf
         <input type="hidden" id="order_item_id" name="order_item_id">
+    </form>
+    <form method="POST" action="{{ route('order_item_allocate_release.release') }}" id="order_item_allocate_release_form">
+        @csrf
+        <input type="hidden" id="allocate_release_order_item_id" name="order_item_id">
     </form>
     <form method="POST" action="{{ route('order_item_split.split') }}" id="order_item_split_form">
         @csrf

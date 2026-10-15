@@ -64,6 +64,7 @@ enum OperationLogEnum
         'hikiatezan_download/download'                      => '引当残データダウンロード',
         'order_detail_update/supplement'                    => '補足事項更新',
         'order_mgt/allocate'                                => '引当処理',
+        'order_item_allocate_release/release'               => '受注商品引当解除',
         // 出荷
         'shipping_mgt'                                      => '出荷管理',
         'total_picking_list_create/create'                  => 'トータルピッキングリスト発行',
